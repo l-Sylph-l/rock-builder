@@ -23,8 +23,13 @@ public class RockBuilderWindow : EditorWindow
     string fifthParameterStones = "MAT_Granite";
 
     // Parameter für die Kristalle/Edelsteine
-    string firstParameterCrystals = "Crystal";
-    string secondParameterCrystals = "MAT_Gem_01";
+    string firstParameterCrystals = "Crystal_01";
+    string secondParameterCrystals = "Crystal";
+    float thirdParamaterCrystals = 3.0f;
+    float fourthParamaterCrystals = 1.0f;
+    float fifthParamaterCrystals = 1.0f;
+    bool sixthParameterStones = false;
+    string seventhParameterCrystals = "MAT_Gem_01";
 
     [MenuItem("Tools/RockBuilder")]
 
@@ -80,14 +85,14 @@ public class RockBuilderWindow : EditorWindow
             // Erster Stones-Parameter => Der Name des Objekts(Steins), welches anschliessend generiert werden soll           
             firstParameterStones = EditorGUILayout.TextField("Object Name", firstParameterStones);
 
-            // Zweiter Paramter => Die Checkbox, ob der User eine eigene Form extruden oder lieber die Defaultform (rund) haben möchte           
+            // Zweiter Stones-Paramter => Die Checkbox, ob der User eine eigene Form extruden oder lieber die Defaultform (rund) haben möchte           
             secondParameterStones = EditorGUILayout.Toggle("Make your own shape", secondParameterStones);
             EditorGUILayout.HelpBox("By clicking 'Make your own shape', a cube will appear in the editor window. Extrude his faces to make the shape you want. If you don't click the checkbox, the generated stone will be round by default.", MessageType.Info);
 
-            // Dritter Parameter => Slidebar für den gewünschten Polycount zwischen 10 und 10'000  
+            // Dritter Stones-Parameter => Slidebar für den gewünschten Polycount zwischen 10 und 10'000  
             thirdParamaterStones = EditorGUILayout.Slider("Polycount", thirdParamaterStones, 10, 10000);
 
-            // Vierter Parameter => Slidebar für die Anzahl der LODs  
+            // Vierter Stones-Parameter => Slidebar für die Anzahl der LODs  
             fourthParamaterStones = EditorGUILayout.IntSlider("LODs", fourthParamaterStones, 0, 3);
 
             GUILayout.Space(15);
@@ -133,39 +138,13 @@ public class RockBuilderWindow : EditorWindow
 
             GUILayout.Space(20);
 
-            // Auswahl der Art des Kristalls/Edelstein     
-            GUILayout.Label("Choose Shape");
-
-            GUILayout.Space(5);
-
-            EditorGUI.BeginDisabledGroup(true);
-            EditorGUILayout.TextField(firstParameterCrystals);
-            EditorGUI.EndDisabledGroup();
-
-            GUILayout.Space(10);
-
-            GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Crystal", GUILayout.Height(60), GUILayout.Width(55)))
-            {
-                Debug.Log("Crystal Button was pressed"); // Gibt eine Logmeldung aus
-                firstParameterCrystals = "Crystal";
-            }
-            if (GUILayout.Button("Gem", GUILayout.Height(60), GUILayout.Width(55)))
-            {
-                Debug.Log("Gem Button was pressed"); // Gibt eine Logmeldung aus
-                firstParameterCrystals = "Gem";
-            }
-            if (GUILayout.Button("Diamond", GUILayout.Height(60), GUILayout.Width(55)))
-            {
-                Debug.Log("Diamond Button was pressed"); // Gibt eine Logmeldung aus
-                firstParameterCrystals = "Diamond";
-            }
-            GUILayout.EndHorizontal();
+            // Erster Crystal-Parameter => Der Name des Objekts, welches anschliessend generiert werden soll           
+            firstParameterCrystals = EditorGUILayout.TextField("Object Name", firstParameterCrystals);
 
             GUILayout.Space(15);
 
-            // Auswahl der Kristall-Materialien      
-            GUILayout.Label("Choose Material");
+            // Auswahl der Art des Kristalls/Edelstein     
+            GUILayout.Label("Choose Shape");
 
             GUILayout.Space(5);
 
@@ -176,20 +155,75 @@ public class RockBuilderWindow : EditorWindow
             GUILayout.Space(10);
 
             GUILayout.BeginHorizontal();
+            if (GUILayout.Button(" Crystal ", GUILayout.Height(60)))
+            {
+                Debug.Log("Crystal Button was pressed"); // Gibt eine Logmeldung aus
+                secondParameterCrystals = "Crystal";
+            }
+            if (GUILayout.Button("   Gem   ", GUILayout.Height(60)))
+            {
+                Debug.Log("Gem Button was pressed"); // Gibt eine Logmeldung aus
+                secondParameterCrystals = "Gem";
+            }
+            if (GUILayout.Button("Diamond", GUILayout.Height(60)))
+            {
+                Debug.Log("Diamond Button was pressed"); // Gibt eine Logmeldung aus
+                secondParameterCrystals = "Diamond";
+            }
+            GUILayout.EndHorizontal();
+
+            GUILayout.Space(15);
+
+            // Dritter Crystal-Parameter => Slidebar für die Anzahl Vertices  
+            thirdParamaterCrystals = EditorGUILayout.Slider("Vertices", thirdParamaterCrystals, 3, 200);
+
+            // Beschränkt die Usereingaben für den Radius => 1 - 1000
+            if (fourthParamaterCrystals < 1 || fourthParamaterCrystals > 1000)
+            {
+                fourthParamaterCrystals = 1.0f;
+            }
+            // Vierter Crystal-Parameter für den Radius der Objekte
+            fourthParamaterCrystals = EditorGUILayout.FloatField("Radius", fourthParamaterCrystals);
+
+            // Beschränkt die Usereingaben für die Höhe => 1 - 1000
+            if (fifthParamaterCrystals < 1 || fifthParamaterCrystals > 1000)
+            {
+                fifthParamaterCrystals = 1.0f;
+            }
+            // Fünfter Crystal-Parameter für die Höhe der Objekte
+            fifthParamaterCrystals = EditorGUILayout.FloatField("Height", fifthParamaterCrystals);
+
+            // Sechster Crystal-Paramter => Die Checkbox, um ein Objekt zu smoothen         
+            sixthParameterStones = EditorGUILayout.Toggle("Smooth", sixthParameterStones);
+
+            GUILayout.Space(15);
+
+            // Auswahl der Kristall-Materialien      
+            GUILayout.Label("Choose Material");
+
+            GUILayout.Space(5);
+
+            EditorGUI.BeginDisabledGroup(true);
+            EditorGUILayout.TextField(seventhParameterCrystals);
+            EditorGUI.EndDisabledGroup();
+
+            GUILayout.Space(10);
+
+            GUILayout.BeginHorizontal();
             if (GUILayout.Button("Gem 01", GUILayout.Height(60), GUILayout.Width(55)))
             {
                 Debug.Log("MAT_Gem_01 Button was pressed"); // Gibt eine Logmeldung aus
-                secondParameterCrystals = "MAT_Gem_01";
+                seventhParameterCrystals = "MAT_Gem_01";
             }
             if (GUILayout.Button("Gem 02", GUILayout.Height(60), GUILayout.Width(55)))
             {
                 Debug.Log("MAT_Gem_02 Button was pressed"); // Gibt eine Logmeldung aus
-                secondParameterCrystals = "MAT_Gem_02";
+                seventhParameterCrystals = "MAT_Gem_02";
             }
             if (GUILayout.Button("Gem 03", GUILayout.Height(60), GUILayout.Width(55)))
             {
                 Debug.Log("MAT_Gem_03 Button was pressed"); // Gibt eine Logmeldung aus
-                secondParameterCrystals = "MAT_Gem_03";
+                seventhParameterCrystals = "MAT_Gem_03";
             }
             GUILayout.EndHorizontal();
         }
