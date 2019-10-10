@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.Rendering;
 
 [CustomEditor(typeof(TestCubeGeneration))]
 public class RockBuilderHandles : Editor
@@ -12,6 +13,8 @@ public class RockBuilderHandles : Editor
     void OnEnable()
     {
         testCube = (TestCubeGeneration)target;
+        RockBuilderWindow.ShowWindow();
+        Debug.Log("Current Pipeline: " + RenderPipelineManager.currentPipeline);
     }
 
 
