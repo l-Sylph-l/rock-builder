@@ -11,17 +11,13 @@ public class RockBuilderWindow : EditorWindow
     int toolbarInt = 0;
     string[] toolbarStrings = { "Hello", "Stones", "Crystals" };
 
-    // Alle Bilder für die Buttons (funktioniert leider nocht nicht...)
-    private Texture shape_crystal;
-    private Texture shape_gem;
-    private Texture shape_diamond;
-
     // Parameter für die Steine
     string firstParameterStones = "Stone_01"; // Objektname
     bool secondParameterStones = false; // Eigene Shape erstellen
     int thirdParamaterStones = 10; // Polycount
     int fourthParamaterStones = 0; // LODs
     string fifthParameterStones = "MAT_Granite"; // Material
+    private Material stoneMaterial; // Material
 
     // Parameter für die Kristalle/Edelsteine
     string firstParameterCrystals = "Crystal_01"; // Objektname
@@ -30,7 +26,7 @@ public class RockBuilderWindow : EditorWindow
     float fourthParamaterCrystals = 1.0f; // Radius
     float fifthParamaterCrystals = 1.0f; // Height
     bool sixthParameterStones = false; // Smooth
-    string seventhParameterCrystals = "MAT_Gem_01"; // Material
+    private Material crystalMaterial; // Material
 
     [MenuItem("Tools/RockBuilder")]
 
@@ -103,29 +99,24 @@ public class RockBuilderWindow : EditorWindow
 
             GUILayout.Space(5);
 
-            EditorGUI.BeginDisabledGroup(true);
-            EditorGUILayout.TextField(fifthParameterStones);
-            EditorGUI.EndDisabledGroup();
+            // Diese Prüfung entscheidet, welche Shader angezeigt werden => Lightweight/Universal oder HD-Renderpipeline
+            if (RenderPipelineManager.currentPipeline != null && RenderPipelineManager.currentPipeline.ToString().Contains("HD"))
+            {
+                stoneMaterial = (Material)EditorGUILayout.ObjectField(stoneMaterial, typeof(Material), true);
+            }
+            // else steht für die Lightweight/Universal Pipeline oder gar keine
+            else
+            {
 
-            GUILayout.Space(10);
+            }
 
-            GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Granite", GUILayout.Height(60), GUILayout.Width(55)))
+            GUILayout.Space(15);
+
+            // Button für das Generieren des Steins
+            if (GUILayout.Button("Let's rock!", GUILayout.Height(25)))
             {
-                Debug.Log("MAT_Granite Button was pressed"); // Gibt eine Logmeldung aus
-                fifthParameterStones = "MAT_Granite";
+                Debug.Log("Stone-Generate Button was pressed"); // Gibt eine Logmeldung aus
             }
-            if (GUILayout.Button("Sandstone", GUILayout.Height(60), GUILayout.Width(55)))
-            {
-                Debug.Log("MAT_Sandstone Button was pressed"); // Gibt eine Logmeldung aus
-                fifthParameterStones = "MAT_Sandstone";
-            }
-            if (GUILayout.Button("Limestone", GUILayout.Height(60), GUILayout.Width(55)))
-            {
-                Debug.Log("MAT_Limestone Button was pressed"); // Gibt eine Logmeldung aus
-                fifthParameterStones = "MAT_Limestone";
-            }
-            GUILayout.EndHorizontal();
         }
 
         // Anzeige für den "Crystals"-Teil
@@ -204,37 +195,23 @@ public class RockBuilderWindow : EditorWindow
 
             GUILayout.Space(5);
 
-            EditorGUI.BeginDisabledGroup(true);
-            EditorGUILayout.TextField(seventhParameterCrystals);
-            EditorGUI.EndDisabledGroup();
-
-            GUILayout.Space(10);
-
             // Diese Prüfung entscheidet, welche Shader angezeigt werden => Lightweight/Universal oder HD-Renderpipeline
-            if (RenderPipelineManager.currentPipeline != null && RenderPipelineManager.currentPipeline.ToString() == "HDRenderPipelineAsset(HDRenderPipelineAsset)")
+            if (RenderPipelineManager.currentPipeline != null && RenderPipelineManager.currentPipeline.ToString().Contains("HD"))
             {
-                GUILayout.BeginHorizontal();
-                if (GUILayout.Button("Gem 01", GUILayout.Height(60), GUILayout.Width(55)))
-                {
-                    Debug.Log("MAT_Gem_01 Button was pressed"); // Gibt eine Logmeldung aus
-                    seventhParameterCrystals = "MAT_Gem_01";
-                }
-                if (GUILayout.Button("Gem 02", GUILayout.Height(60), GUILayout.Width(55)))
-                {
-                    Debug.Log("MAT_Gem_02 Button was pressed"); // Gibt eine Logmeldung aus
-                    seventhParameterCrystals = "MAT_Gem_02";
-                }
-                if (GUILayout.Button("Gem 03", GUILayout.Height(60), GUILayout.Width(55)))
-                {
-                    Debug.Log("MAT_Gem_03 Button was pressed"); // Gibt eine Logmeldung aus
-                    seventhParameterCrystals = "MAT_Gem_03";
-                }
-                GUILayout.EndHorizontal();
+                crystalMaterial = (Material)EditorGUILayout.ObjectField(crystalMaterial, typeof(Material), true);
             }
             // else steht für die Lightweight/Universal Pipeline oder gar keine
             else
             {
 
+            }
+
+            GUILayout.Space(15);
+
+            // Button für das Generieren des Kristalls
+            if (GUILayout.Button("Let's rock!", GUILayout.Height(25)))
+            {
+                Debug.Log("Crystal-Generate Button was pressed"); // Gibt eine Logmeldung aus
             }
         }
     }
