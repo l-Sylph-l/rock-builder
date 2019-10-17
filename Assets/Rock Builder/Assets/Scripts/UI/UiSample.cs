@@ -16,7 +16,6 @@ public class RockBuilderWindow : EditorWindow
     bool secondParameterStones = false; // Eigene Shape erstellen
     int thirdParamaterStones = 10; // Polycount
     int fourthParamaterStones = 0; // LODs
-    string fifthParameterStones = "MAT_Granite"; // Material
     private Material stoneMaterial; // Material
 
     // Parameter für die Kristalle/Edelsteine
