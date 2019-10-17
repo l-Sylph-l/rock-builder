@@ -150,6 +150,7 @@ Material:
     - Vector1_42AE8BEC: 0.5
     - Vector1_724479ED: 1.5
     - Vector1_B6F55592: 0.95
+    - Vector1_C3556D4D: 3
     - Vector1_C3C15BB: 2
     - _AORemapMax: 1
     - _AORemapMin: 0
@@ -281,6 +282,7 @@ Material:
     - Color_2E3DEF26: {r: 1.827451, g: 0.454902, b: 1.466667, a: 0}
     - Color_F43265ED: {r: 0, g: 0, b: 0, a: 0}
     - Color_FCC2C4E6: {r: 0.24468257, g: 0.038892854, b: 0.3584906, a: 0.1764706}
+    - Vector2_79FB8291: {r: 1, g: 1, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
