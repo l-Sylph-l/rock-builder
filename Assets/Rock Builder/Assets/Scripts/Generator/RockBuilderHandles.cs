@@ -17,7 +17,6 @@ public class RockBuilderHandles : Editor
         Debug.Log("Current Pipeline: " + RenderPipelineManager.currentPipeline);
     }
 
-
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
