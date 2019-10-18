@@ -6,15 +6,20 @@ using System.Collections.Generic;
 [ExecuteInEditMode]
 public class DiamondGenerator : MonoBehaviour
 {
-    public float radius = 4f;
-    public float height = 8f;
-    public float heightPeak = 3f;
-    public int edges = 10;
-
+    private float globalRadius = 4f;
+    private float globalHeight = 8f;
+    public float globalHeightPeak = 3f;
+    public int globalEdges = 10;
+    private bool preview = true;
 
     void Start()
     {
-        CreateMesh(radius, height, heightPeak, edges);
+        CreateMesh(globalRadius, globalHeight, globalHeightPeak, globalEdges);
+    }
+
+    public void TooglePreview()
+    {
+        preview = !preview;
     }
 
     private List<Vector3> CreateVertexPositions(float radius, float height, float heightPeak, int edges)
@@ -91,7 +96,7 @@ public class DiamondGenerator : MonoBehaviour
         int vertexLoop = 0;
         float circumference = Vector3.Distance(vertexPositions[0], vertexPositions[1]) * edges;
         float uvHeightBody = (1f - (height / circumference)) / 2;
-        float uvHeightTotal = (1f - ((heightPeak*2+height) / circumference)) / 4;
+        float uvHeightTotal = (1f - ((heightPeak * 2 + height) / circumference)) / 4;
 
         for (int loopCount = 0; edges > loopCount; loopCount++)
         {
@@ -140,7 +145,7 @@ public class DiamondGenerator : MonoBehaviour
         for (int loopCount = 0; edges > loopCount; loopCount++)
         {
             vertices[vertexLoop] = vertexPositions[(edges * 2) + 1] - transform.position;
-            uv[vertexLoop] = new Vector2(((float)loopCount / (float)edges) + 1f/(float)edges/2f, uvHeightTotal);
+            uv[vertexLoop] = new Vector2(((float)loopCount / (float)edges) + 1f / (float)edges / 2f, uvHeightTotal);
             vertexLoop++;
         }
 
@@ -198,17 +203,23 @@ public class DiamondGenerator : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        List<Vector3> spawnList = CreateVertexPositions(radius, height, heightPeak, edges);
-
-        DrawLines(spawnList, edges);
-
-        foreach (Vector3 spawnPosition in spawnList)
+        if (preview)
         {
-            // Draw a yellow sphere at the transform's position
-            Gizmos.color = Color.black;
-            Gizmos.DrawSphere(spawnPosition, 0.3f);
+            List<Vector3> spawnList = CreateVertexPositions(globalRadius, globalHeight, globalHeightPeak, globalEdges);
 
-            Gizmos.color = Color.blue;
+            DrawLines(spawnList, globalEdges);
+
+            // Draw black cubes on every vertex position of the diamond
+            foreach (Vector3 spawnPosition in spawnList)
+            {
+                Gizmos.color = Color.black;
+                float scaleModeModifier = 1f / (globalRadius + globalHeight);
+                float cubeSize = Mathf.Clamp(0.05f / scaleModeModifier, 0.05f, 0.3f);
+                Debug.Log(0.05f / scaleModeModifier);
+                Gizmos.DrawCube(spawnPosition, new Vector3(cubeSize, cubeSize, cubeSize));
+
+                Gizmos.color = Color.blue;
+            }
         }
     }
 }

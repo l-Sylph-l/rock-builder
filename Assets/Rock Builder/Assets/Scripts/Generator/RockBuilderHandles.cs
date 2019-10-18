@@ -4,15 +4,15 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.Rendering;
 
-[CustomEditor(typeof(TestCubeGeneration))]
+[CustomEditor(typeof(DiamondGenerator))]
 public class RockBuilderHandles : Editor
 {
 
-    TestCubeGeneration testCube;
+    DiamondGenerator testCube;
 
     void OnEnable()
     {
-        testCube = (TestCubeGeneration)target;
+        testCube = (DiamondGenerator)target;
         RockBuilderWindow.ShowWindow();
         Debug.Log("Current Pipeline: " + RenderPipelineManager.currentPipeline);
     }
