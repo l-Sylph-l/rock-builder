@@ -86,13 +86,22 @@ public class DiamondGenerator : MonoBehaviour
 
         for (int loopCount = 0; edges > loopCount; loopCount++)
         {
-
-            vertices[vertexLoop] = vertexPositions[edges + loopCount] - transform.position;
-            vertices[vertexLoop + 1] = vertexPositions[loopCount] - transform.position;
-            vertices[vertexLoop + 2] = vertexPositions[loopCount + 1] - transform.position; ;
-            vertices[vertexLoop + 3] = vertexPositions[edges + loopCount + 1] - transform.position;
-            vertexLoop = vertexLoop + 4;
-
+            if (edges-1 != loopCount)
+            {
+                vertices[vertexLoop] = vertexPositions[edges + loopCount] - transform.position;
+                vertices[vertexLoop + 1] = vertexPositions[loopCount] - transform.position;
+                vertices[vertexLoop + 2] = vertexPositions[loopCount + 1] - transform.position; ;
+                vertices[vertexLoop + 3] = vertexPositions[edges + loopCount + 1] - transform.position;
+                vertexLoop = vertexLoop + 4;
+            }
+            else
+            {
+                vertices[vertexLoop] = vertexPositions[edges + loopCount] - transform.position;
+                vertices[vertexLoop + 1] = vertexPositions[loopCount] - transform.position;
+                vertices[vertexLoop + 2] = vertexPositions[0] - transform.position;
+                vertices[vertexLoop + 3] = vertexPositions[edges] - transform.position;
+                vertexLoop = vertexLoop + 4;
+            }
 
         }
 
@@ -102,14 +111,21 @@ public class DiamondGenerator : MonoBehaviour
         int verticesCount = 0;
         int triangleVerticesCount = 0;
 
-        for (int i = 0; verticesCount < vertices.Length; i = i + 2)
+        for (int i = 0; verticesCount < vertices.Length; i = i + 1)
         {
+            //triangles[triangleVerticesCount] = i;
+            //triangles[triangleVerticesCount + 1] = i = i + 2;
+            //triangles[triangleVerticesCount + 2] = i = i - 1;
+            //triangles[triangleVerticesCount + 3] = i = i - 1;
+            //triangles[triangleVerticesCount + 4] = i = i + 3;
+            //triangles[triangleVerticesCount + 5] = i = i - 1;
+
             triangles[triangleVerticesCount] = i;
-            triangles[triangleVerticesCount + 1] = i = i + 2;
-            triangles[triangleVerticesCount + 2] = i = i - 1;
-            triangles[triangleVerticesCount + 3] = i = i - 1;
-            triangles[triangleVerticesCount + 4] = i = i + 3;
-            triangles[triangleVerticesCount + 5] = i = i - 1;
+            triangles[triangleVerticesCount + 1] = i = i + 1;
+            triangles[triangleVerticesCount + 2] = i = i + 1;
+            triangles[triangleVerticesCount + 3] = i = i - 2;
+            triangles[triangleVerticesCount + 4] = i = i + 2;
+            triangles[triangleVerticesCount + 5] = i = i + 1;
 
             triangleVerticesCount += 6;
             verticesCount += 4;

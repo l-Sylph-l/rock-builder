@@ -53,7 +53,6 @@ public class TestCubeGeneration : MonoBehaviour
             new Vector3 (-(width/2), -(height/2), (depth/2)),
             new Vector3 (-(width/2), -(height/2), -(depth/2)),
             new Vector3 (-(width/2), (height/2), -(depth/2))
-
         };
 
         Vector2[] uv = {
@@ -119,7 +118,7 @@ public class TestCubeGeneration : MonoBehaviour
         //          4, 7, 6,
 
         //         8, 10, 9, //face front
-        //          8, 11, 6,
+        //          8, 11, 10,
 
         //         0, 7, 4, //face back
         //          0, 4, 3,
