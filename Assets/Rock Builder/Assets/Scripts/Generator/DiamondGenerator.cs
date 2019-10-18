@@ -6,12 +6,15 @@ using System.Collections.Generic;
 [ExecuteInEditMode]
 public class DiamondGenerator : MonoBehaviour
 {
-
+    public float radius = 4f;
+    public float height = 8f;
+    public float heightPeak = 3f;
     public int edges = 10;
+
 
     void Start()
     {
-        CreateMesh(4f, 8f, 3f, edges);
+        CreateMesh(radius, height, heightPeak, edges);
     }
 
     private List<Vector3> CreateVertexPositions(float radius, float height, float heightPeak, int edges)
@@ -87,7 +90,8 @@ public class DiamondGenerator : MonoBehaviour
         Vector2[] uv = new Vector2[edges * 6];
         int vertexLoop = 0;
         float circumference = Vector3.Distance(vertexPositions[0], vertexPositions[1]) * edges;
-        float uvHeight = (1f - (height / circumference)) / 2;
+        float uvHeightBody = (1f - (height / circumference)) / 2;
+        float uvHeightTotal = (1f - ((heightPeak*2+height) / circumference)) / 4;
 
         for (int loopCount = 0; edges > loopCount; loopCount++)
         {
@@ -100,17 +104,17 @@ public class DiamondGenerator : MonoBehaviour
 
                 if (loopCount == 0)
                 {
-                    uv[vertexLoop] = new Vector2(0f, 1f - uvHeight);
-                    uv[vertexLoop + 1] = new Vector2(0f, uvHeight);
-                    uv[vertexLoop + 2] = new Vector2(((float)loopCount + 1f) / (float)edges, uvHeight);
-                    uv[vertexLoop + 3] = new Vector2(((float)loopCount + 1f) / (float)edges, 1f - uvHeight);
+                    uv[vertexLoop] = new Vector2(0f, 1f - uvHeightBody);
+                    uv[vertexLoop + 1] = new Vector2(0f, uvHeightBody);
+                    uv[vertexLoop + 2] = new Vector2(((float)loopCount + 1f) / (float)edges, uvHeightBody);
+                    uv[vertexLoop + 3] = new Vector2(((float)loopCount + 1f) / (float)edges, 1f - uvHeightBody);
                 }
                 else
                 {
-                    uv[vertexLoop] = new Vector2((float)loopCount / (float)edges, 1f - uvHeight);
-                    uv[vertexLoop + 1] = new Vector2((float)loopCount / (float)edges, uvHeight);
-                    uv[vertexLoop + 2] = new Vector2(((float)loopCount + 1f) / (float)edges, uvHeight);
-                    uv[vertexLoop + 3] = new Vector2(((float)loopCount + 1f) / (float)edges, 1f - uvHeight);
+                    uv[vertexLoop] = new Vector2((float)loopCount / (float)edges, 1f - uvHeightBody);
+                    uv[vertexLoop + 1] = new Vector2((float)loopCount / (float)edges, uvHeightBody);
+                    uv[vertexLoop + 2] = new Vector2(((float)loopCount + 1f) / (float)edges, uvHeightBody);
+                    uv[vertexLoop + 3] = new Vector2(((float)loopCount + 1f) / (float)edges, 1f - uvHeightBody);
                 }
 
                 vertexLoop = vertexLoop + 4;
@@ -123,10 +127,10 @@ public class DiamondGenerator : MonoBehaviour
                 vertices[vertexLoop + 2] = vertexPositions[0] - transform.position;
                 vertices[vertexLoop + 3] = vertexPositions[edges] - transform.position;
 
-                uv[vertexLoop] = new Vector2((float)loopCount / (float)edges, 1f - uvHeight);
-                uv[vertexLoop + 1] = new Vector2((float)loopCount / (float)edges, uvHeight);
-                uv[vertexLoop + 2] = new Vector2(((float)loopCount + 1f) / (float)edges, uvHeight);
-                uv[vertexLoop + 3] = new Vector2(((float)loopCount + 1f) / (float)edges, 1f - uvHeight);
+                uv[vertexLoop] = new Vector2((float)loopCount / (float)edges, 1f - uvHeightBody);
+                uv[vertexLoop + 1] = new Vector2((float)loopCount / (float)edges, uvHeightBody);
+                uv[vertexLoop + 2] = new Vector2(((float)loopCount + 1f) / (float)edges, uvHeightBody);
+                uv[vertexLoop + 3] = new Vector2(((float)loopCount + 1f) / (float)edges, 1f - uvHeightBody);
 
                 vertexLoop = vertexLoop + 4;
             }
@@ -136,12 +140,14 @@ public class DiamondGenerator : MonoBehaviour
         for (int loopCount = 0; edges > loopCount; loopCount++)
         {
             vertices[vertexLoop] = vertexPositions[(edges * 2) + 1] - transform.position;
+            uv[vertexLoop] = new Vector2(((float)loopCount / (float)edges) + 1f/(float)edges/2f, uvHeightTotal);
             vertexLoop++;
         }
 
         for (int loopCount = 0; edges > loopCount; loopCount++)
         {
             vertices[vertexLoop] = vertexPositions[(edges * 2)] - transform.position;
+            uv[vertexLoop] = new Vector2(((float)loopCount / (float)edges) + 1f / (float)edges / 2f, 1f - uvHeightTotal);
             vertexLoop++;
         }
 
@@ -192,7 +198,7 @@ public class DiamondGenerator : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        List<Vector3> spawnList = CreateVertexPositions(4f, 8f, 3f, edges);
+        List<Vector3> spawnList = CreateVertexPositions(radius, height, heightPeak, edges);
 
         DrawLines(spawnList, edges);
 
