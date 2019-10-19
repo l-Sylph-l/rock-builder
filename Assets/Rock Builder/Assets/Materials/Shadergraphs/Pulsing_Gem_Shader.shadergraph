@@ -4,7 +4,7 @@
             "typeInfo": {
                 "fullName": "UnityEditor.ShaderGraph.ColorShaderProperty"
             },
-            "JSONnodeData": "{\n    \"m_Name\": \"Gem Color\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"a20accf3-26d0-443e-9240-e21e08b1fe3a\"\n    },\n    \"m_DefaultReferenceName\": \"Color_FCC2C4E6\",\n    \"m_OverrideReferenceName\": \"\",\n    \"m_Precision\": 0,\n    \"m_Value\": {\n        \"r\": 0.5849056243896484,\n        \"g\": 0.0,\n        \"b\": 0.41285765171051028,\n        \"a\": 0.1411764770746231\n    },\n    \"m_ColorMode\": 1,\n    \"m_Hidden\": false\n}"
+            "JSONnodeData": "{\n    \"m_Name\": \"Gem Color\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"a20accf3-26d0-443e-9240-e21e08b1fe3a\"\n    },\n    \"m_DefaultReferenceName\": \"Color_FCC2C4E6\",\n    \"m_OverrideReferenceName\": \"\",\n    \"m_Precision\": 0,\n    \"m_Value\": {\n        \"r\": 0.24313725531101228,\n        \"g\": 0.03921568766236305,\n        \"b\": 0.35686275362968447,\n        \"a\": 0.1764705926179886\n    },\n    \"m_ColorMode\": 1,\n    \"m_Hidden\": false\n}"
         },
         {
             "typeInfo": {
@@ -34,7 +34,7 @@
             "typeInfo": {
                 "fullName": "UnityEditor.ShaderGraph.Vector1ShaderProperty"
             },
-            "JSONnodeData": "{\n    \"m_Name\": \"Normal Strength\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"849e6b31-e4c6-4b1e-9cd0-95c47787a51b\"\n    },\n    \"m_DefaultReferenceName\": \"Vector1_724479ED\",\n    \"m_OverrideReferenceName\": \"\",\n    \"m_Precision\": 0,\n    \"m_Value\": 2.0,\n    \"m_FloatType\": 0,\n    \"m_RangeValues\": {\n        \"x\": 0.0,\n        \"y\": 1.0\n    },\n    \"m_Hidden\": false\n}"
+            "JSONnodeData": "{\n    \"m_Name\": \"Normal Strength\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"849e6b31-e4c6-4b1e-9cd0-95c47787a51b\"\n    },\n    \"m_DefaultReferenceName\": \"Vector1_724479ED\",\n    \"m_OverrideReferenceName\": \"\",\n    \"m_Precision\": 0,\n    \"m_Value\": 1.5,\n    \"m_FloatType\": 0,\n    \"m_RangeValues\": {\n        \"x\": 0.0,\n        \"y\": 1.0\n    },\n    \"m_Hidden\": false\n}"
         },
         {
             "typeInfo": {
