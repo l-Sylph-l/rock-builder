@@ -6,8 +6,8 @@ using System.Collections.Generic;
 [ExecuteInEditMode]
 public class DiamondGenerator : MonoBehaviour
 {
-    private float globalRadius = 4f;
-    private float globalHeight = 8f;
+    public float globalRadius = 4f;
+    public float globalHeight = 8f;
     public float globalHeightPeak = 3f;
     public int globalEdges = 10;
     private bool preview = true;
@@ -221,6 +221,111 @@ public class DiamondGenerator : MonoBehaviour
                 Gizmos.color = Color.blue;
             }
         }
+    }
+
+    public void CreateSmoothMesh(float radius, float height, float heightPeak, int edges)
+    {
+
+        List<Vector3> vertexPositions = CreateVertexPositions(radius, height, heightPeak, edges);
+
+        Vector3[] vertices = new Vector3[edges * 4];
+        Vector2[] uv = new Vector2[edges * 4];
+        int vertexLoop = 0;
+        float circumference = Vector3.Distance(vertexPositions[0], vertexPositions[1]) * edges;
+        float uvHeightBody = (1f - (height / circumference)) / 2;
+        float uvHeightTotal = (1f - ((heightPeak * 2 + height) / circumference)) / 4;
+
+        for (int loopCount = 0; edges > loopCount; loopCount++)
+        {
+
+                vertices[vertexLoop] = vertexPositions[edges + loopCount] - transform.position;
+                vertices[vertexLoop + 1] = vertexPositions[loopCount] - transform.position;
+
+                if (loopCount == 0)
+                {
+                    uv[vertexLoop] = new Vector2(0f, 1f - uvHeightBody);
+                    uv[vertexLoop + 1] = new Vector2(((float)loopCount + 1f) / (float)edges, uvHeightBody);
+                }
+                else
+                {
+                    uv[vertexLoop] = new Vector2((float)loopCount / (float)edges, 1f - uvHeightBody);
+                    uv[vertexLoop + 1] = new Vector2(((float)loopCount + 1f) / (float)edges, uvHeightBody);
+                }
+
+                vertexLoop = vertexLoop + 2;
+        }
+
+        // Get the vertices for both peaks
+        for (int loopCount = 0; edges > loopCount; loopCount++)
+        {
+            vertices[vertexLoop] = vertexPositions[(edges * 2) + 1] - transform.position;
+            uv[vertexLoop] = new Vector2(((float)loopCount / (float)edges) + 1f / (float)edges / 2f, uvHeightTotal);
+            vertexLoop++;
+        }
+
+        for (int loopCount = 0; edges > loopCount; loopCount++)
+        {
+            vertices[vertexLoop] = vertexPositions[(edges * 2)] - transform.position;
+            uv[vertexLoop] = new Vector2(((float)loopCount / (float)edges) + 1f / (float)edges / 2f, 1f - uvHeightTotal);
+            vertexLoop++;
+        }
+
+        int[] triangles = new int[edges * 12];
+        int loopCountBody = edges * 2;
+        int loopCountPeak = edges * 2;
+        int verticesCount = 0;
+        int triangleVerticesCount = 0;
+
+        for (int i = 0; verticesCount < loopCountBody; i = i - 1)
+        {
+            triangles[triangleVerticesCount] = i;
+            triangles[triangleVerticesCount + 1] = i = i + 3;
+            triangles[triangleVerticesCount + 2] = i = i - 2;
+            triangles[triangleVerticesCount + 3] = i = i - 1;
+            triangles[triangleVerticesCount + 4] = i = i + 2;
+            triangles[triangleVerticesCount + 5] = i = i + 1;
+
+            if (verticesCount == loopCountBody - 2)
+            {
+                triangles[triangleVerticesCount + 1] = 1;
+                triangles[triangleVerticesCount + 4] = 0;
+                triangles[triangleVerticesCount + 5] = 1;
+            }
+
+            triangleVerticesCount += 6;
+            verticesCount += 2;
+        }
+
+        for (int i = 0; 0 < loopCountPeak; i = i - 1)
+        {
+            triangles[triangleVerticesCount] = verticesCount + edges;
+            triangles[triangleVerticesCount + 1] = i = i + 2;
+            triangles[triangleVerticesCount + 2] = i = i - 2;
+            triangles[triangleVerticesCount + 3] = verticesCount;
+            triangles[triangleVerticesCount + 4] = i = i + 1;
+            triangles[triangleVerticesCount + 5] = i = i + 2;
+
+            if (loopCountPeak == 2)
+            {
+                triangles[triangleVerticesCount + 1] = 0;
+                triangles[triangleVerticesCount + 5] = 1;
+            }
+
+            triangleVerticesCount += 6;
+            verticesCount++;
+            loopCountPeak -= 2;
+        }
+
+        Mesh mesh = new Mesh();
+        mesh.Clear();
+        mesh.vertices = vertices;
+        mesh.triangles = triangles;
+        mesh.uv = uv;
+        mesh.name = "generated diamond mesh";
+        mesh.Optimize();
+        mesh.RecalculateNormals();
+        //NormalSolver.RecalculateNormals(mesh, 60);
+        GetComponent<MeshFilter>().sharedMesh = mesh;
     }
 }
 
