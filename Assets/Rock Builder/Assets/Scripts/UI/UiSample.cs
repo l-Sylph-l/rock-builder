@@ -202,15 +202,45 @@ public class RockBuilderWindow : EditorWindow
             // else steht für die Lightweight/Universal Pipeline oder gar keine
             else
             {
-
+                crystalMaterial = (Material)EditorGUILayout.ObjectField(crystalMaterial, typeof(Material), true);
             }
 
             GUILayout.Space(15);
 
+            // Variable for the diamond generator
+            DiamondGenerator diamondGenerator = null;
+            if (Selection.activeGameObject)
+            {
+                diamondGenerator = Selection.activeGameObject.GetComponent<DiamondGenerator>();
+            }
+
+            // update all vlaues if diamondgenerator isn't null
+            if (diamondGenerator)
+            {
+                diamondGenerator.previewRadius = fourthParamaterCrystals;
+                diamondGenerator.previewHeight = fifthParamaterCrystals;
+                diamondGenerator.previewHeightPeak = 3f;
+                diamondGenerator.previewEdges = thirdParamaterCrystals;
+                diamondGenerator.showPreview = true;
+            }
+
             // Button für das Generieren des Kristalls
             if (GUILayout.Button("Let's rock!", GUILayout.Height(25)))
             {
-                Debug.Log("Crystal-Generate Button was pressed"); // Gibt eine Logmeldung aus
+                // generate existing mesh if diamondgenerator exists, otherwise create a new diamond generator
+                if (diamondGenerator)
+                {
+                    diamondGenerator.CreateMesh(fourthParamaterCrystals, fifthParamaterCrystals, 3f, thirdParamaterCrystals, sixthParameterStones).material = crystalMaterial;
+                }
+                else
+                {
+                    Transform cameraTransform = SceneView.lastActiveSceneView.camera.transform;
+                    diamondGenerator = new GameObject().AddComponent(typeof(DiamondGenerator)) as DiamondGenerator;
+                    diamondGenerator.transform.position = (cameraTransform.forward * (fourthParamaterCrystals * 3f + fifthParamaterCrystals * 2f)) + cameraTransform.position;
+                    cameraTransform.LookAt(diamondGenerator.transform);
+                    diamondGenerator.CreateMesh(fourthParamaterCrystals, fifthParamaterCrystals, 3f, thirdParamaterCrystals, sixthParameterStones).material = crystalMaterial;
+                    Debug.Log("Crystal-Generate Button was pressed"); // Gibt eine Logmeldung aus
+                }
             }
         }
     }

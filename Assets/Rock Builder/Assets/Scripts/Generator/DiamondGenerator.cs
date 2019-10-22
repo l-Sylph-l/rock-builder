@@ -6,21 +6,11 @@ using System.Collections.Generic;
 [ExecuteInEditMode]
 public class DiamondGenerator : MonoBehaviour
 {
-    public float globalRadius = 4f;
-    public float globalHeight = 8f;
-    public float globalHeightPeak = 3f;
-    public int globalEdges = 10;
-    private bool preview = true;
-
-    void Start()
-    {
-        CreateMesh(globalRadius, globalHeight, globalHeightPeak, globalEdges);
-    }
-
-    public void TooglePreview()
-    {
-        preview = !preview;
-    }
+    public float previewRadius { get; set; }
+    public float previewHeight { get; set; }
+    public float previewHeightPeak { get; set; }
+    public int previewEdges { get; set; }
+    public bool showPreview { get; set; }
 
     private List<Vector3> CreateVertexPositions(float radius, float height, float heightPeak, int edges)
     {
@@ -86,9 +76,40 @@ public class DiamondGenerator : MonoBehaviour
         }
     }
 
-    public void CreateMesh(float radius, float height, float heightPeak, int edges)
+    void OnDrawGizmosSelected()
     {
+        if (showPreview)
+        {
+            List<Vector3> spawnList = CreateVertexPositions(previewRadius, previewHeight, previewHeightPeak, previewEdges);
 
+            DrawLines(spawnList, previewEdges);
+
+            // Draw black cubes on every vertex position of the diamond
+            foreach (Vector3 spawnPosition in spawnList)
+            {
+                Gizmos.color = Color.black;
+                float scaleModeModifier = 1f / (previewRadius + previewHeight);
+                float cubeSize = Mathf.Clamp(0.05f / scaleModeModifier, 0.05f, 0.3f);
+                Gizmos.DrawCube(spawnPosition, new Vector3(cubeSize, cubeSize, cubeSize));
+                Gizmos.color = Color.blue;
+            }
+        }
+    }
+
+    public MeshRenderer CreateMesh(float radius, float height, float heightPeak, int edges, bool smooth)
+    {
+        if (smooth)
+        {
+            return CreateSmoothMesh(radius, height, heightPeak, edges);
+        }
+        else
+        {
+            return CreateHardMesh(radius, height, heightPeak, edges);
+        }
+    }
+
+    private MeshRenderer CreateHardMesh(float radius, float height, float heightPeak, int edges)
+    {
         List<Vector3> vertexPositions = CreateVertexPositions(radius, height, heightPeak, edges);
 
         Vector3[] vertices = new Vector3[edges * 6];
@@ -199,31 +220,10 @@ public class DiamondGenerator : MonoBehaviour
         mesh.RecalculateNormals();
         //NormalSolver.RecalculateNormals(mesh, 60);
         GetComponent<MeshFilter>().sharedMesh = mesh;
+        return GetComponent<MeshRenderer>();
     }
 
-    void OnDrawGizmosSelected()
-    {
-        if (preview)
-        {
-            List<Vector3> spawnList = CreateVertexPositions(globalRadius, globalHeight, globalHeightPeak, globalEdges);
-
-            DrawLines(spawnList, globalEdges);
-
-            // Draw black cubes on every vertex position of the diamond
-            foreach (Vector3 spawnPosition in spawnList)
-            {
-                Gizmos.color = Color.black;
-                float scaleModeModifier = 1f / (globalRadius + globalHeight);
-                float cubeSize = Mathf.Clamp(0.05f / scaleModeModifier, 0.05f, 0.3f);
-                Debug.Log(0.05f / scaleModeModifier);
-                Gizmos.DrawCube(spawnPosition, new Vector3(cubeSize, cubeSize, cubeSize));
-
-                Gizmos.color = Color.blue;
-            }
-        }
-    }
-
-    public void CreateSmoothMesh(float radius, float height, float heightPeak, int edges)
+    private MeshRenderer CreateSmoothMesh(float radius, float height, float heightPeak, int edges)
     {
 
         List<Vector3> vertexPositions = CreateVertexPositions(radius, height, heightPeak, edges);
@@ -237,22 +237,13 @@ public class DiamondGenerator : MonoBehaviour
 
         for (int loopCount = 0; edges > loopCount; loopCount++)
         {
+            vertices[vertexLoop] = vertexPositions[edges + loopCount] - transform.position;
+            vertices[vertexLoop + 1] = vertexPositions[loopCount] - transform.position;
 
-                vertices[vertexLoop] = vertexPositions[edges + loopCount] - transform.position;
-                vertices[vertexLoop + 1] = vertexPositions[loopCount] - transform.position;
+            uv[vertexLoop] = new Vector2((float)loopCount / (float)edges, 1f - uvHeightBody);
+            uv[vertexLoop + 1] = new Vector2(((float)loopCount) / (float)edges, uvHeightBody);
 
-                if (loopCount == 0)
-                {
-                    uv[vertexLoop] = new Vector2(0f, 1f - uvHeightBody);
-                    uv[vertexLoop + 1] = new Vector2(((float)loopCount + 1f) / (float)edges, uvHeightBody);
-                }
-                else
-                {
-                    uv[vertexLoop] = new Vector2((float)loopCount / (float)edges, 1f - uvHeightBody);
-                    uv[vertexLoop + 1] = new Vector2(((float)loopCount + 1f) / (float)edges, uvHeightBody);
-                }
-
-                vertexLoop = vertexLoop + 2;
+            vertexLoop = vertexLoop + 2;
         }
 
         // Get the vertices for both peaks
@@ -326,6 +317,7 @@ public class DiamondGenerator : MonoBehaviour
         mesh.RecalculateNormals();
         //NormalSolver.RecalculateNormals(mesh, 60);
         GetComponent<MeshFilter>().sharedMesh = mesh;
+        return GetComponent<MeshRenderer>();
     }
 }
 
