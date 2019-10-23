@@ -24,7 +24,8 @@ public class RockBuilderWindow : EditorWindow
     int thirdParamaterCrystals = 3; // Vertices
     float fourthParamaterCrystals = 1.0f; // Radius
     float fifthParamaterCrystals = 1.0f; // Height
-    bool sixthParameterStones = false; // Smooth
+    float sixthParamaterCrystals = 1.0f; // Peak Height
+    bool seventhParameterCrystals = false; // Smooth
     private Material crystalMaterial; // Material
 
     [MenuItem("Tools/RockBuilder")]
@@ -168,24 +169,32 @@ public class RockBuilderWindow : EditorWindow
             // Dritter Crystal-Parameter => Slidebar für die Anzahl Vertices  
             thirdParamaterCrystals = EditorGUILayout.IntSlider("Vertices", thirdParamaterCrystals, 3, 200);
 
-            // Beschränkt die Usereingaben für den Radius => 1 - 1000
-            if (fourthParamaterCrystals < 1 || fourthParamaterCrystals > 1000)
+            // Beschränkt die Usereingaben für den Radius => 0.1 - 1000
+            if (fourthParamaterCrystals < 0.1 || fourthParamaterCrystals > 1000)
             {
                 fourthParamaterCrystals = 1.0f;
             }
             // Vierter Crystal-Parameter für den Radius der Objekte
             fourthParamaterCrystals = EditorGUILayout.FloatField("Radius", fourthParamaterCrystals);
 
-            // Beschränkt die Usereingaben für die Höhe => 1 - 1000
-            if (fifthParamaterCrystals < 1 || fifthParamaterCrystals > 1000)
+            // Beschränkt die Usereingaben für die Höhe => 0.1 - 1000
+            if (fifthParamaterCrystals < 0.1 || fifthParamaterCrystals > 1000)
             {
                 fifthParamaterCrystals = 1.0f;
             }
             // Fünfter Crystal-Parameter für die Höhe der Objekte
             fifthParamaterCrystals = EditorGUILayout.FloatField("Height", fifthParamaterCrystals);
 
-            // Sechster Crystal-Paramter => Die Checkbox, um ein Objekt zu smoothen         
-            sixthParameterStones = EditorGUILayout.Toggle("Smooth", sixthParameterStones);
+            // Beschränkt die Usereingaben für die Höhe => 0.1 - 100
+            if (sixthParamaterCrystals < 0.1 || sixthParamaterCrystals > 100)
+            {
+                sixthParamaterCrystals = 1.0f;
+            }
+            // Sechster Crystal-Parameter für die Höhe der Spitze
+            sixthParamaterCrystals = EditorGUILayout.FloatField("Peak Height", sixthParamaterCrystals);
+
+            // Siebter Crystal-Paramter => Die Checkbox, um ein Objekt zu smoothen         
+            seventhParameterCrystals = EditorGUILayout.Toggle("Smooth", seventhParameterCrystals);
 
             GUILayout.Space(15);
 
@@ -194,16 +203,9 @@ public class RockBuilderWindow : EditorWindow
 
             GUILayout.Space(5);
 
-            // Diese Prüfung entscheidet, welche Shader angezeigt werden => Lightweight/Universal oder HD-Renderpipeline
-            if (RenderPipelineManager.currentPipeline != null && RenderPipelineManager.currentPipeline.ToString().Contains("HD"))
-            {
-                crystalMaterial = (Material)EditorGUILayout.ObjectField(crystalMaterial, typeof(Material), true);
-            }
-            // else steht für die Lightweight/Universal Pipeline oder gar keine
-            else
-            {
-                crystalMaterial = (Material)EditorGUILayout.ObjectField(crystalMaterial, typeof(Material), true);
-            }
+            // Diese Prüfung entscheidet, welche Shader angezeigt werden => Lightweight/Universal oder HD-Renderpipeline (wird momentan nicht mehr benötigt)
+            //if (RenderPipelineManager.currentPipeline != null && RenderPipelineManager.currentPipeline.ToString().Contains("HD"))
+            crystalMaterial = (Material)EditorGUILayout.ObjectField(crystalMaterial, typeof(Material), true);
 
             GUILayout.Space(15);
 
@@ -214,12 +216,12 @@ public class RockBuilderWindow : EditorWindow
                 diamondGenerator = Selection.activeGameObject.GetComponent<DiamondGenerator>();
             }
 
-            // update all vlaues if diamondgenerator isn't null
+            // update all values if diamondgenerator isn't null
             if (diamondGenerator)
             {
                 diamondGenerator.previewRadius = fourthParamaterCrystals;
                 diamondGenerator.previewHeight = fifthParamaterCrystals;
-                diamondGenerator.previewHeightPeak = 3f;
+                diamondGenerator.previewHeightPeak = sixthParamaterCrystals;
                 diamondGenerator.previewEdges = thirdParamaterCrystals;
                 diamondGenerator.showPreview = true;
             }
@@ -230,7 +232,7 @@ public class RockBuilderWindow : EditorWindow
                 // generate existing mesh if diamondgenerator exists, otherwise create a new diamond generator
                 if (diamondGenerator)
                 {
-                    diamondGenerator.CreateMesh(fourthParamaterCrystals, fifthParamaterCrystals, 3f, thirdParamaterCrystals, sixthParameterStones).material = crystalMaterial;
+                    diamondGenerator.CreateMesh(fourthParamaterCrystals, fifthParamaterCrystals, sixthParamaterCrystals, thirdParamaterCrystals, seventhParameterCrystals).material = crystalMaterial;
                 }
                 else
                 {
@@ -238,7 +240,7 @@ public class RockBuilderWindow : EditorWindow
                     diamondGenerator = new GameObject().AddComponent(typeof(DiamondGenerator)) as DiamondGenerator;
                     diamondGenerator.transform.position = (cameraTransform.forward * (fourthParamaterCrystals * 3f + fifthParamaterCrystals * 2f)) + cameraTransform.position;
                     cameraTransform.LookAt(diamondGenerator.transform);
-                    diamondGenerator.CreateMesh(fourthParamaterCrystals, fifthParamaterCrystals, 3f, thirdParamaterCrystals, sixthParameterStones).material = crystalMaterial;
+                    diamondGenerator.CreateMesh(fourthParamaterCrystals, fifthParamaterCrystals, sixthParamaterCrystals, thirdParamaterCrystals, seventhParameterCrystals).material = crystalMaterial;
                     Debug.Log("Crystal-Generate Button was pressed"); // Gibt eine Logmeldung aus
                 }
             }
