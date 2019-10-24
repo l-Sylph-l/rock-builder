@@ -11,6 +11,7 @@ public class DiamondGenerator : MonoBehaviour
     public float previewHeightPeak { get; set; }
     public int previewEdges { get; set; }
     public bool showPreview { get; set; }
+    private Transform[] childrens;
 
     private List<Vector3> CreateVertexPositions(float radius, float height, float heightPeak, int edges)
     {
@@ -96,19 +97,19 @@ public class DiamondGenerator : MonoBehaviour
         }
     }
 
-    public MeshRenderer CreateMesh(float radius, float height, float heightPeak, int edges, bool smooth)
+    public void CreateMesh(float radius, float height, float heightPeak, int edges, bool smooth, Material material)
     {
         if (smooth)
         {
-            return CreateSmoothMesh(radius, height, heightPeak, edges);
+            CreateSmoothMesh(radius, height, heightPeak, edges, material);
         }
         else
         {
-            return CreateHardMesh(radius, height, heightPeak, edges, smooth);
+            CreateHardMesh(radius, height, heightPeak, edges, smooth, material);
         }
     }
 
-    private MeshRenderer CreateHardMesh(float radius, float height, float heightPeak, int edges, bool smoothMesh)
+    private void CreateHardMesh(float radius, float height, float heightPeak, int edges, bool smoothMesh, Material material)
     {
         List<Vector3> vertexPositions = CreateVertexPositions(radius, height, heightPeak, edges);
 
@@ -233,10 +234,10 @@ public class DiamondGenerator : MonoBehaviour
 
         mesh.normals = normals;
         GetComponent<MeshFilter>().sharedMesh = mesh;
-        return GetComponent<MeshRenderer>();
+        GetComponent<MeshRenderer>().material = material;
     }
 
-    private MeshRenderer CreateSmoothMesh(float radius, float height, float heightPeak, int edges)
+    private void CreateSmoothMesh(float radius, float height, float heightPeak, int edges, Material material)
     {
 
         List<Vector3> vertexPositions = CreateVertexPositions(radius, height, heightPeak, edges);
@@ -337,7 +338,82 @@ public class DiamondGenerator : MonoBehaviour
         mesh.RecalculateNormals();
         //NormalSolver.RecalculateNormals(mesh, 60);
         GetComponent<MeshFilter>().sharedMesh = mesh;
-        return GetComponent<MeshRenderer>();
+        GetComponent<MeshRenderer>().material = material;
+    }
+
+    public void CreateLods(float radius, float height, float peakHeight, int edges, Material material)
+    {
+        int lodCount = 4;
+        if (childrens == null)
+        {
+            childrens = new Transform[lodCount - 1];
+        }
+
+        DestroyAllChildren();
+
+        if (edges > 11)
+        {
+            // Programmatically create a LOD group and add LOD levels.
+            // Create a GUI that allows for forcing a specific LOD level.
+            LODGroup group = gameObject.AddComponent<LODGroup>();
+            
+
+            // Add 4 LOD levels
+            LOD[] lods = new LOD[lodCount];
+            for (int i = 0; i < lodCount; i++)
+            {
+
+                Renderer[] renderers;
+
+                if (i != 0)
+                {
+                    DiamondGenerator diamond = new GameObject().AddComponent(typeof(DiamondGenerator)) as DiamondGenerator;
+                    diamond.CreateSmoothMesh(radius, height, peakHeight, edges / (i + 1), material);
+                    diamond.transform.parent = gameObject.transform;
+                    diamond.transform.localPosition = new Vector3(0f, 0f, 0f);
+                    renderers = new Renderer[1];
+                    renderers[0] = diamond.GetComponent<Renderer>();
+                    childrens[i - 1] = diamond.transform;
+                    DestroyImmediate(diamond.GetComponent<DiamondGenerator>());
+                }
+                else
+                {
+                    renderers = new Renderer[1];
+                    renderers[0] = GetComponent<Renderer>();
+                }
+
+                if (i != lodCount - 1)
+                {
+                    lods[i] = new LOD((1f / lodCount) * (lodCount - i - 1), renderers);
+                }
+                else
+                {
+                    lods[i] = new LOD(0f, renderers);
+                }
+
+            }
+            group.SetLODs(lods);
+            group.RecalculateBounds();
+        }
+        else
+        {
+            if (GetComponent<LODGroup>() != null)
+            {
+
+                DestroyImmediate(GetComponent<LODGroup>());
+            }
+        }
+    }
+
+    private void DestroyAllChildren()
+    {
+        foreach (Transform child in childrens)
+        {
+            if(child != null)
+            {
+                DestroyImmediate(child.gameObject);
+            }
+        }
     }
 }
 

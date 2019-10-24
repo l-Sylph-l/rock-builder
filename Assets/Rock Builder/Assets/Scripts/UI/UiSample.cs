@@ -3,12 +3,12 @@ using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
+using System.IO;
 
 public class RockBuilderWindow : EditorWindow
 {
     private GUIStyle guiStyle = new GUIStyle();
     private GUIStyle guiColor = new GUIStyle();
-    private bool focus = false;
     int toolbarInt = 0;
     string[] toolbarStrings = { "Hello", "Stones", "Crystals" };
 
@@ -40,12 +40,6 @@ public class RockBuilderWindow : EditorWindow
     {
         // Code für das UI des RockBuilder Fensters ALLE Tabs
         toolbarInt = GUILayout.Toolbar(toolbarInt, toolbarStrings);
-
-        //if (focus)
-        //{
-        //    focus = false;
-        //    SceneView.lastActiveSceneView.FrameSelected();
-        //}
 
         // Anzeige für den Startteil => Auswahl ob Steine oder Kristalle + Infos
         if (toolbarInt == 0)
@@ -154,11 +148,13 @@ public class RockBuilderWindow : EditorWindow
             GUILayout.Space(10);
 
             GUILayout.BeginHorizontal();
+            GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/gizmo_raycast_crosshaair.png"), new GUILayoutOption[] { GUILayout.Width(50), GUILayout.Height(50) });
             if (GUILayout.Button(" Crystal ", GUILayout.Height(60)))
             {
                 Debug.Log("Crystal Button was pressed"); // Gibt eine Logmeldung aus
                 secondParameterCrystals = "Crystal";
             }
+
             if (GUILayout.Button("   Gem   ", GUILayout.Height(60)))
             {
                 Debug.Log("Gem Button was pressed"); // Gibt eine Logmeldung aus
@@ -236,23 +232,43 @@ public class RockBuilderWindow : EditorWindow
             // Button für das Generieren des Kristalls
             if (GUILayout.Button("Let's rock!", GUILayout.Height(25)))
             {
+
                 // generate existing mesh if diamondgenerator exists, otherwise create a new diamond generator
                 if (diamondGenerator)
                 {
-                    diamondGenerator.CreateMesh(fourthParamaterCrystals, fifthParamaterCrystals, sixthParamaterCrystals, thirdParamaterCrystals, seventhParameterCrystals).material = crystalMaterial;
+                    //Undo.RecordObjects(new Object[] { diamondGenerator, diamondGenerator.transform.GetComponent<MeshFilter>().sharedMesh }, "Diamond modified");
+                    diamondGenerator.CreateMesh(fourthParamaterCrystals, fifthParamaterCrystals, sixthParamaterCrystals, thirdParamaterCrystals, seventhParameterCrystals, crystalMaterial);
+                    diamondGenerator.CreateLods(fourthParamaterCrystals, fifthParamaterCrystals, sixthParamaterCrystals, thirdParamaterCrystals, crystalMaterial);
                 }
                 else
                 {
-                    Transform cameraTransform = SceneView.lastActiveSceneView.camera.transform;             
+                    Transform cameraTransform = SceneView.lastActiveSceneView.camera.transform;
                     diamondGenerator = new GameObject().AddComponent(typeof(DiamondGenerator)) as DiamondGenerator;
                     diamondGenerator.transform.position = (cameraTransform.forward * (fourthParamaterCrystals * 3f + fifthParamaterCrystals * 2f)) + cameraTransform.position;
                     cameraTransform.LookAt(diamondGenerator.transform);
-                    diamondGenerator.CreateMesh(fourthParamaterCrystals, fifthParamaterCrystals, sixthParamaterCrystals, thirdParamaterCrystals, seventhParameterCrystals).material = crystalMaterial;
+                    diamondGenerator.CreateMesh(fourthParamaterCrystals, fifthParamaterCrystals, sixthParamaterCrystals, thirdParamaterCrystals, seventhParameterCrystals, crystalMaterial);
+                    diamondGenerator.CreateLods(fourthParamaterCrystals, fifthParamaterCrystals, sixthParamaterCrystals, thirdParamaterCrystals, crystalMaterial);
                     Debug.Log("Crystal-Generate Button was pressed"); // Gibt eine Logmeldung aus   
                     Selection.activeGameObject = diamondGenerator.gameObject;
                     SceneView.lastActiveSceneView.FrameSelected();
+                    //Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
                 }
             }
         }
+    }
+
+    public Texture2D LoadPNG(string filePath)
+    {
+
+        Texture2D tex = null;
+        byte[] fileData;
+
+        if (File.Exists(filePath))
+        {
+            fileData = File.ReadAllBytes(filePath);
+            tex = new Texture2D(2, 2);
+            tex.LoadImage(fileData); //..this will auto-resize the texture dimensions.
+        }
+        return tex;
     }
 }
