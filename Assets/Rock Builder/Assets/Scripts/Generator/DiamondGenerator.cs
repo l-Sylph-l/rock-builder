@@ -344,19 +344,17 @@ public class DiamondGenerator : MonoBehaviour
     public void CreateLods(float radius, float height, float peakHeight, int edges, Material material)
     {
         int lodCount = 4;
-        if (childrens == null)
+        if (childrens != null)
         {
-            childrens = new Transform[lodCount - 1];
-        }
-
-        DestroyAllChildren();
+            DestroyLOD();
+        }  
 
         if (edges > 11)
         {
             // Programmatically create a LOD group and add LOD levels.
             // Create a GUI that allows for forcing a specific LOD level.
             LODGroup group = gameObject.AddComponent<LODGroup>();
-            
+            childrens = new Transform[lodCount-1];
 
             // Add 4 LOD levels
             LOD[] lods = new LOD[lodCount];
@@ -395,18 +393,15 @@ public class DiamondGenerator : MonoBehaviour
             group.SetLODs(lods);
             group.RecalculateBounds();
         }
-        else
-        {
-            if (GetComponent<LODGroup>() != null)
-            {
-
-                DestroyImmediate(GetComponent<LODGroup>());
-            }
-        }
     }
 
-    private void DestroyAllChildren()
+    private void DestroyLOD()
     {
+        if (GetComponent<LODGroup>() != null)
+        {
+            DestroyImmediate(GetComponent<LODGroup>());
+        }
+
         foreach (Transform child in childrens)
         {
             if(child != null)
