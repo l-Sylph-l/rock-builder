@@ -236,7 +236,7 @@ public class RockBuilderWindow : EditorWindow
                 }
                 else
                 {
-                    Transform cameraTransform = SceneView.lastActiveSceneView.camera.transform;
+                    Transform cameraTransform = SceneView.lastActiveSceneView.camera.transform;             
                     diamondGenerator = new GameObject().AddComponent(typeof(DiamondGenerator)) as DiamondGenerator;
                     diamondGenerator.transform.position = (cameraTransform.forward * (fourthParamaterCrystals * 3f + fifthParamaterCrystals * 2f)) + cameraTransform.position;
                     cameraTransform.LookAt(diamondGenerator.transform);

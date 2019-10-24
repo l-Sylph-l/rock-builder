@@ -104,11 +104,11 @@ public class DiamondGenerator : MonoBehaviour
         }
         else
         {
-            return CreateHardMesh(radius, height, heightPeak, edges);
+            return CreateHardMesh(radius, height, heightPeak, edges, smooth);
         }
     }
 
-    private MeshRenderer CreateHardMesh(float radius, float height, float heightPeak, int edges)
+    private MeshRenderer CreateHardMesh(float radius, float height, float heightPeak, int edges, bool smoothMesh)
     {
         List<Vector3> vertexPositions = CreateVertexPositions(radius, height, heightPeak, edges);
 
@@ -218,7 +218,20 @@ public class DiamondGenerator : MonoBehaviour
         mesh.name = "generated diamond mesh";
         mesh.Optimize();
         mesh.RecalculateNormals();
+        Vector3[] normals = mesh.normals;
         //NormalSolver.RecalculateNormals(mesh, 60);
+
+        if (smoothMesh)
+        {
+            for (int loopCount = 0; edges * 2 > loopCount; loopCount++)
+            {
+                Vector3 averageNormal = (normals[loopCount] + normals[(edges * 4) - loopCount - 1]) / 2f;
+                normals[loopCount] = averageNormal;
+                normals[(edges * 4) - loopCount - 1] = averageNormal;
+            }
+        }
+
+        mesh.normals = normals;
         GetComponent<MeshFilter>().sharedMesh = mesh;
         return GetComponent<MeshRenderer>();
     }
@@ -228,8 +241,9 @@ public class DiamondGenerator : MonoBehaviour
 
         List<Vector3> vertexPositions = CreateVertexPositions(radius, height, heightPeak, edges);
 
-        Vector3[] vertices = new Vector3[edges * 4];
-        Vector2[] uv = new Vector2[edges * 4];
+        int vrticesCount = (edges * 4) + 2;
+        Vector3[] vertices = new Vector3[vrticesCount];
+        Vector2[] uv = new Vector2[vrticesCount];
         int vertexLoop = 0;
         float circumference = Vector3.Distance(vertexPositions[0], vertexPositions[1]) * edges;
         float uvHeightBody = (1f - (height / circumference)) / 2;
@@ -246,6 +260,12 @@ public class DiamondGenerator : MonoBehaviour
             vertexLoop = vertexLoop + 2;
         }
 
+        vertices[vertexLoop] = vertexPositions[edges] - transform.position;
+        vertices[vertexLoop + 1] = vertexPositions[0] - transform.position;
+        uv[vertexLoop] = new Vector2(1f, 1f - uvHeightBody);
+        uv[vertexLoop + 1] = new Vector2(1f, uvHeightBody);
+        vertexLoop = vertexLoop + 2;
+
         // Get the vertices for both peaks
         for (int loopCount = 0; edges > loopCount; loopCount++)
         {
@@ -261,8 +281,8 @@ public class DiamondGenerator : MonoBehaviour
             vertexLoop++;
         }
 
-        int[] triangles = new int[edges * 12];
-        int loopCountBody = edges * 2;
+        int[] triangles = new int[(edges * 12) + 6];
+        int loopCountBody = (edges * 2) + 2;
         int loopCountPeak = edges * 2;
         int verticesCount = 0;
         int triangleVerticesCount = 0;
@@ -298,8 +318,8 @@ public class DiamondGenerator : MonoBehaviour
 
             if (loopCountPeak == 2)
             {
-                triangles[triangleVerticesCount + 1] = 0;
-                triangles[triangleVerticesCount + 5] = 1;
+                triangles[triangleVerticesCount + 1] = edges * 2;
+                triangles[triangleVerticesCount + 5] = (edges * 2) + 1;
             }
 
             triangleVerticesCount += 6;
