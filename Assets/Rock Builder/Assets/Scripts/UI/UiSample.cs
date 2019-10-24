@@ -8,6 +8,7 @@ public class RockBuilderWindow : EditorWindow
 {
     private GUIStyle guiStyle = new GUIStyle();
     private GUIStyle guiColor = new GUIStyle();
+    private bool focus = false;
     int toolbarInt = 0;
     string[] toolbarStrings = { "Hello", "Stones", "Crystals" };
 
@@ -39,6 +40,12 @@ public class RockBuilderWindow : EditorWindow
     {
         // Code für das UI des RockBuilder Fensters ALLE Tabs
         toolbarInt = GUILayout.Toolbar(toolbarInt, toolbarStrings);
+
+        //if (focus)
+        //{
+        //    focus = false;
+        //    SceneView.lastActiveSceneView.FrameSelected();
+        //}
 
         // Anzeige für den Startteil => Auswahl ob Steine oder Kristalle + Infos
         if (toolbarInt == 0)
@@ -241,7 +248,9 @@ public class RockBuilderWindow : EditorWindow
                     diamondGenerator.transform.position = (cameraTransform.forward * (fourthParamaterCrystals * 3f + fifthParamaterCrystals * 2f)) + cameraTransform.position;
                     cameraTransform.LookAt(diamondGenerator.transform);
                     diamondGenerator.CreateMesh(fourthParamaterCrystals, fifthParamaterCrystals, sixthParamaterCrystals, thirdParamaterCrystals, seventhParameterCrystals).material = crystalMaterial;
-                    Debug.Log("Crystal-Generate Button was pressed"); // Gibt eine Logmeldung aus
+                    Debug.Log("Crystal-Generate Button was pressed"); // Gibt eine Logmeldung aus   
+                    Selection.activeGameObject = diamondGenerator.gameObject;
+                    SceneView.lastActiveSceneView.FrameSelected();
                 }
             }
         }

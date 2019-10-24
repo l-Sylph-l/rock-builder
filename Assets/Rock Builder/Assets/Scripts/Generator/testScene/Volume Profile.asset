@@ -62,10 +62,10 @@ MonoBehaviour:
     m_Value: 0
   exposure:
     m_OverrideState: 1
-    m_Value: -1.82
+    m_Value: -3.65
   multiplier:
     m_OverrideState: 1
-    m_Value: 5.22
+    m_Value: 12
     min: 0
   upperHemisphereLuxValue:
     m_OverrideState: 0
@@ -86,7 +86,7 @@ MonoBehaviour:
     m_Value: 0
   top:
     m_OverrideState: 1
-    m_Value: {r: 0.1509434, g: 0.27348796, b: 1, a: 1}
+    m_Value: {r: 0.7924528, g: 0.8230589, b: 1, a: 1}
     hdr: 1
     showAlpha: 0
     showEyeDropper: 1
@@ -104,4 +104,4 @@ MonoBehaviour:
     showEyeDropper: 1
   gradientDiffusion:
     m_OverrideState: 1
-    m_Value: 3.05
+    m_Value: 3.39
