@@ -237,21 +237,20 @@ public class RockBuilderWindow : EditorWindow
                 if (diamondGenerator)
                 {
                     //Undo.RecordObjects(new Object[] { diamondGenerator, diamondGenerator.transform.GetComponent<MeshFilter>().sharedMesh }, "Diamond modified");
+                    Undo.RegisterFullObjectHierarchyUndo(diamondGenerator, "Diamond modified");
                     diamondGenerator.CreateMesh(fourthParamaterCrystals, fifthParamaterCrystals, sixthParamaterCrystals, thirdParamaterCrystals, seventhParameterCrystals, crystalMaterial);
-                    diamondGenerator.CreateLods(fourthParamaterCrystals, fifthParamaterCrystals, sixthParamaterCrystals, thirdParamaterCrystals, crystalMaterial);
                 }
                 else
                 {
                     Transform cameraTransform = SceneView.lastActiveSceneView.camera.transform;
                     diamondGenerator = new GameObject().AddComponent(typeof(DiamondGenerator)) as DiamondGenerator;
+                    Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
                     diamondGenerator.transform.position = (cameraTransform.forward * (fourthParamaterCrystals * 3f + fifthParamaterCrystals * 2f)) + cameraTransform.position;
                     cameraTransform.LookAt(diamondGenerator.transform);
                     diamondGenerator.CreateMesh(fourthParamaterCrystals, fifthParamaterCrystals, sixthParamaterCrystals, thirdParamaterCrystals, seventhParameterCrystals, crystalMaterial);
-                    diamondGenerator.CreateLods(fourthParamaterCrystals, fifthParamaterCrystals, sixthParamaterCrystals, thirdParamaterCrystals, crystalMaterial);
                     Debug.Log("Crystal-Generate Button was pressed"); // Gibt eine Logmeldung aus   
                     Selection.activeGameObject = diamondGenerator.gameObject;
                     SceneView.lastActiveSceneView.FrameSelected();
-                    //Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
                 }
             }
         }

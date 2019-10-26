@@ -1,35 +1,37 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(MeshFilter))]
+//[CustomEditor(typeof(MeshFilter))]
 public class NormalsVisualizer : Editor
 {
 
-    //private Mesh mesh;
+    private Mesh mesh;
 
-    //void OnEnable()
-    //{
-    //    MeshFilter mf = target as MeshFilter;
-    //    if (mf != null)
-    //    {
-    //        mesh = mf.sharedMesh;
-    //    }
-    //}
+    void OnEnable()
+    {
+        MeshFilter mf = target as MeshFilter;
+        if (mf != null)
+        {
+            mesh = mf.sharedMesh;
+        }
+    }
 
-    //void OnSceneGUI()
-    //{
-    //    if (mesh == null)
-    //    {
-    //        return;
-    //    }
+    void OnSceneGUI()
+    {
+        if (mesh == null)
+        {
+            return;
+        }
 
-    //    for (int i = 0; i < mesh.vertexCount; i++)
-    //    {
-    //        Handles.matrix = (target as MeshFilter).transform.localToWorldMatrix;
-    //        Handles.color = Color.black;
-    //        Handles.DrawLine(
-    //            mesh.vertices[i],
-    //            mesh.vertices[i] + mesh.normals[i]);
-    //    }
-    //}
+        for (int i = 0; i < mesh.vertexCount; i++)
+        {
+            Handles.matrix = (target as MeshFilter).transform.localToWorldMatrix;
+            Handles.color = Color.black;
+            Handles.DrawLine(
+                mesh.vertices[i],
+                mesh.vertices[i] + mesh.normals[i]);
+            Handles.Label(new Vector3(0f, 1f, 0f), "Vertices: " + mesh.vertices.Length);
+
+        }
+    }
 }
