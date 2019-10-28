@@ -27,6 +27,7 @@ public class RockBuilderWindow : EditorWindow
     float fifthParamaterGemstones = 1.0f; // Height
     float sixthParamaterGemstones = 1.0f; // Peak Height
     bool seventhParameterGemstones = false; // Smooth
+    int eightParamaterGemstones = 0; // LODs
     private Material gemstoneMaterial; // Material
     float specialParameterDiamond = 0.5f; // Top Radius Diamant
 
@@ -161,7 +162,7 @@ public class RockBuilderWindow : EditorWindow
                 // Beschränkt die Usereingaben für den Top Radius der Diamanten => 0.01 - 1000
                 if (specialParameterDiamond < 0.009 || specialParameterDiamond > 1000)
                 {
-                    specialParameterDiamond = 1.0f;
+                    specialParameterDiamond = 0.5f;
                 }
                 specialParameterDiamond = EditorGUILayout.FloatField("Top Radius", specialParameterDiamond);
             }
@@ -184,6 +185,9 @@ public class RockBuilderWindow : EditorWindow
 
             // Siebter Gemstones-Paramter => Die Checkbox, um ein Objekt zu smoothen         
             seventhParameterGemstones = EditorGUILayout.Toggle("Smooth", seventhParameterGemstones);
+
+            // Achter Gemstones-Parameter => Slidebar für die Anzahl der LODs  
+            eightParamaterGemstones = EditorGUILayout.IntSlider("LODs", eightParamaterGemstones, 0, 3);
 
             GUILayout.Space(15);
 
@@ -215,7 +219,7 @@ public class RockBuilderWindow : EditorWindow
                 diamondGenerator.showPreview = true;
             }
 
-            // Button für das Generieren des Kristalls
+            // Button für das Generieren des Gemstones
             if (GUILayout.Button("Let's rock!", GUILayout.Height(25)))
             {
 
@@ -274,6 +278,7 @@ public class RockBuilderWindow : EditorWindow
         }
     }
 
+    // Wird benötigt um PNG-Dateien auf dem UI anzeigen zu können
     public Texture2D LoadPNG(string filePath)
     {
 
