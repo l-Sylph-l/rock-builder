@@ -148,7 +148,7 @@ public class RockBuilderWindow : EditorWindow
             thirdParamaterGemstones = EditorGUILayout.IntSlider("Vertices", thirdParamaterGemstones, 3, 200);
 
             // Beschränkt die Usereingaben für den Radius => 0.01 - 1000
-            if (fourthParamaterGemstones < 0.01 || fourthParamaterGemstones > 1000)
+            if (fourthParamaterGemstones < 0.009 || fourthParamaterGemstones > 1000)
             {
                 fourthParamaterGemstones = 1.0f;
             }
@@ -159,7 +159,7 @@ public class RockBuilderWindow : EditorWindow
             if (secondParameterGemstones == "Diamond")
             {
                 // Beschränkt die Usereingaben für den Top Radius der Diamanten => 0.01 - 1000
-                if (specialParameterDiamond < 0.01 || specialParameterDiamond > 1000)
+                if (specialParameterDiamond < 0.009 || specialParameterDiamond > 1000)
                 {
                     specialParameterDiamond = 1.0f;
                 }
@@ -167,7 +167,7 @@ public class RockBuilderWindow : EditorWindow
             }
 
             // Beschränkt die Usereingaben für die Höhe => 0.01 - 1000
-            if (fifthParamaterGemstones < 0.01 || fifthParamaterGemstones > 1000)
+            if (fifthParamaterGemstones < 0.009 || fifthParamaterGemstones > 1000)
             {
                 fifthParamaterGemstones = 1.0f;
             }
@@ -175,7 +175,7 @@ public class RockBuilderWindow : EditorWindow
             fifthParamaterGemstones = EditorGUILayout.FloatField("Height", fifthParamaterGemstones);
 
             // Beschränkt die Usereingaben für die Höhe => 0.01 - 100
-            if (sixthParamaterGemstones < 0.01 || sixthParamaterGemstones > 100)
+            if (sixthParamaterGemstones < 0.009 || sixthParamaterGemstones > 100)
             {
                 sixthParamaterGemstones = 1.0f;
             }
