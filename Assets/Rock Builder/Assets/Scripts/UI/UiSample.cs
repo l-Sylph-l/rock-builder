@@ -48,6 +48,7 @@ public class RockBuilderWindow : EditorWindow
             GUILayout.Space(5);
 
             guiStyle.fontSize = 20;
+            guiStyle.margin = new RectOffset(3, 0, 0, 0);
             guiColor.normal.textColor = Color.black;
             GUILayout.Label("Rock Builder - Rocks", guiStyle);
 
