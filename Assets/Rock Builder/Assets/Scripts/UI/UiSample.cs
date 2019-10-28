@@ -8,19 +8,20 @@ using System.IO;
 public class RockBuilderWindow : EditorWindow
 {
     private GUIStyle guiStyle = new GUIStyle();
+    private GUIStyle infoText = new GUIStyle();
     private GUIStyle guiColor = new GUIStyle();
     int toolbarInt = 0;
     string[] toolbarStrings = { "Rocks", "Gemstones", "Help" };
 
     // Parameter für die Steine
-    string firstParameterRocks = "Stone_01"; // Objektname
+    string firstParameterRocks = "Rock_01"; // Objektname
     bool secondParameterRocks = false; // Eigene Shape erstellen
     int thirdParamaterRocks = 10; // Polycount
     int fourthParamaterRocks = 0; // LODs
     private Material rockMaterial; // Material
 
     // Parameter für die Kristalle/Edelsteine
-    string firstParameterGemstones = "Crystal_01"; // Objektname
+    string firstParameterGemstones = "Gemstone_01"; // Objektname
     string secondParameterGemstones = "Crystal"; // Shape
     int thirdParamaterGemstones = 3; // Vertices
     float fourthParamaterGemstones = 1.0f; // Radius
@@ -250,6 +251,8 @@ public class RockBuilderWindow : EditorWindow
         {
             GUILayout.Space(5);
 
+            infoText.wordWrap = true;
+            infoText.margin = new RectOffset(5, 5, 0, 0);
             guiStyle.fontSize = 20;
             GUILayout.Label("Rock Builder - Help", guiStyle);
 
@@ -269,6 +272,10 @@ public class RockBuilderWindow : EditorWindow
             GUILayout.Space(20);
 
             GUILayout.Label("Contact", guiStyle);
+
+            GUILayout.Space(15);
+
+            GUILayout.Label("Please send us an email if you have any questions or if you have problems with the tool. We do our best to answer the email as fast as possible. Thank you!", infoText);
 
             GUILayout.Space(15);
 
