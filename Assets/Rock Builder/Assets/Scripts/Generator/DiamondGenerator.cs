@@ -97,7 +97,7 @@ public class DiamondGenerator : MonoBehaviour
         }
     }
 
-    public void CreateMesh(float radius, float height, float heightPeak, int edges, bool smooth, Material material)
+    public void CreateMesh(float radius, float height, float heightPeak, int edges, bool smooth, Material material, int lodCount)
     {
         this.gameObject.name = "crystal";
         if (smooth)
@@ -109,7 +109,7 @@ public class DiamondGenerator : MonoBehaviour
             CreateHardMesh(radius, height, heightPeak, edges, material);
         }
 
-        CreateLods(radius, height, heightPeak, edges, smooth, material);
+        CreateLods(radius, height, heightPeak, edges, smooth, material, lodCount);
     }
 
     private void CreateHardMesh(float radius, float height, float heightPeak, int edges, Material material)
@@ -355,21 +355,21 @@ public class DiamondGenerator : MonoBehaviour
         GetComponent<MeshRenderer>().material = material;
     }
 
-    public void CreateLods(float radius, float height, float peakHeight, int edges, bool smooth, Material material)
+    public void CreateLods(float radius, float height, float peakHeight, int edges, bool smooth, Material material, int lodCount)
     {
-        int lodCount = 4;
         if (childrens != null)
         {
             DestroyLOD();
         }
 
-        if (edges > 11)
+        if (lodCount != 0 && 3 <= edges/lodCount)
         {
             // Programmatically create a LOD group and add LOD levels.
             // Create a GUI that allows for forcing a specific LOD level.
+            lodCount += 1;
             LODGroup group = gameObject.AddComponent<LODGroup>();
             childrens = new Transform[lodCount - 1];
-
+            
             // Add 4 LOD levels
             LOD[] lods = new LOD[lodCount];
             for (int i = 0; i < lodCount; i++)
@@ -390,6 +390,7 @@ public class DiamondGenerator : MonoBehaviour
                         diamond.CreateHardMesh(radius, height, peakHeight, edges / (i + 1), material);
                     }
 
+                    diamond.name = "diamond_LOD_0" + i;
                     diamond.transform.parent = gameObject.transform;
                     diamond.transform.localPosition = new Vector3(0f, 0f, 0f);
                     renderers = new Renderer[1];

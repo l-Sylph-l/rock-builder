@@ -229,7 +229,7 @@ public class RockBuilderWindow : EditorWindow
                 {
                     //Undo.RecordObjects(new Object[] { diamondGenerator, diamondGenerator.transform.GetComponent<MeshFilter>().sharedMesh }, "Diamond modified");
                     Undo.RegisterFullObjectHierarchyUndo(diamondGenerator, "Diamond modified");
-                    diamondGenerator.CreateMesh(fourthParamaterGemstones, fifthParamaterGemstones, sixthParamaterGemstones, thirdParamaterGemstones, seventhParameterGemstones, gemstoneMaterial);
+                    diamondGenerator.CreateMesh(fourthParamaterGemstones, fifthParamaterGemstones, sixthParamaterGemstones, thirdParamaterGemstones, seventhParameterGemstones, gemstoneMaterial, eightParamaterGemstones);
                 }
                 else
                 {
@@ -238,7 +238,7 @@ public class RockBuilderWindow : EditorWindow
                     Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
                     diamondGenerator.transform.position = (cameraTransform.forward * (fourthParamaterGemstones * 3f + fifthParamaterGemstones * 2f)) + cameraTransform.position;
                     cameraTransform.LookAt(diamondGenerator.transform);
-                    diamondGenerator.CreateMesh(fourthParamaterGemstones, fifthParamaterGemstones, sixthParamaterGemstones, thirdParamaterGemstones, seventhParameterGemstones, gemstoneMaterial);
+                    diamondGenerator.CreateMesh(fourthParamaterGemstones, fifthParamaterGemstones, sixthParamaterGemstones, thirdParamaterGemstones, seventhParameterGemstones, gemstoneMaterial, eightParamaterGemstones);
                     Debug.Log("Gemstones-Generate Button was pressed"); // Gibt eine Logmeldung aus   
                     Selection.activeGameObject = diamondGenerator.gameObject;
                     SceneView.lastActiveSceneView.FrameSelected();
