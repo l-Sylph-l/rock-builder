@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.Rendering;
+using RockBuilder;
 
-[CustomEditor(typeof(DiamondGenerator))]
+[CustomEditor(typeof(CrystalGenerator))]
 public class RockBuilderHandles : Editor
 {
 
-    DiamondGenerator diamond;
+    CrystalGenerator diamond;
 
     void OnEnable()
     {
-        diamond = (DiamondGenerator)target;
+        diamond = (CrystalGenerator)target;
         //RockBuilderWindow.ShowWindow();
         //Debug.Log("Current Pipeline: " + RenderPipelineManager.currentPipeline);
     }

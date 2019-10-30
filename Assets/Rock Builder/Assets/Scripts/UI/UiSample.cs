@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
 using System.IO;
+using RockBuilder;
 
 public class RockBuilderWindow : EditorWindow
 {
@@ -204,10 +205,10 @@ public class RockBuilderWindow : EditorWindow
             GUILayout.Space(15);
 
             // Variable for the diamond generator
-            DiamondGenerator diamondGenerator = null;
+            CrystalGenerator diamondGenerator = null;
             if (Selection.activeGameObject)
             {
-                diamondGenerator = Selection.activeGameObject.GetComponent<DiamondGenerator>();
+                diamondGenerator = Selection.activeGameObject.GetComponent<CrystalGenerator>();
             }
 
             // update all values if diamondgenerator isn't null
@@ -234,7 +235,7 @@ public class RockBuilderWindow : EditorWindow
                 else
                 {
                     Transform cameraTransform = SceneView.lastActiveSceneView.camera.transform;
-                    diamondGenerator = new GameObject().AddComponent(typeof(DiamondGenerator)) as DiamondGenerator;
+                    diamondGenerator = new GameObject().AddComponent(typeof(CrystalGenerator)) as CrystalGenerator;
                     Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
                     diamondGenerator.transform.position = (cameraTransform.forward * (fourthParamaterGemstones * 3f + fifthParamaterGemstones * 2f)) + cameraTransform.position;
                     cameraTransform.LookAt(diamondGenerator.transform);
