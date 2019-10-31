@@ -5,15 +5,15 @@ using UnityEditor;
 using UnityEngine.Rendering;
 using RockBuilder;
 
-[CustomEditor(typeof(CrystalGenerator))]
+[CustomEditor(typeof(Crystal))]
 public class RockBuilderHandles : Editor
 {
 
-    CrystalGenerator diamond;
+    Crystal crystal;
 
     void OnEnable()
     {
-        diamond = (CrystalGenerator)target;
+        crystal = (Crystal)target;
         //RockBuilderWindow.ShowWindow();
         //Debug.Log("Current Pipeline: " + RenderPipelineManager.currentPipeline);
     }
@@ -25,7 +25,10 @@ public class RockBuilderHandles : Editor
 
     void OnSceneGUI()
     {
-        Handles.Label(diamond.transform.TransformPoint(new Vector3(0f, diamond.previewHeight + diamond.previewHeightPeak, 0f)), "Vertices: " + diamond.GetComponent<MeshFilter>().sharedMesh.vertices.Length);
+        if(crystal.GetComponent<MeshFilter>().sharedMesh != null)
+        {
+            Handles.Label(crystal.transform.TransformPoint(new Vector3(0f, crystal.height + crystal.heightPeak, 0f)), "Vertices: " + crystal.GetComponent<MeshFilter>().sharedMesh.vertices.Length);
+        }
 
         Handles.BeginGUI();
 

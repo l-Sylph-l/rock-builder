@@ -13,16 +13,22 @@ namespace RockBuilder
         public float heightPeak { get; set; } = 1f;
         public int edges { get; set; } = 3;
         public bool smooth { get; set; } = false;
+        public int lodCount { get; set; } = 0;
         public Transform[] childrens { get; set; }
+        public List<Vector3> vertexPositions { get; set; }
 
-        public void SetMesh(Mesh mesh)
+        public Mesh mesh
         {
-            GetComponent<MeshFilter>().sharedMesh = mesh;
-        }
-
-        public void SetMaterial(Material material)
-        {
-            GetComponent<MeshRenderer>().material = material;
+            get
+            {
+                //Some other code
+                return GetComponent<MeshFilter>().sharedMesh;
+            }
+            set
+            {
+                //Some other code
+                GetComponent<MeshFilter>().sharedMesh = value;
+            }
         }
 
         public void SetLODGroup(LODGroup lodGroup)
@@ -39,7 +45,7 @@ namespace RockBuilder
             }
         }
 
-        private void RemoveLOD()
+        public void RemoveLOD()
         {
             if (GetComponent<LODGroup>() != null)
             {
@@ -53,6 +59,12 @@ namespace RockBuilder
                     DestroyImmediate(child.gameObject);
                 }
             }
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            vertexPositions = CrystalMeshGenerator.Instance.CreateVertexPositions(this);
+            CrystalPreview.Instance.DrawGizmo(this);
         }
     }
 }

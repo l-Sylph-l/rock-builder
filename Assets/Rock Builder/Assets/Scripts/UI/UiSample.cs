@@ -35,6 +35,9 @@ namespace RockBuilder
         private Material gemstoneMaterial; // Material
         float specialParameterDiamond = 0.5f; // Top Radius Diamant
 
+        // Objecktreferenz für einen Kristall
+        Crystal crystal;
+
         [MenuItem("Tools/RockBuilder")]
 
         public static void ShowWindow()
@@ -132,6 +135,7 @@ namespace RockBuilder
                 {
                     Debug.Log("Crystal Button was pressed"); // Gibt eine Logmeldung aus
                     secondParameterGemstones = "Crystal";
+                    crystal = CrystalService.Instance.CreateEmptyCrystal(firstParameterGemstones);
                 }
                 GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Gem_icon.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
                 if (GUILayout.Button("   Gem   ", GUILayout.Height(60)))
@@ -150,8 +154,10 @@ namespace RockBuilder
                 GUILayout.Space(15);
 
                 // Der zweite Teil der Gemstones, wird erst eingeblendet, wenn eine Shape ausgewählt wurde
-                if (secondParameterGemstones != "")
+                if (secondParameterGemstones != "" && crystal != null)
                 {
+                    UpdateCrystal();
+
                     // Dritter Gemstones-Parameter => Slidebar für die Anzahl Vertices  
                     thirdParamaterGemstones = EditorGUILayout.IntSlider("Vertices", thirdParamaterGemstones, 3, 200);
 
@@ -209,45 +215,15 @@ namespace RockBuilder
 
                     GUILayout.Space(15);
 
-                    // Variable for the diamond generator
-                    CrystalGenerator diamondGenerator = null;
-                    if (Selection.activeGameObject)
-                    {
-                        diamondGenerator = Selection.activeGameObject.GetComponent<CrystalGenerator>();
-                    }
-
-                    // update all values if diamondgenerator isn't null
-                    if (diamondGenerator)
-                    {
-                        diamondGenerator.previewRadius = fourthParamaterGemstones;
-                        diamondGenerator.previewHeight = fifthParamaterGemstones;
-                        diamondGenerator.previewHeightPeak = sixthParamaterGemstones;
-                        diamondGenerator.previewEdges = thirdParamaterGemstones;
-                        diamondGenerator.showPreview = true;
-                    }
-
                     // Button für das Generieren des Gemstones
                     if (GUILayout.Button("Let's rock!", GUILayout.Height(25)))
                     {
 
                         // generate existing mesh if diamondgenerator exists, otherwise create a new diamond generator
-                        if (diamondGenerator)
+                        if (crystal)
                         {
-                            //Undo.RecordObjects(new Object[] { diamondGenerator, diamondGenerator.transform.GetComponent<MeshFilter>().sharedMesh }, "Diamond modified");
-                            Undo.RegisterFullObjectHierarchyUndo(diamondGenerator, "Diamond modified");
-                            diamondGenerator.CreateMesh(fourthParamaterGemstones, fifthParamaterGemstones, sixthParamaterGemstones, thirdParamaterGemstones, seventhParameterGemstones, gemstoneMaterial, eightParamaterGemstones);
-                        }
-                        else
-                        {
-                            Transform cameraTransform = SceneView.lastActiveSceneView.camera.transform;
-                            diamondGenerator = new GameObject().AddComponent(typeof(CrystalGenerator)) as CrystalGenerator;
-                            Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
-                            diamondGenerator.transform.position = (cameraTransform.forward * (fourthParamaterGemstones * 3f + fifthParamaterGemstones * 2f)) + cameraTransform.position;
-                            cameraTransform.LookAt(diamondGenerator.transform);
-                            diamondGenerator.CreateMesh(fourthParamaterGemstones, fifthParamaterGemstones, sixthParamaterGemstones, thirdParamaterGemstones, seventhParameterGemstones, gemstoneMaterial, eightParamaterGemstones);
-                            Debug.Log("Gemstones-Generate Button was pressed"); // Gibt eine Logmeldung aus   
-                            Selection.activeGameObject = diamondGenerator.gameObject;
-                            SceneView.lastActiveSceneView.FrameSelected();
+                            crystal = CrystalService.Instance.CreateCrystal(crystal);
+                            crystal.GetComponent<MeshRenderer>().material = gemstoneMaterial;
                         }
                     }
                 }
@@ -292,8 +268,13 @@ namespace RockBuilder
             }
         }
 
+        private void Update()
+        {
+            CheckIfCrystalSelected();
+        }
+
         // Wird benötigt um PNG-Dateien auf dem UI anzeigen zu können
-        public Texture2D LoadPNG(string filePath)
+        private Texture2D LoadPNG(string filePath)
         {
 
             Texture2D tex = null;
@@ -306,6 +287,48 @@ namespace RockBuilder
                 tex.LoadImage(fileData); // This will auto-resize the texture dimensions
             }
             return tex;
+        }
+
+        private void CheckIfCrystalSelected()
+        {
+            if (crystal == null)
+            {
+                crystal = CrystalService.Instance.GetCrystalFromSelection();
+                if (crystal != null)
+                {
+                    firstParameterGemstones = crystal.name;
+                    secondParameterGemstones = "Crystal";
+                    thirdParamaterGemstones = crystal.edges;
+                    fourthParamaterGemstones = crystal.radius;
+                    fifthParamaterGemstones = crystal.height;
+                    sixthParamaterGemstones = crystal.heightPeak;
+                    seventhParameterGemstones = crystal.smooth;
+                    if(crystal.GetComponent<MeshRenderer>().sharedMaterial != null)
+                    {
+                        gemstoneMaterial = crystal.GetComponent<MeshRenderer>().sharedMaterial;
+                    }
+                    this.Repaint();
+                }
+            } else
+            {
+                if(crystal != CrystalService.Instance.GetCrystalFromSelection())
+                {
+                    crystal = null;
+                    this.Repaint();
+                }
+            }
+        }
+
+        private void UpdateCrystal()
+        {
+            if(crystal != null)
+            {
+                crystal.edges = thirdParamaterGemstones; // Vertices
+                crystal.radius = fourthParamaterGemstones; // Radius
+                crystal.height = fifthParamaterGemstones; // Height
+                crystal.heightPeak = sixthParamaterGemstones; // Peak Height
+                crystal.smooth = seventhParameterGemstones; // Smooth
+            }
         }
     }
 }
