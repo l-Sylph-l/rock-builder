@@ -25,7 +25,7 @@ namespace RockBuilder
 
         // Parameter für die Kristalle/Edelsteine
         string firstParameterGemstones = "Gemstone_01"; // Objektname
-        string secondParameterGemstones = "Crystal"; // Shape
+        string secondParameterGemstones = ""; // Shape
         int thirdParamaterGemstones = 3; // Vertices
         float fourthParamaterGemstones = 1.0f; // Radius
         float fifthParamaterGemstones = 1.0f; // Height
@@ -149,102 +149,106 @@ namespace RockBuilder
 
                 GUILayout.Space(15);
 
-                // Dritter Gemstones-Parameter => Slidebar für die Anzahl Vertices  
-                thirdParamaterGemstones = EditorGUILayout.IntSlider("Vertices", thirdParamaterGemstones, 3, 200);
-
-                // Beschränkt die Usereingaben für den Radius => 0.01 - 1000
-                if (fourthParamaterGemstones < 0.009 || fourthParamaterGemstones > 1000)
+                // Der zweite Teil der Gemstones, wird erst eingeblendet, wenn eine Shape ausgewählt wurde
+                if (secondParameterGemstones != "")
                 {
-                    fourthParamaterGemstones = 1.0f;
-                }
-                // Vierter Gemstones-Parameter für den Radius der Objekte
-                fourthParamaterGemstones = EditorGUILayout.FloatField("Radius", fourthParamaterGemstones);
+                    // Dritter Gemstones-Parameter => Slidebar für die Anzahl Vertices  
+                    thirdParamaterGemstones = EditorGUILayout.IntSlider("Vertices", thirdParamaterGemstones, 3, 200);
 
-                // Diese Eingabe wird nur bei Diamanten benötigt, deshalb wird hier geprüft
-                if (secondParameterGemstones == "Diamond")
-                {
-                    // Beschränkt die Usereingaben für den Top Radius der Diamanten => 0.01 - 1000
-                    if (specialParameterDiamond < 0.009 || specialParameterDiamond > 1000)
+                    // Beschränkt die Usereingaben für den Radius => 0.01 - 1000
+                    if (fourthParamaterGemstones < 0.009 || fourthParamaterGemstones > 1000)
                     {
-                        specialParameterDiamond = 0.5f;
+                        fourthParamaterGemstones = 1.0f;
                     }
-                    specialParameterDiamond = EditorGUILayout.FloatField("Top Radius", specialParameterDiamond);
-                }
+                    // Vierter Gemstones-Parameter für den Radius der Objekte
+                    fourthParamaterGemstones = EditorGUILayout.FloatField("Radius", fourthParamaterGemstones);
 
-                // Beschränkt die Usereingaben für die Höhe => 0.01 - 1000
-                if (fifthParamaterGemstones < 0.009 || fifthParamaterGemstones > 1000)
-                {
-                    fifthParamaterGemstones = 1.0f;
-                }
-                // Fünfter Gemstones-Parameter für die Höhe der Objekte
-                fifthParamaterGemstones = EditorGUILayout.FloatField("Height", fifthParamaterGemstones);
+                    // Diese Eingabe wird nur bei Diamanten benötigt, deshalb wird hier geprüft
+                    if (secondParameterGemstones == "Diamond")
+                    {
+                        // Beschränkt die Usereingaben für den Top Radius der Diamanten => 0.01 - 1000
+                        if (specialParameterDiamond < 0.009 || specialParameterDiamond > 1000)
+                        {
+                            specialParameterDiamond = 0.5f;
+                        }
+                        specialParameterDiamond = EditorGUILayout.FloatField("Top Radius", specialParameterDiamond);
+                    }
 
-                // Beschränkt die Usereingaben für die Höhe => 0.01 - 100
-                if (sixthParamaterGemstones < 0.009 || sixthParamaterGemstones > 100)
-                {
-                    sixthParamaterGemstones = 1.0f;
-                }
-                // Sechster Gemstones-Parameter für die Höhe der Spitze
-                sixthParamaterGemstones = EditorGUILayout.FloatField("Peak Height", sixthParamaterGemstones);
+                    // Beschränkt die Usereingaben für die Höhe => 0.01 - 1000
+                    if (fifthParamaterGemstones < 0.009 || fifthParamaterGemstones > 1000)
+                    {
+                        fifthParamaterGemstones = 1.0f;
+                    }
+                    // Fünfter Gemstones-Parameter für die Höhe der Objekte
+                    fifthParamaterGemstones = EditorGUILayout.FloatField("Height", fifthParamaterGemstones);
 
-                // Siebter Gemstones-Paramter => Die Checkbox, um ein Objekt zu smoothen         
-                seventhParameterGemstones = EditorGUILayout.Toggle("Smooth", seventhParameterGemstones);
+                    // Beschränkt die Usereingaben für die Höhe => 0.01 - 100
+                    if (sixthParamaterGemstones < 0.009 || sixthParamaterGemstones > 100)
+                    {
+                        sixthParamaterGemstones = 1.0f;
+                    }
+                    // Sechster Gemstones-Parameter für die Höhe der Spitze
+                    sixthParamaterGemstones = EditorGUILayout.FloatField("Peak Height", sixthParamaterGemstones);
 
-                // Achter Gemstones-Parameter => Slidebar für die Anzahl der LODs  
-                eightParamaterGemstones = EditorGUILayout.IntSlider("LODs", eightParamaterGemstones, 0, 3);
+                    // Siebter Gemstones-Paramter => Die Checkbox, um ein Objekt zu smoothen         
+                    seventhParameterGemstones = EditorGUILayout.Toggle("Smooth", seventhParameterGemstones);
 
-                GUILayout.Space(15);
+                    // Achter Gemstones-Parameter => Slidebar für die Anzahl der LODs  
+                    eightParamaterGemstones = EditorGUILayout.IntSlider("LODs", eightParamaterGemstones, 0, 3);
 
-                // Auswahl der Gemstones-Materialien      
-                GUILayout.Label("Choose Material");
+                    GUILayout.Space(15);
 
-                GUILayout.Space(5);
+                    // Auswahl der Gemstones-Materialien      
+                    GUILayout.Label("Choose Material");
 
-                // Diese Prüfung entscheidet, welche Shader angezeigt werden => Lightweight/Universal oder HD-Renderpipeline (wird momentan nicht mehr benötigt)
-                //if (RenderPipelineManager.currentPipeline != null && RenderPipelineManager.currentPipeline.ToString().Contains("HD"))
-                gemstoneMaterial = (Material)EditorGUILayout.ObjectField(gemstoneMaterial, typeof(Material), true);
+                    GUILayout.Space(5);
 
-                GUILayout.Space(15);
+                    // Diese Prüfung entscheidet, welche Shader angezeigt werden => Lightweight/Universal oder HD-Renderpipeline (wird momentan nicht mehr benötigt)
+                    //if (RenderPipelineManager.currentPipeline != null && RenderPipelineManager.currentPipeline.ToString().Contains("HD"))
+                    gemstoneMaterial = (Material)EditorGUILayout.ObjectField(gemstoneMaterial, typeof(Material), true);
 
-                // Variable for the diamond generator
-                CrystalGenerator diamondGenerator = null;
-                if (Selection.activeGameObject)
-                {
-                    diamondGenerator = Selection.activeGameObject.GetComponent<CrystalGenerator>();
-                }
+                    GUILayout.Space(15);
 
-                // update all values if diamondgenerator isn't null
-                if (diamondGenerator)
-                {
-                    diamondGenerator.previewRadius = fourthParamaterGemstones;
-                    diamondGenerator.previewHeight = fifthParamaterGemstones;
-                    diamondGenerator.previewHeightPeak = sixthParamaterGemstones;
-                    diamondGenerator.previewEdges = thirdParamaterGemstones;
-                    diamondGenerator.showPreview = true;
-                }
+                    // Variable for the diamond generator
+                    CrystalGenerator diamondGenerator = null;
+                    if (Selection.activeGameObject)
+                    {
+                        diamondGenerator = Selection.activeGameObject.GetComponent<CrystalGenerator>();
+                    }
 
-                // Button für das Generieren des Gemstones
-                if (GUILayout.Button("Let's rock!", GUILayout.Height(25)))
-                {
-
-                    // generate existing mesh if diamondgenerator exists, otherwise create a new diamond generator
+                    // update all values if diamondgenerator isn't null
                     if (diamondGenerator)
                     {
-                        //Undo.RecordObjects(new Object[] { diamondGenerator, diamondGenerator.transform.GetComponent<MeshFilter>().sharedMesh }, "Diamond modified");
-                        Undo.RegisterFullObjectHierarchyUndo(diamondGenerator, "Diamond modified");
-                        diamondGenerator.CreateMesh(fourthParamaterGemstones, fifthParamaterGemstones, sixthParamaterGemstones, thirdParamaterGemstones, seventhParameterGemstones, gemstoneMaterial, eightParamaterGemstones);
+                        diamondGenerator.previewRadius = fourthParamaterGemstones;
+                        diamondGenerator.previewHeight = fifthParamaterGemstones;
+                        diamondGenerator.previewHeightPeak = sixthParamaterGemstones;
+                        diamondGenerator.previewEdges = thirdParamaterGemstones;
+                        diamondGenerator.showPreview = true;
                     }
-                    else
+
+                    // Button für das Generieren des Gemstones
+                    if (GUILayout.Button("Let's rock!", GUILayout.Height(25)))
                     {
-                        Transform cameraTransform = SceneView.lastActiveSceneView.camera.transform;
-                        diamondGenerator = new GameObject().AddComponent(typeof(CrystalGenerator)) as CrystalGenerator;
-                        Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
-                        diamondGenerator.transform.position = (cameraTransform.forward * (fourthParamaterGemstones * 3f + fifthParamaterGemstones * 2f)) + cameraTransform.position;
-                        cameraTransform.LookAt(diamondGenerator.transform);
-                        diamondGenerator.CreateMesh(fourthParamaterGemstones, fifthParamaterGemstones, sixthParamaterGemstones, thirdParamaterGemstones, seventhParameterGemstones, gemstoneMaterial, eightParamaterGemstones);
-                        Debug.Log("Gemstones-Generate Button was pressed"); // Gibt eine Logmeldung aus   
-                        Selection.activeGameObject = diamondGenerator.gameObject;
-                        SceneView.lastActiveSceneView.FrameSelected();
+
+                        // generate existing mesh if diamondgenerator exists, otherwise create a new diamond generator
+                        if (diamondGenerator)
+                        {
+                            //Undo.RecordObjects(new Object[] { diamondGenerator, diamondGenerator.transform.GetComponent<MeshFilter>().sharedMesh }, "Diamond modified");
+                            Undo.RegisterFullObjectHierarchyUndo(diamondGenerator, "Diamond modified");
+                            diamondGenerator.CreateMesh(fourthParamaterGemstones, fifthParamaterGemstones, sixthParamaterGemstones, thirdParamaterGemstones, seventhParameterGemstones, gemstoneMaterial, eightParamaterGemstones);
+                        }
+                        else
+                        {
+                            Transform cameraTransform = SceneView.lastActiveSceneView.camera.transform;
+                            diamondGenerator = new GameObject().AddComponent(typeof(CrystalGenerator)) as CrystalGenerator;
+                            Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
+                            diamondGenerator.transform.position = (cameraTransform.forward * (fourthParamaterGemstones * 3f + fifthParamaterGemstones * 2f)) + cameraTransform.position;
+                            cameraTransform.LookAt(diamondGenerator.transform);
+                            diamondGenerator.CreateMesh(fourthParamaterGemstones, fifthParamaterGemstones, sixthParamaterGemstones, thirdParamaterGemstones, seventhParameterGemstones, gemstoneMaterial, eightParamaterGemstones);
+                            Debug.Log("Gemstones-Generate Button was pressed"); // Gibt eine Logmeldung aus   
+                            Selection.activeGameObject = diamondGenerator.gameObject;
+                            SceneView.lastActiveSceneView.FrameSelected();
+                        }
                     }
                 }
             }
@@ -283,8 +287,8 @@ namespace RockBuilder
                 GUILayout.Space(15);
 
                 // Mit einem Klick öffnet sich direkt die Mailmaske
-                if (GUILayout.Button("Email: RockBuilder@hotmail.com", EditorStyles.label))
-                    Application.OpenURL("mailto:RockBuilder@hotmail.com?");
+                if (GUILayout.Button("Email: rockbuilder-help@hotmail.com", EditorStyles.label))
+                    Application.OpenURL("mailto:rockbuilder-help@hotmail.com?");
             }
         }
 
