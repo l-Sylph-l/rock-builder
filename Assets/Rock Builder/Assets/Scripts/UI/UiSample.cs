@@ -303,7 +303,8 @@ namespace RockBuilder
                     fifthParamaterGemstones = crystal.height;
                     sixthParamaterGemstones = crystal.heightPeak;
                     seventhParameterGemstones = crystal.smooth;
-                    if(crystal.GetComponent<MeshRenderer>().sharedMaterial != null)
+                    eightParamaterGemstones = crystal.lodCount;
+                    if (crystal.GetComponent<MeshRenderer>().sharedMaterial != null)
                     {
                         gemstoneMaterial = crystal.GetComponent<MeshRenderer>().sharedMaterial;
                     }
@@ -323,11 +324,12 @@ namespace RockBuilder
         {
             if(crystal != null)
             {
-                crystal.edges = thirdParamaterGemstones; // Vertices
-                crystal.radius = fourthParamaterGemstones; // Radius
-                crystal.height = fifthParamaterGemstones; // Height
-                crystal.heightPeak = sixthParamaterGemstones; // Peak Height
-                crystal.smooth = seventhParameterGemstones; // Smooth
+                crystal.edges = thirdParamaterGemstones;
+                crystal.radius = fourthParamaterGemstones;
+                crystal.height = fifthParamaterGemstones;
+                crystal.heightPeak = sixthParamaterGemstones;
+                crystal.smooth = seventhParameterGemstones;
+                crystal.lodCount = eightParamaterGemstones;
             }
         }
     }

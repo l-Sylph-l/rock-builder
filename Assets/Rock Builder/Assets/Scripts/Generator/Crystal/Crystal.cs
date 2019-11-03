@@ -8,14 +8,22 @@ namespace RockBuilder
     [RequireComponent(typeof(MeshRenderer))]
     public class Crystal : MonoBehaviour
     {
-        public float radius { get; set; } = 1f;
-        public float height { get; set; } = 1f;
-        public float heightPeak { get; set; } = 1f;
-        public int edges { get; set; } = 3;
-        public bool smooth { get; set; } = false;
-        public int lodCount { get; set; } = 0;
-        public Transform[] childrens { get; set; }
-        public List<Vector3> vertexPositions { get; set; }
+        [HideInInspector]
+        public float radius;
+        [HideInInspector]
+        public float height;
+        [HideInInspector]
+        public float heightPeak;
+        [HideInInspector]
+        public int edges;
+        [HideInInspector]
+        public bool smooth;
+        [HideInInspector]
+        public int lodCount;
+        [HideInInspector]
+        public Transform[] childrens;
+        [HideInInspector]
+        public List<Vector3> vertexPositions;
 
         public Mesh mesh
         {
@@ -65,6 +73,11 @@ namespace RockBuilder
         {
             vertexPositions = CrystalMeshGenerator.Instance.CreateVertexPositions(this);
             CrystalPreview.Instance.DrawGizmo(this);
+        }
+
+        public void RemoveCrystalClass()
+        {
+            DestroyImmediate(this.GetComponent<Crystal>());
         }
     }
 }
