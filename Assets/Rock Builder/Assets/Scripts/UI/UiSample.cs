@@ -147,7 +147,7 @@ namespace RockBuilder
                     secondParameterGemstones = "Gem";
                 }
                 GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Diamond_icon.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
-                if (GUILayout.Button("Diamond", GUILayout.Height(60)))
+                if (GUILayout.Button("Diamond", GUILayout.Height(60)) && diamond == null)
                 {
                     Debug.Log("Diamond Button was pressed"); // Gibt eine Logmeldung aus
                     secondParameterGemstones = "Diamond";
