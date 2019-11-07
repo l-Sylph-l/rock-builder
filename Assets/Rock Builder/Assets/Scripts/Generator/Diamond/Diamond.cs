@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace RockBuilder
 {
+    [RequireComponent(typeof(MeshFilter))]
+    [RequireComponent(typeof(MeshRenderer))]
     public class Diamond : MonoBehaviour
     {
         [HideInInspector]

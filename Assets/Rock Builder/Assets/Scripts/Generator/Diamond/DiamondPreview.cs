@@ -108,7 +108,7 @@ namespace RockBuilder
             foreach (Vector3 spawnPosition in diamond.vertexPositions)
             {
                 Gizmos.color = Color.black;
-                float scaleModeModifier = 1f / (diamond.radius + diamond.pavillonHeight);
+                float scaleModeModifier = 1f / (diamond.radius);
                 float cubeSize = Mathf.Clamp(0.05f / scaleModeModifier, 0.05f, 0.3f);
                 Gizmos.DrawCube(spawnPosition, new Vector3(cubeSize, cubeSize, cubeSize));
                 Gizmos.color = Color.blue;

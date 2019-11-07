@@ -160,7 +160,7 @@ namespace RockBuilder
                 // Der zweite Teil der Gemstones, wird erst eingeblendet, wenn eine Shape ausgewählt wurde
                 if (secondParameterGemstones != "" && (crystal != null || diamond != null))
                 {
-                    UpdateCrystal();
+                    UpdateGem();
 
                     // Dritter Gemstones-Parameter => Slidebar für die Anzahl Vertices
                     if (secondParameterGemstones == "Crystal")
@@ -277,6 +277,7 @@ namespace RockBuilder
         private void Update()
         {
             CheckIfCrystalSelected();
+            CheckIfDiamonSelected();
         }
 
         // Wird benötigt um PNG-Dateien auf dem UI anzeigen zu können
@@ -326,7 +327,39 @@ namespace RockBuilder
             }
         }
 
-        private void UpdateCrystal()
+        private void CheckIfDiamonSelected()
+        {
+            if (diamond == null)
+            {
+                diamond = DiamondService.Instance.GetDiamondFromSelection();
+                if (diamond != null)
+                {
+                    firstParameterGemstones = diamond.name;
+                    secondParameterGemstones = "Diamond";
+                    thirdParamaterGemstones = diamond.edges;
+                    fourthParamaterGemstones = diamond.radius;
+                    fifthParamaterGemstones = diamond.pavillonHeight;
+                    sixthParamaterGemstones = diamond.crownHeight;
+                    seventhParameterGemstones = diamond.smooth;
+                    eightParamaterGemstones = diamond.lodCount;
+                    if (diamond.GetComponent<MeshRenderer>().sharedMaterial != null)
+                    {
+                        gemstoneMaterial = diamond.GetComponent<MeshRenderer>().sharedMaterial;
+                    }
+                    this.Repaint();
+                }
+            }
+            else
+            {
+                if (diamond != DiamondService.Instance.GetDiamondFromSelection())
+                {
+                    diamond = null;
+                    this.Repaint();
+                }
+            }
+        }
+
+        private void UpdateGem()
         {
             if(crystal != null)
             {
@@ -336,6 +369,15 @@ namespace RockBuilder
                 crystal.heightPeak = sixthParamaterGemstones;
                 crystal.smooth = seventhParameterGemstones;
                 crystal.lodCount = eightParamaterGemstones;
+            }
+            if (diamond != null)
+            {
+                diamond.edges = thirdParamaterGemstones;
+                diamond.radius = fourthParamaterGemstones;
+                diamond.pavillonHeight = fifthParamaterGemstones;
+                diamond.crownHeight = sixthParamaterGemstones;
+                diamond.smooth = seventhParameterGemstones;
+                diamond.lodCount = eightParamaterGemstones;
             }
         }
     }

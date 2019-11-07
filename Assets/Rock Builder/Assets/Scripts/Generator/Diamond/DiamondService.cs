@@ -32,6 +32,7 @@ namespace RockBuilder
         public Diamond CreateEmptyDiamond()
         {
             Diamond diamond = new GameObject().AddComponent(typeof(Diamond)) as Diamond;
+            diamond.vertexPositions = DiamondMeshGenerator.Instance.CreateVertexPositions(diamond);
             diamond.radius = 1f;
             diamond.pavillonHeight = 1f;
             diamond.crownHeight = 0.33f;
