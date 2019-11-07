@@ -59,9 +59,7 @@ namespace RockBuilder
             FocusCrystal(crystal);
             crystal.mesh = CrystalMeshGenerator.Instance.CreateMesh(crystal);
             CreateLods(crystal);
-            MeshCollider meshCollider = crystal.gameObject.AddComponent<MeshCollider>();
-            meshCollider.sharedMesh = crystal.mesh;
-            meshCollider.convex = true;
+            CreateMeshCollider(crystal);
             return crystal;
         }
 
@@ -86,6 +84,14 @@ namespace RockBuilder
             Transform cameraTransform = SceneView.lastActiveSceneView.camera.transform;
             return (cameraTransform.forward * (crystal.radius * 3f + crystal.height * 2f)) + cameraTransform.position;
         }
+
+        private void CreateMeshCollider(Crystal crystal)
+        {
+            crystal.RemoveMeshCollider();
+            MeshCollider meshCollider = crystal.gameObject.AddComponent<MeshCollider>();
+            meshCollider.sharedMesh = crystal.mesh;
+            meshCollider.convex = true;
+        } 
 
         public void CreateLods(Crystal crystal)
         {

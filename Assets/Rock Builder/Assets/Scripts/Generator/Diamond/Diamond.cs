@@ -4,16 +4,18 @@ using UnityEngine;
 
 namespace RockBuilder
 {
-    [RequireComponent(typeof(MeshFilter))]
-    [RequireComponent(typeof(MeshRenderer))]
-    public class Crystal : MonoBehaviour
+    public class Diamond : MonoBehaviour
     {
         [HideInInspector]
         public float radius;
         [HideInInspector]
-        public float height;
+        public float upperRadius;
         [HideInInspector]
-        public float heightPeak;
+        public float bottomRadiusPosition;
+        [HideInInspector]
+        public float pavillonHeight;
+        [HideInInspector]
+        public float crownHeight;
         [HideInInspector]
         public int edges;
         [HideInInspector]
@@ -71,13 +73,13 @@ namespace RockBuilder
 
         private void OnDrawGizmosSelected()
         {
-            vertexPositions = CrystalMeshGenerator.Instance.CreateVertexPositions(this);
-            CrystalPreview.Instance.DrawGizmo(this);
+            vertexPositions = DiamondMeshGenerator.Instance.CreateVertexPositions(this);
+            DiamondPreview.Instance.DrawGizmo(this);
         }
 
-        public void RemoveCrystalClass()
+        public void RemoveDiamondClass()
         {
-            DestroyImmediate(this.GetComponent<Crystal>());
+            DestroyImmediate(this.GetComponent<Diamond>());
         }
 
         public void RemoveMeshCollider()

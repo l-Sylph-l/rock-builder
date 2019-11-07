@@ -38,6 +38,9 @@ namespace RockBuilder
         // Objecktreferenz für einen Kristall
         Crystal crystal;
 
+        // Objecktreferenz für einen Kristall
+        Diamond diamond;
+
         [MenuItem("Tools/RockBuilder")]
 
         public static void ShowWindow()
@@ -148,6 +151,7 @@ namespace RockBuilder
                 {
                     Debug.Log("Diamond Button was pressed"); // Gibt eine Logmeldung aus
                     secondParameterGemstones = "Diamond";
+                    diamond = DiamondService.Instance.CreateEmptyDiamond(firstParameterGemstones);
                 }
                 GUILayout.EndHorizontal();
 
