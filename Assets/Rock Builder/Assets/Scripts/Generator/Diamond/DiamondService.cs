@@ -31,8 +31,7 @@ namespace RockBuilder
 
         public Diamond CreateEmptyDiamond()
         {
-            Diamond diamond = new GameObject().AddComponent(typeof(Diamond)) as Diamond;
-            diamond.vertexPositions = DiamondMeshGenerator.Instance.CreateVertexPositions(diamond);
+            Diamond diamond = new GameObject().AddComponent(typeof(Diamond)) as Diamond;            
             diamond.radius = 1f;
             diamond.pavillonHeight = 1f;
             diamond.crownHeight = 0.33f;
@@ -42,6 +41,7 @@ namespace RockBuilder
             diamond.smooth = false;
             diamond.lodCount = 0;
             //Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
+            diamond.vertexPositions = DiamondMeshGenerator.Instance.CreateVertexPositions(diamond);
             diamond.transform.position = CalculateDiamondSpawnPosition(diamond);
             SceneView.lastActiveSceneView.camera.transform.LookAt(diamond.transform);
             FocusDiamond(diamond);
@@ -60,6 +60,7 @@ namespace RockBuilder
         //    //Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
         //    SceneView.lastActiveSceneView.camera.transform.LookAt(diamond.transform);
         //    FocusDiamond(diamond);
+        //    diamond.vertexPositions = DiamondMeshGenerator.Instance.CreateVertexPositions(diamond);
         //    diamond.mesh = DiamondMeshGenerator.Instance.CreateMesh(diamond);
         //    CreateLods(diamond);
         //    CreateMeshCollider(diamond);

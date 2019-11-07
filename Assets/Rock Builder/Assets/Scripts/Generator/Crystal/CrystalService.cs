@@ -39,6 +39,7 @@ namespace RockBuilder
             crystal.smooth = false;
             crystal.lodCount = 0;
             //Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
+            crystal.vertexPositions = CrystalMeshGenerator.Instance.CreateVertexPositions(crystal);
             crystal.transform.position = CalculateCrystalSpawnPosition(crystal);
             SceneView.lastActiveSceneView.camera.transform.LookAt(crystal.transform);
             FocusCrystal(crystal);
@@ -57,6 +58,7 @@ namespace RockBuilder
             //Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
             SceneView.lastActiveSceneView.camera.transform.LookAt(crystal.transform);
             FocusCrystal(crystal);
+            crystal.vertexPositions = CrystalMeshGenerator.Instance.CreateVertexPositions(crystal);
             crystal.mesh = CrystalMeshGenerator.Instance.CreateMesh(crystal);
             CreateLods(crystal);
             CreateMeshCollider(crystal);
