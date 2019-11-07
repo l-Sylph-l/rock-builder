@@ -75,8 +75,12 @@ namespace RockBuilder
 
         private void OnDrawGizmosSelected()
         {
-            vertexPositions = DiamondMeshGenerator.Instance.CreateVertexPositions(this);
-            DiamondPreview.Instance.DrawGizmo(this);
+            if (vertexPositions != null)
+            {
+                // update vertex positions
+                vertexPositions = DiamondMeshGenerator.Instance.CreateVertexPositions(this);
+                DiamondPreview.Instance.DrawGizmo(this);
+            }
         }
 
         public void RemoveDiamondClass()

@@ -71,8 +71,12 @@ namespace RockBuilder
 
         private void OnDrawGizmosSelected()
         {
-            vertexPositions = CrystalMeshGenerator.Instance.CreateVertexPositions(this);
-            CrystalPreview.Instance.DrawGizmo(this);
+            if(vertexPositions != null)
+            {
+                // update vertex positions
+                vertexPositions = CrystalMeshGenerator.Instance.CreateVertexPositions(this);
+                CrystalPreview.Instance.DrawGizmo(this);
+            }
         }
 
         public void RemoveCrystalClass()
