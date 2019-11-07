@@ -134,7 +134,7 @@ namespace RockBuilder
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Crystal_icon.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
-                if (GUILayout.Button(" Crystal ", GUILayout.Height(60)))
+                if (GUILayout.Button(" Crystal ", GUILayout.Height(60)) && crystal == null)
                 {
                     Debug.Log("Crystal Button was pressed"); // Gibt eine Logmeldung aus
                     secondParameterGemstones = "Crystal";
@@ -164,7 +164,7 @@ namespace RockBuilder
 
                     // Dritter Gemstones-Parameter => Slidebar für die Anzahl Vertices  
                     thirdParamaterGemstones = EditorGUILayout.IntSlider("Vertices", thirdParamaterGemstones, 3, 200);
-
+                    
                     // Beschränkt die Usereingaben für den Radius => 0.01 - 1000
                     if (fourthParamaterGemstones < 0.009 || fourthParamaterGemstones > 1000)
                     {
