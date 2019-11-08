@@ -36,15 +36,22 @@ namespace RockBuilder
 
                 if (loopCount == edges - 1)
                 {
-                    //Draw line from the peak to the upper pavillon vertices      
-                    Gizmos.DrawLine(spawnPoints[0], spawnPoints[1 + loopCount + edges / 2]);
+                    //Draw line from the bottom peak to the upper pavillon vertices 
+                    if(loopCount % 2 == 0)
+                    {
+                        Gizmos.DrawLine(spawnPoints[0], spawnPoints[1 + loopCount + edges / 2]);
+                    }
+
                     // Draw the upper pavillon circumference 
                     Gizmos.DrawLine(spawnPoints[(edges / 2) + 1 + loopCount], spawnPoints[(edges / 2) + 1]);
                 }
                 else
                 {
-                    //Draw line from the peak to the upper pavillon vertices      
-                    Gizmos.DrawLine(spawnPoints[0], spawnPoints[1 + loopCount + edges / 2]);
+                    //Draw line from the bottom peak to the upper pavillon vertices     
+                    if (loopCount % 2 == 0)
+                    {
+                        Gizmos.DrawLine(spawnPoints[0], spawnPoints[1 + loopCount + edges / 2]);
+                    }
                     // Draw the upper pavillon circumference 
                     Gizmos.DrawLine(spawnPoints[(edges / 2) + 1 + loopCount], spawnPoints[(edges / 2) + 2 + loopCount]);
                 }

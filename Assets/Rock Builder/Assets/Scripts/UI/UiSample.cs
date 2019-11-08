@@ -231,6 +231,11 @@ namespace RockBuilder
                             crystal = CrystalService.Instance.CreateCrystal(crystal);
                             crystal.GetComponent<MeshRenderer>().material = gemstoneMaterial;
                         }
+                        if (diamond)
+                        {
+                            diamond = DiamondService.Instance.CreateDiamond(diamond);
+                            diamond.GetComponent<MeshRenderer>().material = gemstoneMaterial;
+                        }
                     }
                 }
             }

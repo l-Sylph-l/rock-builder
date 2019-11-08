@@ -55,17 +55,17 @@ namespace RockBuilder
             return diamond;
         }
 
-        //public Diamond CreateDiamond(Diamond diamond)
-        //{
-        //    //Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
-        //    SceneView.lastActiveSceneView.camera.transform.LookAt(diamond.transform);
-        //    FocusDiamond(diamond);
-        //    diamond.vertexPositions = DiamondMeshGenerator.Instance.CreateVertexPositions(diamond);
-        //    diamond.mesh = DiamondMeshGenerator.Instance.CreateMesh(diamond);
-        //    CreateLods(diamond);
-        //    CreateMeshCollider(diamond);
-        //    return diamond;
-        //}
+        public Diamond CreateDiamond(Diamond diamond)
+        {
+            //Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
+            SceneView.lastActiveSceneView.camera.transform.LookAt(diamond.transform);
+            FocusDiamond(diamond);
+            diamond.vertexPositions = DiamondMeshGenerator.Instance.CreateVertexPositions(diamond);
+            diamond.mesh = DiamondMeshGenerator.Instance.CreateMesh(diamond);
+            //CreateLods(diamond);
+            //CreateMeshCollider(diamond);
+            return diamond;
+        }
 
         public Diamond GetDiamondFromSelection()
         {
