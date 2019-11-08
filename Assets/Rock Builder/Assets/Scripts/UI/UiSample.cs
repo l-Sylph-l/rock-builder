@@ -32,6 +32,7 @@ namespace RockBuilder
         float sixthParamaterGemstones = 0.5f; // Peak Height
         bool seventhParameterGemstones = false; // Smooth
         int eightParamaterGemstones = 0; // LODs
+        bool ninthParameterGemstones = false; // Collider
         private Material gemstoneMaterial; // Material
         float specialParameterDiamond = 0.5f; // Top Radius Diamant
 
@@ -204,6 +205,9 @@ namespace RockBuilder
 
                     // Siebter Gemstones-Paramter => Die Checkbox, um ein Objekt zu smoothen         
                     seventhParameterGemstones = EditorGUILayout.Toggle("Smooth", seventhParameterGemstones);
+
+                    // Neunter Gemstones-Paramter => Die Checkbox, um dem Objekt einen Collider zu verpassen         
+                    ninthParameterGemstones = EditorGUILayout.Toggle("Collider", ninthParameterGemstones);
 
                     // Achter Gemstones-Parameter => Slidebar für die Anzahl der LODs  
                     eightParamaterGemstones = EditorGUILayout.IntSlider("LODs", eightParamaterGemstones, 0, 3);
