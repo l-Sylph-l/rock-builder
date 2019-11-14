@@ -38,6 +38,7 @@ namespace RockBuilder
             crystal.edges = 3;
             crystal.smoothFlag = false;
             crystal.lodCount = 0;
+            crystal.colliderFlag = true;
             //Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
             crystal.vertexPositions = CrystalMeshGenerator.Instance.CreateVertexPositions(crystal);
             crystal.transform.position = CalculateCrystalSpawnPosition(crystal);
