@@ -90,9 +90,9 @@ namespace RockBuilder
 
         public Mesh CreateMesh(Diamond diamond)
         {
-            if (diamond.smooth)
+            if (diamond.smoothFlag)
             {
-                //return CreateSmoothMesh(diamond);
+                return CreateSmoothMesh(diamond);
             }
             else
             {
@@ -114,9 +114,6 @@ namespace RockBuilder
 
             // Initialize variables for uv logic
             Vector2[] uv = new Vector2[initialVerticesCount];
-            float circumference = Vector3.Distance(vertexPositions[0], vertexPositions[1]) * diamond.edges;
-            float uvHeightBody = ((diamond.pavillonHeight / circumference) * 2);
-            float uvHeightTotal = (((diamond.crownHeight + diamond.pavillonHeight) / circumference) * 2);
 
             // Initialize variables for triangle logic
             int[] triangles = new int[diamond.edges * 15];
@@ -143,10 +140,10 @@ namespace RockBuilder
                     vertices[vertexLoop + 3] = vertexPositions[pavillonStartIndex] - diamond.transform.position;
                 }
 
-                uv[vertexLoop] = new Vector2(((float)loopCount + 0.5f) / (float)halfAmountOfEdges, 0f);
-                uv[vertexLoop + 1] = new Vector2((float)loopCount / (float)halfAmountOfEdges, uvHeightBody / 2);
-                uv[vertexLoop + 2] = new Vector2(((float)loopCount + 0.5f) / (float)halfAmountOfEdges, uvHeightBody);
-                uv[vertexLoop + 3] = new Vector2(((float)loopCount + 1f) / (float)halfAmountOfEdges, uvHeightBody / 2);
+                uv[vertexLoop] = new Vector2(.5f, .5f);
+                uv[vertexLoop + 1] = DrawCircularVerticesForUv(halfAmountOfEdges, .25f, .5f + loopCount * -1f);
+                uv[vertexLoop + 2] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, 0f + loopCount * -1f);
+                uv[vertexLoop + 3] = DrawCircularVerticesForUv(halfAmountOfEdges, .25f, -.5f + loopCount * -1f);
 
                 triangles[triangleVerticesCount] = verticesCount;
                 triangles[triangleVerticesCount + 1] = verticesCount + 1;
@@ -184,12 +181,13 @@ namespace RockBuilder
                     vertices[vertexLoop + 5] = vertexPositions[halfAmountOfEdges + 1] - diamond.transform.position;
                 }
 
-                uv[vertexLoop] = new Vector2(((float)loopCount + 1f) / (float)halfAmountOfEdges, uvHeightBody / 2);
-                uv[vertexLoop + 1] = new Vector2(((float)loopCount + 0.5f) / (float)halfAmountOfEdges, uvHeightBody);
-                uv[vertexLoop + 2] = new Vector2(((float)loopCount + 1f) / (float)halfAmountOfEdges, uvHeightBody);
-                uv[vertexLoop + 3] = new Vector2(((float)loopCount + 1f) / (float)halfAmountOfEdges, uvHeightBody / 2);
-                uv[vertexLoop + 4] = new Vector2(((float)loopCount + 1f) / (float)halfAmountOfEdges, uvHeightBody);
-                uv[vertexLoop + 5] = new Vector2(((float)loopCount + 1.5f) / (float)halfAmountOfEdges, uvHeightBody);
+                uv[vertexLoop] = DrawCircularVerticesForUv(halfAmountOfEdges, .25f, -.5f - loopCount + 1);
+                uv[vertexLoop + 1] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, -.5f - loopCount + 1);
+                uv[vertexLoop + 2] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, -1f - loopCount + 1);
+                uv[vertexLoop + 3] = DrawCircularVerticesForUv(halfAmountOfEdges, .25f, -1.5f - loopCount + 1);
+                uv[vertexLoop + 4] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, -1f - loopCount + 1);
+                uv[vertexLoop + 5] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, -1.5f - loopCount + 1);
+
 
                 triangles[triangleVerticesCount] = verticesCount;
                 triangles[triangleVerticesCount + 1] = verticesCount + 1;
@@ -227,6 +225,13 @@ namespace RockBuilder
                     vertices[vertexLoop + 4] = vertexPositions[halfAmountOfEdges + 1] - diamond.transform.position;
                 }
 
+                uv[vertexLoop] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, 1f + loopCount + 1);
+                uv[vertexLoop + 1] = DrawCircularVerticesForUv(halfAmountOfEdges, .375f, 1f + loopCount + 1);
+                uv[vertexLoop + 2] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, 1.5f + loopCount + 1);
+                uv[vertexLoop + 3] = DrawCircularVerticesForUv(halfAmountOfEdges, .375f, 2f + loopCount + 1);
+                uv[vertexLoop + 4] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, 2f + loopCount + 1);
+                uv[vertexLoop + 5] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, 1.5f + loopCount + 1);
+
                 triangles[triangleVerticesCount] = verticesCount;
                 triangles[triangleVerticesCount + 1] = verticesCount + 1;
                 triangles[triangleVerticesCount + 2] = verticesCount + 2;
@@ -261,6 +266,11 @@ namespace RockBuilder
                     vertices[vertexLoop + 3] = vertexPositions[crownStartIndex] - diamond.transform.position;
                 }
 
+                uv[vertexLoop] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, 1.5f + loopCount + 1);
+                uv[vertexLoop + 1] = DrawCircularVerticesForUv(halfAmountOfEdges, .375f, 1f + loopCount + 1);
+                uv[vertexLoop + 2] = DrawCircularVerticesForUv(halfAmountOfEdges, .25f, 1.5f + loopCount + 1);
+                uv[vertexLoop + 3] = DrawCircularVerticesForUv(halfAmountOfEdges, .375f, 2f + loopCount + 1);
+
                 triangles[triangleVerticesCount] = verticesCount;
                 triangles[triangleVerticesCount + 1] = verticesCount + 1;
                 triangles[triangleVerticesCount + 2] = verticesCount + 2;
@@ -294,6 +304,10 @@ namespace RockBuilder
                     vertices[vertexLoop + 2] = vertexPositions[(halfAmountOfEdges * 4) + 1] - diamond.transform.position;
                 }
 
+                uv[vertexLoop] = DrawCircularVerticesForUv(halfAmountOfEdges, .375f, 2f + loopCount + 1);
+                uv[vertexLoop + 1] = DrawCircularVerticesForUv(halfAmountOfEdges, .25f, 1.5f + loopCount + 1);
+                uv[vertexLoop + 2] = DrawCircularVerticesForUv(halfAmountOfEdges, .25f, 2.5f + loopCount + 1);
+
                 triangles[triangleVerticesCount] = verticesCount;
                 triangles[triangleVerticesCount + 1] = verticesCount + 1;
                 triangles[triangleVerticesCount + 2] = verticesCount + 2;
@@ -322,6 +336,10 @@ namespace RockBuilder
                     vertices[vertexLoop + 2] = vertexPositions[(halfAmountOfEdges * 4) + 1] - diamond.transform.position;
                 }
 
+                uv[vertexLoop] = DrawCircularVerticesForUv(halfAmountOfEdges, .25f, 1.5f + loopCount + 1);
+                uv[vertexLoop + 1] = new Vector2(0.5f, 0.5f);
+                uv[vertexLoop + 2] = DrawCircularVerticesForUv(halfAmountOfEdges, .25f, 2.5f + loopCount + 1);
+
                 triangles[triangleVerticesCount] = verticesCount;
                 triangles[triangleVerticesCount + 1] = verticesCount + 1;
                 triangles[triangleVerticesCount + 2] = verticesCount + 2;
@@ -343,129 +361,200 @@ namespace RockBuilder
             return mesh;
         }
 
-        //private Mesh CreateSmoothMesh(Diamond diamond)
-        //{
+        private Mesh CreateSmoothMesh(Diamond diamond)
+        {
+            List<Vector3> vertexPositions = diamond.vertexPositions;
+            int halfAmountOfEdges = diamond.edges / 2;
 
-        //    List<Vector3> vertexPositions = diamond.vertexPositions;
+            // Initialize variables for vertices logic
+            int initialVerticesCount = diamond.edges * 3 + 2;
+            Vector3[] vertices = new Vector3[initialVerticesCount];
+            int vertexLoop = 0;
 
-        //    int vrticesCount = (diamond.edges * 4) + 2;
-        //    Vector3[] vertices = new Vector3[vrticesCount];
-        //    Vector2[] uv = new Vector2[vrticesCount];
-        //    int vertexLoop = 0;
-        //    float circumference = Vector3.Distance(vertexPositions[0], vertexPositions[1]) * diamond.edges;
-        //    float uvHeightBody = (1f - (diamond.height / circumference)) / 2;
-        //    float uvHeightTotal = (1f - ((diamond.heightPeak * 2 + diamond.height) / circumference)) / 4;
+            // Initialize variables for uv logic
+            Vector2[] uv = new Vector2[initialVerticesCount];
 
-        //    for (int loopCount = 0; diamond.edges > loopCount; loopCount++)
-        //    {
-        //        vertices[vertexLoop] = vertexPositions[diamond.edges + loopCount] - diamond.transform.position;
-        //        vertices[vertexLoop + 1] = vertexPositions[loopCount] - diamond.transform.position;
+            // Initialize variables for triangle logic
+            int[] triangles = new int[diamond.edges * 12];
+            int verticesCount = 0;
+            int triangleVerticesCount = 0;
 
-        //        uv[vertexLoop] = new Vector2((float)loopCount / (float)diamond.edges, 1f - uvHeightBody);
-        //        uv[vertexLoop + 1] = new Vector2(((float)loopCount) / (float)diamond.edges, uvHeightBody);
+            // Set the vertex of the bottom peak
+            vertices[vertexLoop] = vertexPositions[0] - diamond.transform.position;
+            vertexLoop++;
 
-        //        vertexLoop = vertexLoop + 2;
-        //    }
+            // Calculate vertices, uv and triangles for the first part of the pavillon
+            for (int loopCount = 0; diamond.edges > loopCount; loopCount++)
+            {
+                int bootomPeakStartIndex = 0;
+                int upperPavillonStartIndex = halfAmountOfEdges + 1;
 
-        //    vertices[vertexLoop] = vertexPositions[diamond.edges] - diamond.transform.position;
-        //    vertices[vertexLoop + 1] = vertexPositions[0] - diamond.transform.position;
-        //    uv[vertexLoop] = new Vector2(1f, 1f - uvHeightBody);
-        //    uv[vertexLoop + 1] = new Vector2(1f, uvHeightBody);
-        //    vertexLoop = vertexLoop + 2;
-
-        //    // Get the vertices for both peaks
-        //    for (int loopCount = 0; diamond.edges > loopCount; loopCount++)
-        //    {
-        //        vertices[vertexLoop] = vertexPositions[(diamond.edges * 2) + 1] - diamond.transform.position;
-        //        uv[vertexLoop] = new Vector2(((float)loopCount / (float)diamond.edges) + 1f / (float)diamond.edges / 2f, uvHeightTotal);
-        //        vertexLoop++;
-        //    }
-
-        //    for (int loopCount = 0; diamond.edges > loopCount; loopCount++)
-        //    {
-        //        vertices[vertexLoop] = vertexPositions[(diamond.edges * 2)] - diamond.transform.position;
-        //        uv[vertexLoop] = new Vector2(((float)loopCount / (float)diamond.edges) + 1f / (float)diamond.edges / 2f, 1f - uvHeightTotal);
-        //        vertexLoop++;
-        //    }
-
-        //    #region Draw triangles 
-        //    int[] triangles = new int[(diamond.edges * 12) + 6];
-        //    int loopCountBody = (diamond.edges * 2) + 2;
-        //    int loopCountPeak = diamond.edges * 2;
-        //    int verticesCount = 0;
-        //    int triangleVerticesCount = 0;
-
-        //    for (int i = 0; verticesCount < loopCountBody; i = i - 1)
-        //    {
-        //        triangles[triangleVerticesCount] = i;
-        //        triangles[triangleVerticesCount + 1] = i = i + 3;
-        //        triangles[triangleVerticesCount + 2] = i = i - 2;
-        //        triangles[triangleVerticesCount + 3] = i = i - 1;
-        //        triangles[triangleVerticesCount + 4] = i = i + 2;
-        //        triangles[triangleVerticesCount + 5] = i = i + 1;
-
-        //        if (verticesCount == loopCountBody - 2)
-        //        {
-        //            triangles[triangleVerticesCount + 1] = 1;
-        //            triangles[triangleVerticesCount + 4] = 0;
-        //            triangles[triangleVerticesCount + 5] = 1;
-        //        }
-
-        //        triangleVerticesCount += 6;
-        //        verticesCount += 2;
-        //    }
-
-        //    for (int i = 0; 0 < loopCountPeak; i = i - 1)
-        //    {
-        //        triangles[triangleVerticesCount] = verticesCount + diamond.edges;
-        //        triangles[triangleVerticesCount + 1] = i = i + 2;
-        //        triangles[triangleVerticesCount + 2] = i = i - 2;
-        //        triangles[triangleVerticesCount + 3] = verticesCount;
-        //        triangles[triangleVerticesCount + 4] = i = i + 1;
-        //        triangles[triangleVerticesCount + 5] = i = i + 2;
-
-        //        if (loopCountPeak == 2)
-        //        {
-        //            triangles[triangleVerticesCount + 1] = diamond.edges * 2;
-        //            triangles[triangleVerticesCount + 5] = (diamond.edges * 2) + 1;
-        //        }
-
-        //        triangleVerticesCount += 6;
-        //        verticesCount++;
-        //        loopCountPeak -= 2;
-        //    }
-        //    #endregion
-
-        //    Mesh mesh = new Mesh();
-        //    mesh.Clear();
-        //    mesh.vertices = vertices;
-        //    mesh.triangles = triangles;
-        //    mesh.uv = uv;
-        //    mesh.name = "generated diamond mesh";
-        //    mesh.RecalculateNormals();
+                if (loopCount < halfAmountOfEdges)
+                {
+                    vertices[vertexLoop + 1] = vertexPositions[upperPavillonStartIndex + loopCount * 2 + 1] - diamond.transform.position;
+                    vertices[vertexLoop] = vertexPositions[upperPavillonStartIndex + loopCount * 2] - diamond.transform.position;
 
 
-        //    #region Recalculate some normals manually for smoother shading. 
-        //    Vector3[] normals = mesh.normals;
+                    uv[bootomPeakStartIndex] = new Vector2(.5f, .5f);
+                    uv[vertexLoop] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, .5f + loopCount * -1f);
+                    uv[vertexLoop + 1] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, 0f + loopCount * -1f);
 
-        //    Vector3 averageNormal1 = (normals[0] + normals[(diamond.edges * 2)]) / 2;
-        //    normals[0] = averageNormal1;
-        //    normals[(diamond.edges * 2)] = averageNormal1;
+                    vertexLoop = vertexLoop + 2;
+                }
 
-        //    Vector3 averageNormal2 = (normals[1] + normals[(diamond.edges * 2) + 1]) / 2;
-        //    normals[1] = averageNormal2;
-        //    normals[(diamond.edges * 2) + 1] = averageNormal2;
+                triangles[triangleVerticesCount] = bootomPeakStartIndex;
+                triangles[triangleVerticesCount + 1] = verticesCount + 1;
+                triangles[triangleVerticesCount + 2] = verticesCount + 2;
+                if (diamond.edges - 1 == loopCount)
+                {
+                    triangles[triangleVerticesCount + 2] = bootomPeakStartIndex + 1;
+                }
 
-        //    for (int i = 1; i < diamond.edges + 1; i++)
-        //    {
-        //        normals[normals.Length - i] = new Vector3(0f, 1f, 0f);
-        //        normals[normals.Length - i - diamond.edges] = new Vector3(0f, -1f, 0f);
-        //    }
+                triangleVerticesCount += 3;
+                verticesCount += 1;
+            }
 
-        //    mesh.normals = normals;
-        //    #endregion
-        //    mesh.Optimize();
-        //    return mesh;
-        //}
+            // Calculate vertices, uv and triangles for the first part of the pavillon
+            for (int loopCount = 0; diamond.edges > loopCount; loopCount++)
+            {
+                int crownStartIndex = (halfAmountOfEdges * 3) + 1;
+                int upperPavillonStartIndex = halfAmountOfEdges + 1;
+
+                if (loopCount < halfAmountOfEdges)
+                {
+                    vertices[vertexLoop] = vertexPositions[upperPavillonStartIndex + loopCount * 2] - diamond.transform.position;
+                    vertices[vertexLoop + 1] = vertexPositions[upperPavillonStartIndex + loopCount * 2 + 1] - diamond.transform.position;
+                    vertices[diamond.edges * 2 + 1 + loopCount] = vertexPositions[crownStartIndex + loopCount] - diamond.transform.position;
+
+                    uv[diamond.edges * 2 + 1 + loopCount] = DrawCircularVerticesForUv(halfAmountOfEdges, 0.375f, 0.5f + loopCount);
+                    uv[vertexLoop] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, 0.5f + loopCount);
+                    uv[vertexLoop + 1] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, 1f + loopCount);
+
+                    vertexLoop = vertexLoop + 2;
+                }
+
+                triangles[triangleVerticesCount] = (diamond.edges * 2) + 1 + loopCount / 2;
+                triangles[triangleVerticesCount + 2] = verticesCount;
+                triangles[triangleVerticesCount + 1] = verticesCount + 1;
+
+                triangleVerticesCount += 3;
+                verticesCount += 1;
+            }
+
+            vertexLoop = vertexLoop + halfAmountOfEdges;
+            verticesCount = vertexLoop;
+
+
+            // Calculate vertices, uv and triangles for the first part of the pavillon
+            for (int loopCount = 0; halfAmountOfEdges > loopCount; loopCount++)
+            {
+                int upperCrownStartIndex = (halfAmountOfEdges * 4) + 1;
+                int crownStartIndex = (halfAmountOfEdges * 3) + 1;
+                int upperPavillonStartIndex = halfAmountOfEdges + 1 + loopCount * 2;
+
+                vertices[vertexLoop] = vertexPositions[upperCrownStartIndex + loopCount] - diamond.transform.position;
+                uv[vertexLoop] = DrawCircularVerticesForUv(halfAmountOfEdges, .25f, 1f + loopCount);
+                vertexLoop = vertexLoop + 1;
+
+                triangles[triangleVerticesCount] = diamond.edges + 2 + loopCount * 2;
+                triangles[triangleVerticesCount + 1] = (diamond.edges * 2) + 1 + loopCount;
+                triangles[triangleVerticesCount + 2] = verticesCount;
+                triangles[triangleVerticesCount + 3] = diamond.edges + 2 + loopCount * 2;
+                triangles[triangleVerticesCount + 4] = verticesCount;
+                triangles[triangleVerticesCount + 5] = (diamond.edges * 2) + 2 + loopCount;
+
+                if (halfAmountOfEdges - 1 == loopCount)
+                {
+                    triangles[triangleVerticesCount + 5] = (diamond.edges * 2) + 1;
+                }
+
+                triangleVerticesCount += 6;
+                verticesCount += 1;
+            }
+
+            // Calculate vertices, uv and triangles for the first part of the pavillon
+            for (int loopCount = 0; halfAmountOfEdges > loopCount; loopCount++)
+            {
+                int upperCrownStartIndex = (halfAmountOfEdges * 5) + 1;
+                int crownStartIndex = (diamond.edges * 2) + 1;
+
+                triangles[triangleVerticesCount] = crownStartIndex + loopCount + 1;
+                triangles[triangleVerticesCount + 1] = upperCrownStartIndex + loopCount;
+                triangles[triangleVerticesCount + 2] = upperCrownStartIndex + loopCount + 1;
+
+
+                if (halfAmountOfEdges - 1 == loopCount)
+                {
+                    triangles[triangleVerticesCount] = crownStartIndex;
+                    triangles[triangleVerticesCount + 2] = upperCrownStartIndex;
+                }
+
+                triangleVerticesCount += 3;
+            }
+
+
+            // Get the vertex in the middle of the upper plane
+            int upperMiddlePlaneStartIndex = (halfAmountOfEdges * 5 + 1);
+            vertices[vertexLoop] = vertexPositions[upperMiddlePlaneStartIndex] - diamond.transform.position;
+            uv[vertexLoop] = DrawCircularVerticesForUv(halfAmountOfEdges, 0f, 0f);
+
+            // Calculate vertices, uv and triangles for the first part of the pavillon
+            for (int loopCount = 0; halfAmountOfEdges > loopCount; loopCount++)
+            {
+
+                int upperCrownStartIndex = (halfAmountOfEdges * 5) + 1;
+
+                triangles[triangleVerticesCount] = upperCrownStartIndex + loopCount;
+                triangles[triangleVerticesCount + 1] = verticesCount;
+                triangles[triangleVerticesCount + 2] = upperCrownStartIndex + loopCount + 1;
+
+
+                if (halfAmountOfEdges - 1 == loopCount)
+                {
+                    triangles[triangleVerticesCount + 2] = upperCrownStartIndex;
+                }
+
+                triangleVerticesCount += 3;
+            }
+
+
+
+            Mesh mesh = new Mesh();
+            mesh.Clear();
+            mesh.vertices = vertices;
+            mesh.triangles = triangles;
+            mesh.uv = uv;
+            mesh.name = "generated diamond mesh";
+            mesh.RecalculateNormals();
+
+            #region Recalculate some normals manually for smoother shading. 
+            Vector3[] normals = mesh.normals;
+
+            for (int i = 1; i < diamond.edges + 1; i++)
+            {
+                Vector3 averageNormal = (normals[i] + normals[i + diamond.edges]) / 2;
+                normals[i] = averageNormal;
+                normals[i + diamond.edges] = averageNormal;
+            }
+
+            mesh.normals = normals;
+            #endregion
+
+            mesh.Optimize();
+            return mesh;
+        }
+
+        private Vector3 DrawCircularVerticesForUv(int edges, float radius, float offset)
+        {
+            Vector2 uvPosition;
+            float degree = (360f / edges);
+            degree += (360f / edges) * offset;
+            float radian = degree * Mathf.Deg2Rad;
+            float x = Mathf.Cos(radian);
+            float y = Mathf.Sin(radian);
+            uvPosition = new Vector2(.5f, .5f);
+            uvPosition = uvPosition + new Vector2(x, y) * radius;
+            return uvPosition;
+        }
     }
 }

@@ -38,8 +38,9 @@ namespace RockBuilder
             diamond.upperRadius = 1f;
             diamond.bottomRadiusPosition = 0.5f;
             diamond.edges = 8;
-            diamond.smooth = false;
+            diamond.smoothFlag = false;
             diamond.lodCount = 0;
+            diamond.colliderFlag = true;
             //Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
             diamond.vertexPositions = DiamondMeshGenerator.Instance.CreateVertexPositions(diamond);
             diamond.transform.position = CalculateDiamondSpawnPosition(diamond);
@@ -63,7 +64,7 @@ namespace RockBuilder
             diamond.vertexPositions = DiamondMeshGenerator.Instance.CreateVertexPositions(diamond);
             diamond.mesh = DiamondMeshGenerator.Instance.CreateMesh(diamond);
             //CreateLods(diamond);
-            //CreateMeshCollider(diamond);
+            CreateMeshCollider(diamond);
             return diamond;
         }
 
@@ -92,9 +93,12 @@ namespace RockBuilder
         private void CreateMeshCollider(Diamond diamond)
         {
             diamond.RemoveMeshCollider();
-            MeshCollider meshCollider = diamond.gameObject.AddComponent<MeshCollider>();
-            meshCollider.sharedMesh = diamond.mesh;
-            meshCollider.convex = true;
+            if (diamond.colliderFlag)
+            {
+                MeshCollider meshCollider = diamond.gameObject.AddComponent<MeshCollider>();
+                meshCollider.sharedMesh = diamond.mesh;
+                meshCollider.convex = true;
+            }
         }
 
         //public void CreateLods(Diamond diamond)

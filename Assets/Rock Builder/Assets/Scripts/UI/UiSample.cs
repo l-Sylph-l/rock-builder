@@ -318,8 +318,9 @@ namespace RockBuilder
                     fourthParamaterGemstones = crystal.radius;
                     fifthParamaterGemstones = crystal.height;
                     sixthParamaterGemstones = crystal.heightPeak;
-                    seventhParameterGemstones = crystal.smooth;
+                    seventhParameterGemstones = crystal.smoothFlag;
                     eightParamaterGemstones = crystal.lodCount;
+                    ninthParameterGemstones = crystal.colliderFlag; 
                     if (crystal.GetComponent<MeshRenderer>().sharedMaterial != null)
                     {
                         gemstoneMaterial = crystal.GetComponent<MeshRenderer>().sharedMaterial;
@@ -350,8 +351,9 @@ namespace RockBuilder
                     fourthParamaterGemstones = diamond.radius;
                     fifthParamaterGemstones = diamond.pavillonHeight;
                     sixthParamaterGemstones = diamond.crownHeight;
-                    seventhParameterGemstones = diamond.smooth;
+                    seventhParameterGemstones = diamond.smoothFlag;
                     eightParamaterGemstones = diamond.lodCount;
+                    ninthParameterGemstones = diamond.colliderFlag;
                     if (diamond.GetComponent<MeshRenderer>().sharedMaterial != null)
                     {
                         gemstoneMaterial = diamond.GetComponent<MeshRenderer>().sharedMaterial;
@@ -377,8 +379,9 @@ namespace RockBuilder
                 crystal.radius = fourthParamaterGemstones;
                 crystal.height = fifthParamaterGemstones;
                 crystal.heightPeak = sixthParamaterGemstones;
-                crystal.smooth = seventhParameterGemstones;
+                crystal.smoothFlag = seventhParameterGemstones;
                 crystal.lodCount = eightParamaterGemstones;
+                crystal.colliderFlag = ninthParameterGemstones;
             }
             if (diamond != null)
             {
@@ -386,8 +389,9 @@ namespace RockBuilder
                 diamond.radius = fourthParamaterGemstones;
                 diamond.pavillonHeight = fifthParamaterGemstones;
                 diamond.crownHeight = sixthParamaterGemstones;
-                diamond.smooth = seventhParameterGemstones;
+                diamond.smoothFlag = seventhParameterGemstones;
                 diamond.lodCount = eightParamaterGemstones;
+                diamond.colliderFlag = ninthParameterGemstones;
             }
         }
 

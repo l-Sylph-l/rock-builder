@@ -68,7 +68,7 @@ namespace RockBuilder
 
         public Mesh CreateMesh(Crystal crystal)
         {
-            if (crystal.smooth)
+            if (crystal.smoothFlag)
             {
                 return CreateSmoothMesh(crystal);
             }

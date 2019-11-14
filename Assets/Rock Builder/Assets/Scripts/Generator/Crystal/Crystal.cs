@@ -17,7 +17,9 @@ namespace RockBuilder
         [HideInInspector]
         public int edges;
         [HideInInspector]
-        public bool smooth;
+        public bool smoothFlag;
+        [HideInInspector]
+        public bool colliderFlag;
         [HideInInspector]
         public int lodCount;
         [HideInInspector]

@@ -36,7 +36,7 @@ namespace RockBuilder
             crystal.height = 1f;
             crystal.heightPeak = 1f;
             crystal.edges = 3;
-            crystal.smooth = false;
+            crystal.smoothFlag = false;
             crystal.lodCount = 0;
             //Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
             crystal.vertexPositions = CrystalMeshGenerator.Instance.CreateVertexPositions(crystal);
@@ -90,9 +90,12 @@ namespace RockBuilder
         private void CreateMeshCollider(Crystal crystal)
         {
             crystal.RemoveMeshCollider();
-            MeshCollider meshCollider = crystal.gameObject.AddComponent<MeshCollider>();
-            meshCollider.sharedMesh = crystal.mesh;
-            meshCollider.convex = true;
+            if (crystal.colliderFlag)
+            {
+                MeshCollider meshCollider = crystal.gameObject.AddComponent<MeshCollider>();
+                meshCollider.sharedMesh = crystal.mesh;
+                meshCollider.convex = true;
+            }
         } 
 
         public void CreateLods(Crystal crystal)
@@ -126,7 +129,7 @@ namespace RockBuilder
                         childCrystal.edges = crystal.edges / (i + 1);
                         childCrystal.height = crystal.height;
                         childCrystal.heightPeak = crystal.heightPeak;
-                        childCrystal.smooth = crystal.smooth;
+                        childCrystal.smoothFlag = crystal.smoothFlag;
                         childCrystal.vertexPositions = CrystalMeshGenerator.Instance.CreateVertexPositions(childCrystal);
                         childCrystal.mesh = CrystalMeshGenerator.Instance.CreateMesh(childCrystal);
                         childCrystal.name = crystal.name + "_LOD_0" + i;
