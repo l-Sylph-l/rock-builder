@@ -39,7 +39,10 @@ namespace RockBuilder
         // Objecktreferenz für einen Kristall
         Crystal crystal;
 
-        // Objecktreferenz für einen Kristall
+        // Objecktreferenz für ein Juwel
+        Gem gem;
+
+        // Objecktreferenz für einen Diamant
         Diamond diamond;
 
         [MenuItem("Tools/RockBuilder")]
@@ -146,6 +149,7 @@ namespace RockBuilder
                 {
                     Debug.Log("Gem Button was pressed"); // Gibt eine Logmeldung aus
                     secondParameterGemstones = "Gem";
+                    gem = GemService.Instance.CreateEmptyGem(firstParameterGemstones);
                 }
                 GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Diamond_icon.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
                 if (GUILayout.Button("Diamond", GUILayout.Height(60)) && diamond == null)
@@ -159,14 +163,14 @@ namespace RockBuilder
                 GUILayout.Space(15);
 
                 // Der zweite Teil der Gemstones, wird erst eingeblendet, wenn eine Shape ausgewählt wurde
-                if (secondParameterGemstones != "" && (crystal != null || diamond != null))
+                if (secondParameterGemstones != "" && (crystal != null || diamond != null || gem != null))
                 {
-                    UpdateGem();
+                    UpdateGemStones();
 
                     // Dritter Gemstones-Parameter => Slidebar für die Anzahl Vertices
                     if (secondParameterGemstones == "Crystal")
                         thirdParamaterGemstones = EditorGUILayout.IntSlider("Edges", thirdParamaterGemstones, 3, 200);
-                    if (secondParameterGemstones == "Diamond")
+                    if (secondParameterGemstones == "Diamond" || secondParameterGemstones == "Gem")
                     {
                         // Bei den Diamanten darf die Anzahl Edges nicht ungerade sein, deshalb diese Prüfung hier
                         thirdParamaterGemstones = EditorGUILayout.IntSlider("Edges", thirdParamaterGemstones, 6, 200);
@@ -182,7 +186,10 @@ namespace RockBuilder
                         fourthParamaterGemstones = 1.0f;
                     }
                     // Vierter Gemstones-Parameter für den Radius der Objekte
-                    fourthParamaterGemstones = EditorGUILayout.FloatField("Radius", fourthParamaterGemstones);
+                    if (secondParameterGemstones != "Gem")
+                        fourthParamaterGemstones = EditorGUILayout.FloatField("Radius", fourthParamaterGemstones);
+                    else
+                        fourthParamaterGemstones = EditorGUILayout.FloatField("RadiusX", fourthParamaterGemstones);
 
                     // Beschränkt die Usereingaben für die Höhe der Spitze der Kristalle => 0.01 - 1000
                     if (sixthParamaterGemstones < 0.009 || sixthParamaterGemstones > 1000)
@@ -192,6 +199,8 @@ namespace RockBuilder
                     // Sechster Gemstones-Parameter für die Höhe der Spitze oder der Krone
                     if (secondParameterGemstones == "Crystal")
                         sixthParamaterGemstones = EditorGUILayout.FloatField("Peak Height", sixthParamaterGemstones);
+                    if (secondParameterGemstones == "Gem")
+                        sixthParamaterGemstones = EditorGUILayout.FloatField("RadiusY", sixthParamaterGemstones);
                     if (secondParameterGemstones == "Diamond")
                         sixthParamaterGemstones = EditorGUILayout.FloatField("Crown Height", sixthParamaterGemstones);
 
@@ -201,7 +210,10 @@ namespace RockBuilder
                         fifthParamaterGemstones = 1.0f;
                     }
                     // Fünfter Gemstones-Parameter für die Höhe der Objekte
-                    fifthParamaterGemstones = EditorGUILayout.FloatField("Body Height", fifthParamaterGemstones);
+                    if (secondParameterGemstones != "Gem")
+                        fifthParamaterGemstones = EditorGUILayout.FloatField("Body Height", fifthParamaterGemstones);
+                    else
+                        fifthParamaterGemstones = EditorGUILayout.FloatField("width", fifthParamaterGemstones);
 
                     // Siebter Gemstones-Paramter => Die Checkbox, um ein Objekt zu smoothen         
                     seventhParameterGemstones = EditorGUILayout.Toggle("Smooth", seventhParameterGemstones);
@@ -234,6 +246,11 @@ namespace RockBuilder
                         {
                             crystal = CrystalService.Instance.CreateCrystal(crystal);
                             crystal.GetComponent<MeshRenderer>().material = gemstoneMaterial;
+                        }
+                        if (gem)
+                        {
+                            gem = GemService.Instance.CreateGem(gem);
+                            gem.GetComponent<MeshRenderer>().material = gemstoneMaterial;
                         }
                         if (diamond)
                         {
@@ -286,7 +303,8 @@ namespace RockBuilder
         private void Update()
         {
             CheckIfCrystalSelected();
-            CheckIfDiamonSelected();
+            CheckIfGemSelected();
+            CheckIfDiamondSelected();
         }
 
         // Wird benötigt um PNG-Dateien auf dem UI anzeigen zu können
@@ -338,7 +356,40 @@ namespace RockBuilder
             }
         }
 
-        private void CheckIfDiamonSelected()
+        private void CheckIfGemSelected()
+        {
+            if (gem == null)
+            {
+                gem = GemService.Instance.GetGemFromSelection();
+                if (gem != null)
+                {
+                    firstParameterGemstones = gem.name;
+                    secondParameterGemstones = "Gem";
+                    thirdParamaterGemstones = gem.edges;
+                    fourthParamaterGemstones = gem.radiusX;
+                    sixthParamaterGemstones = gem.radiusY;
+                    fifthParamaterGemstones = gem.width;
+                    seventhParameterGemstones = gem.smoothFlag;
+                    eightParamaterGemstones = gem.lodCount;
+                    ninthParameterGemstones = gem.colliderFlag;
+                    if (gem.GetComponent<MeshRenderer>().sharedMaterial != null)
+                    {
+                        gemstoneMaterial = gem.GetComponent<MeshRenderer>().sharedMaterial;
+                    }
+                    this.Repaint();
+                }
+            }
+            else
+            {
+                if (gem != GemService.Instance.GetGemFromSelection())
+                {
+                    gem = null;
+                    this.Repaint();
+                }
+            }
+        }
+
+        private void CheckIfDiamondSelected()
         {
             if (diamond == null)
             {
@@ -371,7 +422,7 @@ namespace RockBuilder
             }
         }
 
-        private void UpdateGem()
+        private void UpdateGemStones()
         {
             if (crystal != null)
             {
@@ -382,6 +433,16 @@ namespace RockBuilder
                 crystal.smoothFlag = seventhParameterGemstones;
                 crystal.lodCount = eightParamaterGemstones;
                 crystal.colliderFlag = ninthParameterGemstones;
+            }
+            if (gem != null)
+            {
+                gem.edges = thirdParamaterGemstones;
+                gem.radiusX = fourthParamaterGemstones;
+                gem.radiusY = sixthParamaterGemstones;
+                gem.width = fifthParamaterGemstones;
+                gem.smoothFlag = seventhParameterGemstones;
+                gem.lodCount = eightParamaterGemstones;
+                gem.colliderFlag = ninthParameterGemstones;
             }
             if (diamond != null)
             {
@@ -400,6 +461,11 @@ namespace RockBuilder
             if (crystal && crystal.mesh == null)
             {
                 DestroyImmediate(crystal.gameObject);
+            }
+
+            if (gem && gem.mesh == null)
+            {
+                DestroyImmediate(gem.gameObject);
             }
 
             if (diamond && diamond.mesh == null)

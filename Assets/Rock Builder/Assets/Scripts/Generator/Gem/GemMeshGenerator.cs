@@ -32,46 +32,62 @@ namespace RockBuilder
         {
             List<Vector3> spawnPoints = new List<Vector3>();
 
-            // Get the point for the bottom peak
-            spawnPoints.Add(gem.transform.position - (Vector3.up * (gem.pavillonHeight)));
+            float startPositionZ = -gem.width / 2;
+            // Get the vertex for the bottom middlepoint
+            spawnPoints.Add(gem.transform.position + (Vector3.forward * startPositionZ));
 
-            // Get the points of the middle pavillon circle
-            for (int loopCount = 0; gem.edges / 2 > loopCount; loopCount++)
+            for (int loopCountZ = 0; 5 > loopCountZ; loopCountZ++)
             {
-                float height = gem.pavillonHeight * gem.bottomRadiusPosition;
-                float radius = gem.radius * gem.bottomRadiusPosition;
-                Vector3 spawnPoint = DrawCircularVertices(gem, radius, -height, gem.edges / 2, loopCount, false);
-                spawnPoints.Add(spawnPoint);
+                float positionZ = startPositionZ + (gem.width / 4) * loopCountZ;
+                float radiusX;
+                float radiusY;
+                if (loopCountZ < 3)
+                {
+                    radiusX = (gem.radiusX / 3) * (loopCountZ + 1);
+                    radiusY = (gem.radiusY / 3) * (loopCountZ + 1);
+                }
+                else
+                {
+                    radiusX = gem.radiusX - ((gem.radiusX / 3) * (loopCountZ-2));
+                    radiusY = gem.radiusY - ((gem.radiusY / 3) * (loopCountZ-2));
+                }
+
+                int edges;
+                if (loopCountZ == 2)
+                {
+                    edges = gem.edges;
+                } else
+                {
+                    edges = gem.edges/2;
+                }
+
+                bool offset;
+
+                if (loopCountZ == 1 || loopCountZ == 3)
+                {
+                    offset = true;
+                }
+                else
+                {
+                    offset = false;
+                }
+           
+                // Get the vertices for the body
+                for (int loopCount = 0; edges > loopCount; loopCount++)
+                {
+                    Vector3 spawnPoint = DrawCircularVertices(gem, radiusX, radiusY, positionZ, edges, loopCount, offset);
+                    spawnPoints.Add(spawnPoint);
+                }
             }
 
-            // Get the points of the upper pavillon circle
-            for (int loopCount = 0; gem.edges > loopCount; loopCount++)
-            {
-                Vector3 spawnPoint = DrawCircularVertices(gem, gem.radius, 0f, gem.edges, loopCount, false);
-                spawnPoints.Add(spawnPoint);
-            }
-
-            // Get the points for the upper circle
-            for (int loopCount = 0; gem.edges / 2 > loopCount; loopCount++)
-            {
-                Vector3 spawnPoint = DrawCircularVertices(gem, gem.radius * 0.75f, gem.crownHeight / 2, gem.edges / 2, loopCount, false);
-                spawnPoints.Add(spawnPoint);
-            }
-
-            // Get the points for the upper plane
-            for (int loopCount = 0; gem.edges / 2 > loopCount; loopCount++)
-            {
-                Vector3 spawnPoint = DrawCircularVertices(gem, gem.radius / 2, gem.crownHeight, gem.edges / 2, loopCount, true);
-                spawnPoints.Add(spawnPoint);
-            }
-
-            // Get the vertex position in the middle from the upper plane
-            spawnPoints.Add(gem.transform.position + (Vector3.up * (gem.crownHeight)));
+            // Get the vertex for the upper middlepoint
+            float endPositionZ = gem.width / 2;
+            spawnPoints.Add(gem.transform.position + (Vector3.forward * endPositionZ));
 
             return spawnPoints;
         }
 
-        private Vector3 DrawCircularVertices(Gem gem, float radius, float height, int edges, int loopCount, bool offset)
+        private Vector3 DrawCircularVertices(Gem gem, float radiusX, float radiusY, float positionZ, int edges, int loopCount, bool offset)
         {
             Vector3 spawnPoint;
             float degree = (360f / edges) * loopCount;
@@ -80,10 +96,10 @@ namespace RockBuilder
                 degree += (360f / edges) / 2;
             }
             float radian = degree * Mathf.Deg2Rad;
-            float x = Mathf.Cos(radian);
-            float z = Mathf.Sin(radian);
-            spawnPoint = new Vector3(x, 0, z) * radius;
-            spawnPoint.y = height;
+            float x = Mathf.Cos(radian) * radiusX;
+            float y = Mathf.Sin(radian) * radiusY;
+            spawnPoint = new Vector3(x, y, 0);
+            spawnPoint.z = positionZ;
             spawnPoint += gem.transform.position;
             return spawnPoint;
         }
@@ -98,7 +114,6 @@ namespace RockBuilder
             {
                 return CreateHardMesh(gem);
             }
-            return null;
             //CreateLods(Gem);
         }
 

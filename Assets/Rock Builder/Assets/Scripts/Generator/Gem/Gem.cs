@@ -9,15 +9,13 @@ namespace RockBuilder
     public class Gem : MonoBehaviour
     {
         [HideInInspector]
-        public float radius;
+        public float radiusX;
         [HideInInspector]
-        public float upperRadius;
+        public float radiusY;
         [HideInInspector]
-        public float bottomRadiusPosition;
+        public float width;
         [HideInInspector]
-        public float pavillonHeight;
-        [HideInInspector]
-        public float crownHeight;
+        public float height;
         [HideInInspector]
         public int edges;
         [HideInInspector]

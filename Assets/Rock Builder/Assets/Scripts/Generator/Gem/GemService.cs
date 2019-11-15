@@ -32,11 +32,9 @@ namespace RockBuilder
         public Gem CreateEmptyGem()
         {
             Gem gem = new GameObject().AddComponent(typeof(Gem)) as Gem;
-            gem.radius = 1f;
-            gem.pavillonHeight = 1f;
-            gem.crownHeight = 0.33f;
-            gem.upperRadius = 1f;
-            gem.bottomRadiusPosition = 0.5f;
+            gem.radiusX = 1f;
+            gem.radiusY = 1.5f;
+            gem.width = 1f;
             gem.edges = 8;
             gem.smoothFlag = false;
             gem.lodCount = 0;
@@ -87,7 +85,7 @@ namespace RockBuilder
         private Vector3 CalculateGemSpawnPosition(Gem gem)
         {
             Transform cameraTransform = SceneView.lastActiveSceneView.camera.transform;
-            return (cameraTransform.forward * (gem.radius * 3f + gem.pavillonHeight * 2f)) + cameraTransform.position;
+            return (cameraTransform.forward * (gem.radiusX * 3f + gem.radiusY * 2f)) + cameraTransform.position;
         }
 
         private void CreateMeshCollider(Gem gem)

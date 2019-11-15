@@ -31,79 +31,118 @@ namespace RockBuilder
         public void DrawLines(List<Vector3> spawnPoints, int edges)
         {
             Gizmos.color = Color.blue;
-            for (int loopCount = 0; edges > loopCount; loopCount++)
+
+            int halfAmountOfEdges = edges / 2;
+            int innerRingIndex = 1;
+            int middleRingIndex = 1 + halfAmountOfEdges;
+            int outerRingIndex = 1 + edges;
+            int secondMiddleRingIndex = 1 + edges * 2;
+            int secondInnerRingIndex = 1 + halfAmountOfEdges + edges * 2;
+
+            for (int loopCount = 0; halfAmountOfEdges > loopCount; loopCount++)
             {
-
-                if (loopCount == edges - 1)
+                int index = loopCount + 1;
+                int nextIndex;
+                if (halfAmountOfEdges - 1 == loopCount)
                 {
-                    //Draw line from the bottom peak to the upper pavillon vertices 
-                    if (loopCount % 2 == 0)
-                    {
-                        Gizmos.DrawLine(spawnPoints[0], spawnPoints[1 + loopCount + edges / 2]);
-                    }
+                    nextIndex = 1;
 
-                    // Draw the upper pavillon circumference 
-                    Gizmos.DrawLine(spawnPoints[(edges / 2) + 1 + loopCount], spawnPoints[(edges / 2) + 1]);
                 }
                 else
                 {
-                    //Draw line from the bottom peak to the upper pavillon vertices     
-                    if (loopCount % 2 == 0)
-                    {
-                        Gizmos.DrawLine(spawnPoints[0], spawnPoints[1 + loopCount + edges / 2]);
-                    }
-                    // Draw the upper pavillon circumference 
-                    Gizmos.DrawLine(spawnPoints[(edges / 2) + 1 + loopCount], spawnPoints[(edges / 2) + 2 + loopCount]);
+                    nextIndex = index + 1;
                 }
 
-
-                if (loopCount < edges / 2)
+                if (0 == loopCount)
                 {
-                    int index;
-                    if (loopCount == 0)
-                    {
-                        index = (edges / 2) + edges;
-                        // Draw from the lower pavillon vertices to the upper vertices
-                        Gizmos.DrawLine(spawnPoints[(edges / 2) + 2], spawnPoints[1 + loopCount]);
-                        Gizmos.DrawLine(spawnPoints[index], spawnPoints[1 + loopCount]);
+                    Gizmos.DrawLine(spawnPoints[index], spawnPoints[index + edges - 1]);
+                }
+                else
+                {
+                    Gizmos.DrawLine(spawnPoints[index], spawnPoints[index + halfAmountOfEdges - 1]);
+                }
 
-                        // Draw from the pavillon vertices to the lower crown vertices
-                        Gizmos.DrawLine(spawnPoints[index + 1], spawnPoints[(edges / 2) + edges]);
-                        Gizmos.DrawLine(spawnPoints[index + 1], spawnPoints[(edges / 2) + 1]);
-                        Gizmos.DrawLine(spawnPoints[index + 1], spawnPoints[(edges / 2) + 2]);
+                Gizmos.DrawLine(spawnPoints[index], spawnPoints[nextIndex]);
+                Gizmos.DrawLine(spawnPoints[index], spawnPoints[index + halfAmountOfEdges]);
+            }
 
-                        // Draw from the lower crown vertices to the upper crown vertices
-                        Gizmos.DrawLine(spawnPoints[index + 1], spawnPoints[(edges / 2) + index + 1]);
-                        Gizmos.DrawLine(spawnPoints[index + 1], spawnPoints[(edges) + index]);
+            for (int loopCount = 0; halfAmountOfEdges > loopCount; loopCount++)
+            {
+                int index = middleRingIndex + loopCount;
+                int nextIndex = (outerRingIndex + loopCount * 2) + 1;
 
-                        // Draw the first line of the top plane of the gem
-                        Gizmos.DrawLine(spawnPoints[(edges / 2) + index + 1], spawnPoints[(edges) + index]);
-                    }
-                    else
-                    {
-                        index = (edges / 2) + (loopCount * 2);
-                        // Draw from the lower pavillon vertices to the upper vertices
-                        Gizmos.DrawLine(spawnPoints[index], spawnPoints[1 + loopCount]);
-                        Gizmos.DrawLine(spawnPoints[index + 2], spawnPoints[1 + loopCount]);
+                Gizmos.DrawLine(spawnPoints[index], spawnPoints[nextIndex]);
+                Gizmos.DrawLine(spawnPoints[index], spawnPoints[nextIndex - 1]);
 
-                        index = (edges / 2) + edges + loopCount + 1;
-                        // Draw from the pavillon vertices to the lower crown vertices
-                        // Always connect one crown vertex to three pavillon vertices
-                        Gizmos.DrawLine(spawnPoints[index], spawnPoints[(edges / 2) + loopCount * 2]);
-                        Gizmos.DrawLine(spawnPoints[index], spawnPoints[(edges / 2) + 1 + loopCount * 2]);
-                        Gizmos.DrawLine(spawnPoints[index], spawnPoints[(edges / 2) + 2 + loopCount * 2]);
-
-                        // Draw from the lower crown vertices to the upper crown vertices
-                        // Always connect one lower crown vertex to two upper crown vertices
-                        Gizmos.DrawLine(spawnPoints[index], spawnPoints[(edges / 2) + index]);
-                        Gizmos.DrawLine(spawnPoints[index], spawnPoints[(edges / 2) + index - 1]);
-
-                        index = edges * 2 + loopCount;
-                        // Draw the top plane of the gem
-                        Gizmos.DrawLine(spawnPoints[index], spawnPoints[index + 1]);
-                    }
+                if (halfAmountOfEdges - 1 == loopCount)
+                {
+                    Gizmos.DrawLine(spawnPoints[index], spawnPoints[outerRingIndex]);
+                }
+                else
+                {
+                    Gizmos.DrawLine(spawnPoints[index], spawnPoints[nextIndex + 1]);
                 }
             }
+
+            for (int loopCount = 0; edges > loopCount; loopCount++)
+            {
+                int index = outerRingIndex + loopCount;
+                int nextIndex = index + 1;
+
+                if (edges - 1 == loopCount)
+                {
+                    Gizmos.DrawLine(spawnPoints[index], spawnPoints[outerRingIndex]);
+                }
+                else
+                {
+                    Gizmos.DrawLine(spawnPoints[index], spawnPoints[nextIndex]);
+                }
+            }
+
+            for (int loopCount = 0; halfAmountOfEdges > loopCount; loopCount++)
+            {
+                int index = secondMiddleRingIndex + loopCount;
+                int nextIndex = (outerRingIndex + loopCount * 2) + 1;
+
+                Gizmos.DrawLine(spawnPoints[index], spawnPoints[nextIndex]);
+                Gizmos.DrawLine(spawnPoints[index], spawnPoints[nextIndex - 1]);
+
+                if (halfAmountOfEdges - 1 == loopCount)
+                {
+                    Gizmos.DrawLine(spawnPoints[index], spawnPoints[outerRingIndex]);
+                }
+                else
+                {
+                    Gizmos.DrawLine(spawnPoints[index], spawnPoints[nextIndex + 1]);
+                }
+            }
+
+            for (int loopCount = 0; halfAmountOfEdges > loopCount; loopCount++)
+            {
+                int index = loopCount + secondInnerRingIndex;
+                int nextIndex;
+                if (halfAmountOfEdges - 1 == loopCount)
+                {
+                    nextIndex = secondInnerRingIndex;
+                }
+                else
+                {
+                    nextIndex = index + 1;
+                }
+
+                if (0 == loopCount)
+                {
+                    Gizmos.DrawLine(spawnPoints[index], spawnPoints[index - 1]);
+                }
+                else
+                {
+                    Gizmos.DrawLine(spawnPoints[index], spawnPoints[index - halfAmountOfEdges - 1]);
+                }
+
+                Gizmos.DrawLine(spawnPoints[index], spawnPoints[nextIndex]);
+                Gizmos.DrawLine(spawnPoints[index], spawnPoints[index - halfAmountOfEdges]);
+            }
+
         }
 
         public void DrawGizmo(Gem gem)
@@ -115,7 +154,7 @@ namespace RockBuilder
             foreach (Vector3 spawnPosition in gem.vertexPositions)
             {
                 Gizmos.color = Color.black;
-                float scaleModeModifier = 1f / (gem.radius);
+                float scaleModeModifier = 1f / (gem.radiusX / 2);
                 float cubeSize = Mathf.Clamp(0.05f / scaleModeModifier, 0.05f, 0.3f);
                 Gizmos.DrawCube(spawnPosition, new Vector3(cubeSize, cubeSize, cubeSize));
                 Gizmos.color = Color.blue;
