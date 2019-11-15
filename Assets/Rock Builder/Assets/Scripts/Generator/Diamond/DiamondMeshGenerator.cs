@@ -98,7 +98,6 @@ namespace RockBuilder
             {
                 return CreateHardMesh(diamond);
             }
-            return null;
             //CreateLods(Diamond);
         }
 
