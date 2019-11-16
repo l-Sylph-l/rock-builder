@@ -138,7 +138,8 @@ namespace RockBuilder
             {
                 radiusUvModifierX = 1f;
                 radiusUvModifierY = gem.radiusY / gem.radiusX;
-            } else
+            }
+            else
             {
                 radiusUvModifierX = gem.radiusX / gem.radiusY;
                 radiusUvModifierY = 1f;
@@ -365,7 +366,7 @@ namespace RockBuilder
             int halfAmountOfEdges = gem.edges / 2;
 
             // Initialize variables for vertices logic
-            int initialVerticesCount = gem.edges * 15 + 2;
+            int initialVerticesCount = gem.edges * 4 + 2;
             Vector3[] vertices = new Vector3[initialVerticesCount];
             int vertexLoop = 0;
 
@@ -411,35 +412,32 @@ namespace RockBuilder
             for (int loopCount = 0; halfAmountOfEdges > loopCount; loopCount++)
             {
                 vertices[vertexLoop] = vertexPositions[innerRingIndex + loopCount] - gem.transform.position;
-                vertices[vertexLoop + 1] = vertexPositions[innerRingIndex + loopCount + 1] - gem.transform.position;
-
-                vertices[vertexLoop + 2] = vertexPositions[secondInnerRingIndex + loopCount] - gem.transform.position;
-                vertices[vertexLoop + 3] = vertexPositions[secondInnerRingIndex + loopCount + 1] - gem.transform.position;
-
-                if (halfAmountOfEdges - 1 == loopCount)
-                {
-                    vertices[vertexLoop + 1] = vertexPositions[innerRingIndex] - gem.transform.position;
-                    vertices[vertexLoop + 3] = vertexPositions[secondInnerRingIndex] - gem.transform.position;
-                }
+                vertices[vertexLoop + 1] = vertexPositions[secondInnerRingIndex + loopCount] - gem.transform.position;
 
                 uv[vertexLoop] = DrawCircularVerticesForUv(halfAmountOfEdges, .166f, 0f + loopCount - uvOffset, radiusUvModifierX, radiusUvModifierY);
-                uv[vertexLoop + 1] = DrawCircularVerticesForUv(halfAmountOfEdges, .166f, 1f + loopCount - uvOffset, radiusUvModifierX, radiusUvModifierY);
+                uv[vertexLoop + 1] = DrawCircularVerticesForUv(halfAmountOfEdges, .166f, 1f - loopCount, radiusUvModifierX, radiusUvModifierY);
 
-                uv[vertexLoop + 2] = DrawCircularVerticesForUv(halfAmountOfEdges, .166f, 1f - loopCount, radiusUvModifierX, radiusUvModifierY);
-                uv[vertexLoop + 3] = DrawCircularVerticesForUv(halfAmountOfEdges, .166f, 0f - loopCount, radiusUvModifierX, radiusUvModifierY);
+                vertexLoop = vertexLoop + 2;
+            }
 
+            for (int loopCount = 0; halfAmountOfEdges > loopCount; loopCount++)
+            {
                 triangles[triangleVerticesCount] = 0;
-                triangles[triangleVerticesCount + 1] = verticesCount + 1;
+                triangles[triangleVerticesCount + 1] = verticesCount + 2;
                 triangles[triangleVerticesCount + 2] = verticesCount;
 
                 triangles[triangleVerticesCount + 3] = 1;
-                triangles[triangleVerticesCount + 4] = verticesCount + 2;
+                triangles[triangleVerticesCount + 4] = verticesCount + 1;
                 triangles[triangleVerticesCount + 5] = verticesCount + 3;
 
-                triangleVerticesCount += 6;
-                verticesCount += 4;
+                if (halfAmountOfEdges - 1 == loopCount)
+                {
+                    triangles[triangleVerticesCount + 1] = 2;
+                    triangles[triangleVerticesCount + 5] = 3;
+                }
 
-                vertexLoop = vertexLoop + 4;
+                triangleVerticesCount += 6;
+                verticesCount += 2;
             }
 
             // Calculate vertices, uv and triangles for the first part of the pavillon
@@ -452,12 +450,18 @@ namespace RockBuilder
                 uv[vertexLoop] = DrawCircularVerticesForUv(halfAmountOfEdges, .333f, 0.5f + loopCount - uvOffset, radiusUvModifierX, radiusUvModifierY);
                 uv[vertexLoop + 1] = DrawCircularVerticesForUv(halfAmountOfEdges, .333f, 0.5f - loopCount, radiusUvModifierX, radiusUvModifierY);
 
-                triangles[triangleVerticesCount] = verticesCount-gem.edges;
-                triangles[triangleVerticesCount + 1] = verticesCount - gem.edges + 1;
+                triangles[triangleVerticesCount] = verticesCount - gem.edges;
+                triangles[triangleVerticesCount + 1] = verticesCount - gem.edges + 2;
                 triangles[triangleVerticesCount + 2] = verticesCount;
-                triangles[triangleVerticesCount + 3] = verticesCount - gem.edges + 2;
+                triangles[triangleVerticesCount + 3] = verticesCount - gem.edges + 1;
                 triangles[triangleVerticesCount + 4] = verticesCount + 1;
                 triangles[triangleVerticesCount + 5] = verticesCount - gem.edges + 3;
+
+                if (halfAmountOfEdges - 1 == loopCount)
+                {
+                    triangles[triangleVerticesCount + 1] = 2;
+                    triangles[triangleVerticesCount + 5] = 3;
+                }
 
                 triangleVerticesCount += 6;
                 verticesCount += 2;
@@ -465,115 +469,85 @@ namespace RockBuilder
                 vertexLoop = vertexLoop + 2;
             }
 
-            //// Calculate vertices, uv and triangles for the first part of the pavillon
-            //for (int loopCount = 0; halfAmountOfEdges > loopCount; loopCount++)
-            //{
+            // Calculate vertices, uv and triangles for the first part of the pavillon
+            for (int loopCount = 0; halfAmountOfEdges > loopCount; loopCount++)
+            {
 
-            //    vertices[vertexLoop] = vertexPositions[innerRingIndex + loopCount] - gem.transform.position;
-            //    vertices[vertexLoop + 1] = vertexPositions[middleRingIndex + loopCount] - gem.transform.position;
-            //    vertices[vertexLoop + 2] = vertexPositions[outerRingIndex + loopCount * 2] - gem.transform.position;
-            //    vertices[vertexLoop + 3] = vertexPositions[middleRingIndex + loopCount - 1] - gem.transform.position;
+                vertices[vertexLoop] = vertexPositions[outerRingIndex + loopCount * 2] - gem.transform.position;
+                vertices[vertexLoop + 1] = vertexPositions[outerRingIndex + loopCount * 2] - gem.transform.position;
 
-            //    vertices[vertexLoop + 4] = vertexPositions[secondInnerRingIndex + loopCount] - gem.transform.position;
-            //    vertices[vertexLoop + 5] = vertexPositions[secondMiddleRingIndex + loopCount] - gem.transform.position;
-            //    vertices[vertexLoop + 6] = vertexPositions[outerRingIndex + loopCount * 2] - gem.transform.position;
-            //    vertices[vertexLoop + 7] = vertexPositions[secondMiddleRingIndex + loopCount - 1] - gem.transform.position;
+                uv[vertexLoop] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, 0f + loopCount - uvOffset, radiusUvModifierX, radiusUvModifierY);
+                uv[vertexLoop + 1] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, 1f - loopCount, radiusUvModifierX, radiusUvModifierY);
 
-            //    if (loopCount == 0)
-            //    {
-            //        vertices[vertexLoop + 3] = vertexPositions[middleRingIndex + halfAmountOfEdges - 1] - gem.transform.position;
-            //        vertices[vertexLoop + 7] = vertexPositions[secondMiddleRingIndex + halfAmountOfEdges - 1] - gem.transform.position;
-            //    }
+                vertexLoop = vertexLoop + 2;
+            }
 
-            //    uv[vertexLoop] = DrawCircularVerticesForUv(halfAmountOfEdges, .166f, 0f + loopCount - uvOffset, radiusUvModifierX, radiusUvModifierY);
-            //    uv[vertexLoop + 1] = DrawCircularVerticesForUv(halfAmountOfEdges, .333f, 0.5f + loopCount - uvOffset, radiusUvModifierX, radiusUvModifierY);
-            //    uv[vertexLoop + 2] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, 0f + loopCount - uvOffset, radiusUvModifierX, radiusUvModifierY);
-            //    uv[vertexLoop + 3] = DrawCircularVerticesForUv(halfAmountOfEdges, .333f, -0.5f + loopCount - uvOffset, radiusUvModifierX, radiusUvModifierY);
+            for (int loopCount = 0; halfAmountOfEdges > loopCount; loopCount++)
+            {
+                triangles[triangleVerticesCount] = verticesCount;
+                triangles[triangleVerticesCount + 1] = verticesCount - (gem.edges * 2);
+                triangles[triangleVerticesCount + 2] = verticesCount - gem.edges;
+                triangles[triangleVerticesCount + 3] = verticesCount - gem.edges;
+                triangles[triangleVerticesCount + 4] = verticesCount - (gem.edges * 2) + 2;
+                triangles[triangleVerticesCount + 5] = verticesCount + 2;
 
-            //    uv[vertexLoop + 4] = DrawCircularVerticesForUv(halfAmountOfEdges, .166f, 1f - loopCount, radiusUvModifierX, radiusUvModifierY);
-            //    uv[vertexLoop + 5] = DrawCircularVerticesForUv(halfAmountOfEdges, .333f, 0.5f - loopCount, radiusUvModifierX, radiusUvModifierY);
-            //    uv[vertexLoop + 6] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, 1f - loopCount, radiusUvModifierX, radiusUvModifierY);
-            //    uv[vertexLoop + 7] = DrawCircularVerticesForUv(halfAmountOfEdges, .333f, 1.5f - loopCount, radiusUvModifierX, radiusUvModifierY);
+                triangles[triangleVerticesCount + 6] = verticesCount + 1;
+                triangles[triangleVerticesCount + 7] = verticesCount - gem.edges + 1;
+                triangles[triangleVerticesCount + 8] = verticesCount - (gem.edges * 2) + 1;
+                triangles[triangleVerticesCount + 9] = verticesCount - gem.edges + 1;
+                triangles[triangleVerticesCount + 10] = verticesCount + 3;
+                triangles[triangleVerticesCount + 11] = verticesCount - (gem.edges * 2) + 3;
 
-            //    triangles[triangleVerticesCount] = verticesCount;
-            //    triangles[triangleVerticesCount + 1] = verticesCount + 1;
-            //    triangles[triangleVerticesCount + 2] = verticesCount + 2;
-            //    triangles[triangleVerticesCount + 3] = verticesCount + 3;
-            //    triangles[triangleVerticesCount + 4] = verticesCount;
-            //    triangles[triangleVerticesCount + 5] = verticesCount + 2;
+                if (halfAmountOfEdges - 1 == loopCount)
+                {
+                    triangles[triangleVerticesCount + 4] = 2;
+                    triangles[triangleVerticesCount + 5] = verticesCount - gem.edges + 2;
+                    triangles[triangleVerticesCount + 11] = 3;
+                    triangles[triangleVerticesCount + 10] = verticesCount - gem.edges + 3;
+                }
 
-            //    triangles[triangleVerticesCount + 6] = verticesCount + 4;
-            //    triangles[triangleVerticesCount + 7] = verticesCount + 6;
-            //    triangles[triangleVerticesCount + 8] = verticesCount + 5;
-            //    triangles[triangleVerticesCount + 9] = verticesCount + 7;
-            //    triangles[triangleVerticesCount + 10] = verticesCount + 6;
-            //    triangles[triangleVerticesCount + 11] = verticesCount + 4;
+                triangleVerticesCount += 12;
+                verticesCount += 2;
+            }
 
-            //    triangleVerticesCount += 12;
-            //    verticesCount += 8;
+            // Calculate vertices, uv and triangles for the first part of the pavillon
+            for (int loopCount = 0; halfAmountOfEdges > loopCount; loopCount++)
+            {
 
-            //    vertexLoop = vertexLoop + 8;
-            //}
+                vertices[vertexLoop] = vertexPositions[outerRingIndex + loopCount * 2 + 1] - gem.transform.position;
+                vertices[vertexLoop + 1] = vertexPositions[outerRingIndex + loopCount * 2 + 1] - gem.transform.position;
 
-            //// Calculate vertices, uv and triangles for the first part of the pavillon
-            //for (int loopCount = 0; halfAmountOfEdges > loopCount; loopCount++)
-            //{
+                uv[vertexLoop] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, 0.5f + loopCount - uvOffset, radiusUvModifierX, radiusUvModifierY);
+                uv[vertexLoop + 1] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, 0.5f - loopCount, radiusUvModifierX, radiusUvModifierY);
 
-            //    vertices[vertexLoop] = vertexPositions[middleRingIndex + loopCount] - gem.transform.position;
-            //    vertices[vertexLoop + 1] = vertexPositions[outerRingIndex + loopCount * 2] - gem.transform.position;
-            //    vertices[vertexLoop + 2] = vertexPositions[outerRingIndex + loopCount * 2 + 1] - gem.transform.position;
-            //    vertices[vertexLoop + 3] = vertexPositions[middleRingIndex + loopCount] - gem.transform.position;
-            //    vertices[vertexLoop + 4] = vertexPositions[outerRingIndex + loopCount * 2 + 1] - gem.transform.position;
-            //    vertices[vertexLoop + 5] = vertexPositions[outerRingIndex + loopCount * 2 + 2] - gem.transform.position;
+                vertexLoop = vertexLoop + 2;
+            }
 
-            //    vertices[vertexLoop + 6] = vertexPositions[secondMiddleRingIndex + loopCount] - gem.transform.position;
-            //    vertices[vertexLoop + 7] = vertexPositions[outerRingIndex + loopCount * 2] - gem.transform.position;
-            //    vertices[vertexLoop + 8] = vertexPositions[outerRingIndex + loopCount * 2 + 1] - gem.transform.position;
-            //    vertices[vertexLoop + 9] = vertexPositions[secondMiddleRingIndex + loopCount] - gem.transform.position;
-            //    vertices[vertexLoop + 10] = vertexPositions[outerRingIndex + loopCount * 2 + 1] - gem.transform.position;
-            //    vertices[vertexLoop + 11] = vertexPositions[outerRingIndex + loopCount * 2 + 2] - gem.transform.position;
+            for (int loopCount = 0; halfAmountOfEdges > loopCount; loopCount++)
+            {
+                triangles[triangleVerticesCount] = verticesCount;
+                triangles[triangleVerticesCount + 1] = verticesCount - gem.edges;
+                triangles[triangleVerticesCount + 2] = verticesCount - (gem.edges * 2);
+                triangles[triangleVerticesCount + 3] = verticesCount - (gem.edges * 2);
+                triangles[triangleVerticesCount + 4] = verticesCount - gem.edges + 2;
+                triangles[triangleVerticesCount + 5] = verticesCount;
 
+                triangles[triangleVerticesCount + 6] = verticesCount + 1;
+                triangles[triangleVerticesCount + 7] = verticesCount - (gem.edges * 2) + 1;
+                triangles[triangleVerticesCount + 8] = verticesCount - gem.edges + 1;
+                triangles[triangleVerticesCount + 9] = verticesCount - gem.edges + 3;
+                triangles[triangleVerticesCount + 10] = verticesCount - (gem.edges * 2) + 1;
+                triangles[triangleVerticesCount + 11] = verticesCount + 1;
 
-            //    if (halfAmountOfEdges - 1 == loopCount)
-            //    {
+                if (halfAmountOfEdges - 1 == loopCount)
+                {
+                    triangles[triangleVerticesCount + 4] = verticesCount - gem.edges * 2 + 2;
+                    triangles[triangleVerticesCount + 9] = verticesCount - gem.edges * 2 + 3;
+                }
 
-            //        vertices[vertexLoop + 5] = vertexPositions[outerRingIndex] - gem.transform.position;
-            //        vertices[vertexLoop + 11] = vertexPositions[outerRingIndex] - gem.transform.position;
-            //    }
-
-            //    uv[vertexLoop] = DrawCircularVerticesForUv(halfAmountOfEdges, .333f, 0.5f + loopCount - uvOffset, radiusUvModifierX, radiusUvModifierY);
-            //    uv[vertexLoop + 1] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, 0f + loopCount - uvOffset, radiusUvModifierX, radiusUvModifierY);
-            //    uv[vertexLoop + 2] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, 0.5f + loopCount - uvOffset, radiusUvModifierX, radiusUvModifierY);
-            //    uv[vertexLoop + 3] = DrawCircularVerticesForUv(halfAmountOfEdges, .333f, 0.5f + loopCount - uvOffset, radiusUvModifierX, radiusUvModifierY);
-            //    uv[vertexLoop + 4] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, 0.5f + loopCount - uvOffset, radiusUvModifierX, radiusUvModifierY);
-            //    uv[vertexLoop + 5] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, 1f + loopCount - uvOffset, radiusUvModifierX, radiusUvModifierY);
-
-            //    uv[vertexLoop + 6] = DrawCircularVerticesForUv(halfAmountOfEdges, .333f, 0.5f - loopCount, radiusUvModifierX, radiusUvModifierY);
-            //    uv[vertexLoop + 7] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, 1f - loopCount, radiusUvModifierX, radiusUvModifierY);
-            //    uv[vertexLoop + 8] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, 0.5f - loopCount, radiusUvModifierX, radiusUvModifierY);
-            //    uv[vertexLoop + 9] = DrawCircularVerticesForUv(halfAmountOfEdges, .333f, 0.5f - loopCount, radiusUvModifierX, radiusUvModifierY);
-            //    uv[vertexLoop + 10] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, 0.5f - loopCount, radiusUvModifierX, radiusUvModifierY);
-            //    uv[vertexLoop + 11] = DrawCircularVerticesForUv(halfAmountOfEdges, .5f, 0f - loopCount, radiusUvModifierX, radiusUvModifierY);
-
-            //    triangles[triangleVerticesCount] = verticesCount;
-            //    triangles[triangleVerticesCount + 1] = verticesCount + 2;
-            //    triangles[triangleVerticesCount + 2] = verticesCount + 1;
-            //    triangles[triangleVerticesCount + 3] = verticesCount + 3;
-            //    triangles[triangleVerticesCount + 4] = verticesCount + 5;
-            //    triangles[triangleVerticesCount + 5] = verticesCount + 4;
-
-            //    triangles[triangleVerticesCount + 6] = verticesCount + 6;
-            //    triangles[triangleVerticesCount + 7] = verticesCount + 7;
-            //    triangles[triangleVerticesCount + 8] = verticesCount + 8;
-            //    triangles[triangleVerticesCount + 9] = verticesCount + 9;
-            //    triangles[triangleVerticesCount + 10] = verticesCount + 10;
-            //    triangles[triangleVerticesCount + 11] = verticesCount + 11;
-
-            //    triangleVerticesCount += 12;
-            //    verticesCount += 12;
-
-            //    vertexLoop = vertexLoop + 12;
-            //}
+                triangleVerticesCount += 12;
+                verticesCount += 2;
+            }
 
             Mesh mesh = new Mesh();
             mesh.Clear();
@@ -581,8 +555,25 @@ namespace RockBuilder
             mesh.triangles = triangles;
             mesh.uv = uv;
             mesh.name = "generated gem mesh";
-            mesh.Optimize();
             mesh.RecalculateNormals();
+
+            #region Recalculate some normals manually for smoother shading. 
+            Vector3[] normals = mesh.normals;
+            verticesCount--;
+
+            for (int i = 0; i < gem.edges; i++)
+            {
+                int firstIndex = verticesCount - i * 2;
+                int secondIndex = verticesCount - i * 2 - 1;
+                Vector3 averageNormal = (normals[firstIndex] + normals[secondIndex]) / 2;
+                normals[firstIndex] = averageNormal;
+                normals[secondIndex] = averageNormal;
+            }
+
+            mesh.normals = normals;
+            #endregion
+
+            mesh.Optimize();
             return mesh;
         }
 
