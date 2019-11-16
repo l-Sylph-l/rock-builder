@@ -28,9 +28,15 @@ namespace RockBuilder
             }
         }
 
-        public void DrawLines(List<Vector3> spawnPoints, int edges)
+        public void DrawLines(List<Vector3> spawnPoints, int edges, Gem gem)
         {
             Gizmos.color = Color.blue;
+            Gizmos.matrix = gem.transform.localToWorldMatrix;
+
+            for (int loopCount = 0; spawnPoints.Count > loopCount; loopCount++)
+            {
+                spawnPoints[loopCount] = spawnPoints[loopCount] - gem.transform.position;
+            }
 
             int halfAmountOfEdges = edges / 2;
             int innerRingIndex = 1;
@@ -148,7 +154,7 @@ namespace RockBuilder
         public void DrawGizmo(Gem gem)
         {
 
-            DrawLines(gem.vertexPositions, gem.edges);
+            DrawLines(gem.vertexPositions, gem.edges, gem);
 
             // Draw black cubes on every vertex position of the gem
             foreach (Vector3 spawnPosition in gem.vertexPositions)

@@ -28,9 +28,16 @@ namespace RockBuilder
             }
         }
 
-        public void DrawLines(List<Vector3> spawnPoints, int edges)
+        public void DrawLines(List<Vector3> spawnPoints, int edges, Diamond diamond)
         {
             Gizmos.color = Color.blue;
+            Gizmos.matrix = diamond.transform.localToWorldMatrix;
+
+            for (int loopCount = 0; spawnPoints.Count > loopCount; loopCount++)
+            {
+                spawnPoints[loopCount] = spawnPoints[loopCount] - diamond.transform.position;
+            }
+
             for (int loopCount = 0; edges > loopCount; loopCount++)
             {
 
@@ -109,7 +116,7 @@ namespace RockBuilder
         public void DrawGizmo(Diamond diamond)
         {
 
-            DrawLines(diamond.vertexPositions, diamond.edges);
+            DrawLines(diamond.vertexPositions, diamond.edges, diamond);
 
             // Draw black cubes on every vertex position of the diamond
             foreach (Vector3 spawnPosition in diamond.vertexPositions)
