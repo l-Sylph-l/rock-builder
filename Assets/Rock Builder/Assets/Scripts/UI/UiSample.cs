@@ -366,8 +366,8 @@ namespace RockBuilder
                     firstParameterGemstones = gem.name;
                     secondParameterGemstones = "Gem";
                     thirdParamaterGemstones = gem.edges;
-                    fourthParamaterGemstones = gem.radiusX;
-                    sixthParamaterGemstones = gem.radiusY;
+                    sixthParamaterGemstones = gem.radiusX;
+                    fourthParamaterGemstones  = gem.radiusY;
                     fifthParamaterGemstones = gem.width;
                     seventhParameterGemstones = gem.smoothFlag;
                     eightParamaterGemstones = gem.lodCount;
@@ -437,8 +437,8 @@ namespace RockBuilder
             if (gem != null)
             {
                 gem.edges = thirdParamaterGemstones;
-                gem.radiusX = fourthParamaterGemstones;
-                gem.radiusY = sixthParamaterGemstones;
+                gem.radiusX = sixthParamaterGemstones;
+                gem.radiusY = fourthParamaterGemstones;
                 gem.width = fifthParamaterGemstones;
                 gem.smoothFlag = seventhParameterGemstones;
                 gem.lodCount = eightParamaterGemstones;

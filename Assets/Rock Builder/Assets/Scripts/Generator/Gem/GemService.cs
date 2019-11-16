@@ -32,9 +32,9 @@ namespace RockBuilder
         public Gem CreateEmptyGem()
         {
             Gem gem = new GameObject().AddComponent(typeof(Gem)) as Gem;
-            gem.radiusX = 1f;
-            gem.radiusY = 1.5f;
-            gem.width = 1f;
+            gem.radiusX = 0.5f;
+            gem.radiusY = 1f;
+            gem.width = 0.5f;
             gem.edges = 8;
             gem.smoothFlag = false;
             gem.lodCount = 0;

@@ -136,11 +136,11 @@ namespace RockBuilder
                         childCrystal.name = crystal.name + "_LOD_0" + i;
                         childCrystal.transform.parent = crystal.transform;
                         childCrystal.transform.localPosition = new Vector3(0f, 0f, 0f);
-                        childCrystal.GetComponent<MeshRenderer>().material = crystal.GetComponent<MeshRenderer>().sharedMaterial;
+                        childCrystal.GetComponent<MeshRenderer>().sharedMaterial = crystal.GetComponent<MeshRenderer>().sharedMaterial;
                         renderers = new Renderer[1];
                         renderers[0] = childCrystal.GetComponent<Renderer>();
                         childrens[i - 1] = childCrystal.transform;
-                        //childCrystal.RemoveCrystalClass();
+                        childCrystal.RemoveCrystalClass();
                     }
                     else
                     {

@@ -317,5 +317,18 @@ namespace RockBuilder
             mesh.Optimize();
             return mesh;
         }
+
+        private Vector3 DrawCircularVerticesForUv(int edges, float radius, float offset)
+        {
+            Vector2 uvPosition;
+            float degree = (360f / edges);
+            degree += (360f / edges) * offset;
+            float radian = degree * Mathf.Deg2Rad;
+            float x = Mathf.Cos(radian);
+            float y = Mathf.Sin(radian);
+            uvPosition = new Vector2(.5f, .5f);
+            uvPosition = uvPosition + new Vector2(x, y) * radius;
+            return uvPosition;
+        }
     }
 }
