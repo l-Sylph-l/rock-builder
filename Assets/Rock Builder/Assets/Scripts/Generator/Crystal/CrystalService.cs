@@ -128,6 +128,7 @@ namespace RockBuilder
                     {
                         childCrystal = new GameObject().AddComponent(typeof(Crystal)) as Crystal;
                         childCrystal.edges = crystal.edges / (i + 1);
+                        childCrystal.radius = crystal.radius;
                         childCrystal.height = crystal.height;
                         childCrystal.heightPeak = crystal.heightPeak;
                         childCrystal.smoothFlag = crystal.smoothFlag;
@@ -135,7 +136,8 @@ namespace RockBuilder
                         childCrystal.mesh = CrystalMeshGenerator.Instance.CreateMesh(childCrystal);
                         childCrystal.name = crystal.name + "_LOD_0" + i;
                         childCrystal.transform.parent = crystal.transform;
-                        childCrystal.transform.localPosition = new Vector3(0f, 0f, 0f);
+                        childCrystal.transform.localPosition = Vector3.zero;
+                        childCrystal.transform.localRotation = new Quaternion(0f, 0f, 0f, 0f);
                         childCrystal.GetComponent<MeshRenderer>().sharedMaterial = crystal.GetComponent<MeshRenderer>().sharedMaterial;
                         renderers = new Renderer[1];
                         renderers[0] = childCrystal.GetComponent<Renderer>();

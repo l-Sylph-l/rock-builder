@@ -144,7 +144,7 @@ namespace RockBuilder
                     secondParameterGemstones = "Crystal";
                     crystal = CrystalService.Instance.CreateEmptyCrystal(firstParameterGemstones);
                 }
-                GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Gem_icon.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
+                GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Gem_Icon_2.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
                 if (GUILayout.Button("   Gem   ", GUILayout.Height(60)))
                 {
                     Debug.Log("Gem Button was pressed"); // Gibt eine Logmeldung aus
@@ -189,7 +189,7 @@ namespace RockBuilder
                     if (secondParameterGemstones != "Gem")
                         fourthParamaterGemstones = EditorGUILayout.FloatField("Radius", fourthParamaterGemstones);
                     else
-                        fourthParamaterGemstones = EditorGUILayout.FloatField("RadiusX", fourthParamaterGemstones);
+                        fourthParamaterGemstones = EditorGUILayout.FloatField("Height", fourthParamaterGemstones);
 
                     // Beschränkt die Usereingaben für die Höhe der Spitze der Kristalle => 0.01 - 1000
                     if (sixthParamaterGemstones < 0.009 || sixthParamaterGemstones > 1000)
@@ -200,7 +200,7 @@ namespace RockBuilder
                     if (secondParameterGemstones == "Crystal")
                         sixthParamaterGemstones = EditorGUILayout.FloatField("Peak Height", sixthParamaterGemstones);
                     if (secondParameterGemstones == "Gem")
-                        sixthParamaterGemstones = EditorGUILayout.FloatField("RadiusY", sixthParamaterGemstones);
+                        sixthParamaterGemstones = EditorGUILayout.FloatField("Width", sixthParamaterGemstones);
                     if (secondParameterGemstones == "Diamond")
                         sixthParamaterGemstones = EditorGUILayout.FloatField("Crown Height", sixthParamaterGemstones);
 
@@ -213,7 +213,7 @@ namespace RockBuilder
                     if (secondParameterGemstones != "Gem")
                         fifthParamaterGemstones = EditorGUILayout.FloatField("Body Height", fifthParamaterGemstones);
                     else
-                        fifthParamaterGemstones = EditorGUILayout.FloatField("width", fifthParamaterGemstones);
+                        fifthParamaterGemstones = EditorGUILayout.FloatField("Depth", fifthParamaterGemstones);
 
                     // Siebter Gemstones-Paramter => Die Checkbox, um ein Objekt zu smoothen         
                     seventhParameterGemstones = EditorGUILayout.Toggle("Smooth", seventhParameterGemstones);
@@ -366,9 +366,9 @@ namespace RockBuilder
                     firstParameterGemstones = gem.name;
                     secondParameterGemstones = "Gem";
                     thirdParamaterGemstones = gem.edges;
-                    sixthParamaterGemstones = gem.radiusX;
-                    fourthParamaterGemstones  = gem.radiusY;
-                    fifthParamaterGemstones = gem.width;
+                    sixthParamaterGemstones = gem.width;
+                    fourthParamaterGemstones  = gem.height;
+                    fifthParamaterGemstones = gem.depth;
                     seventhParameterGemstones = gem.smoothFlag;
                     eightParamaterGemstones = gem.lodCount;
                     ninthParameterGemstones = gem.colliderFlag;
@@ -437,9 +437,9 @@ namespace RockBuilder
             if (gem != null)
             {
                 gem.edges = thirdParamaterGemstones;
-                gem.radiusX = sixthParamaterGemstones;
-                gem.radiusY = fourthParamaterGemstones;
-                gem.width = fifthParamaterGemstones;
+                gem.width = sixthParamaterGemstones;
+                gem.height = fourthParamaterGemstones;
+                gem.depth = fifthParamaterGemstones;
                 gem.smoothFlag = seventhParameterGemstones;
                 gem.lodCount = eightParamaterGemstones;
                 gem.colliderFlag = ninthParameterGemstones;

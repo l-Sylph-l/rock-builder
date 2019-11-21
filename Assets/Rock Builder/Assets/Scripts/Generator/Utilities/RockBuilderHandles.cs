@@ -110,7 +110,7 @@ public class DiamondHandles : Editor
         {
             if (gem.GetComponent<MeshFilter>().sharedMesh != null)
             {
-                Handles.Label(gem.transform.TransformPoint(new Vector3(0f, gem.height + gem.radiusY, 0f)), "Vertices: " + gem.GetComponent<MeshFilter>().sharedMesh.vertices.Length);
+                Handles.Label(gem.transform.TransformPoint(new Vector3(0f, gem.height + gem.height, 0f)), "Vertices: " + gem.GetComponent<MeshFilter>().sharedMesh.vertices.Length);
             }
 
             Handles.BeginGUI();

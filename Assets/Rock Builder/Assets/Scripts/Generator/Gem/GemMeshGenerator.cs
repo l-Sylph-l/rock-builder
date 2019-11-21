@@ -32,24 +32,24 @@ namespace RockBuilder
         {
             List<Vector3> spawnPoints = new List<Vector3>();
 
-            float startPositionZ = -gem.width / 2;
+            float startPositionZ = -gem.depth / 2;
             // Get the vertex for the bottom middlepoint
             spawnPoints.Add(gem.transform.position + (Vector3.forward * startPositionZ));
 
             for (int loopCountZ = 0; 5 > loopCountZ; loopCountZ++)
             {
-                float positionZ = startPositionZ + (gem.width / 4) * loopCountZ;
+                float positionZ = startPositionZ + (gem.depth / 4) * loopCountZ;
                 float radiusX;
                 float radiusY;
                 if (loopCountZ < 3)
                 {
-                    radiusX = (gem.radiusX / 3) * (loopCountZ + 1);
-                    radiusY = (gem.radiusY / 3) * (loopCountZ + 1);
+                    radiusX = (gem.width / 3) * (loopCountZ + 1);
+                    radiusY = (gem.height / 3) * (loopCountZ + 1);
                 }
                 else
                 {
-                    radiusX = gem.radiusX - ((gem.radiusX / 3) * (loopCountZ - 2));
-                    radiusY = gem.radiusY - ((gem.radiusY / 3) * (loopCountZ - 2));
+                    radiusX = gem.width - ((gem.width / 3) * (loopCountZ - 2));
+                    radiusY = gem.height - ((gem.height / 3) * (loopCountZ - 2));
                 }
 
                 int edges;
@@ -82,7 +82,7 @@ namespace RockBuilder
             }
 
             // Get the vertex for the upper middlepoint
-            float endPositionZ = gem.width / 2;
+            float endPositionZ = gem.depth / 2;
             spawnPoints.Add(gem.transform.position + (Vector3.forward * endPositionZ));
 
             return spawnPoints;
@@ -134,14 +134,14 @@ namespace RockBuilder
             float radiusUvModifierX;
             float radiusUvModifierY;
 
-            if (gem.radiusX > gem.radiusY)
+            if (gem.width > gem.height)
             {
                 radiusUvModifierX = 1f;
-                radiusUvModifierY = gem.radiusY / gem.radiusX;
+                radiusUvModifierY = gem.height / gem.width;
             }
             else
             {
-                radiusUvModifierX = gem.radiusX / gem.radiusY;
+                radiusUvModifierX = gem.width / gem.height;
                 radiusUvModifierY = 1f;
             }
 
@@ -376,14 +376,14 @@ namespace RockBuilder
             float radiusUvModifierX;
             float radiusUvModifierY;
 
-            if (gem.radiusX > gem.radiusY)
+            if (gem.width > gem.height)
             {
                 radiusUvModifierX = 1f;
-                radiusUvModifierY = gem.radiusY / gem.radiusX;
+                radiusUvModifierY = gem.height / gem.width;
             }
             else
             {
-                radiusUvModifierX = gem.radiusX / gem.radiusY;
+                radiusUvModifierX = gem.width / gem.height;
                 radiusUvModifierY = 1f;
             }
 

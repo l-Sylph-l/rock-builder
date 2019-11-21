@@ -160,7 +160,7 @@ namespace RockBuilder
             foreach (Vector3 spawnPosition in gem.vertexPositions)
             {
                 Gizmos.color = Color.black;
-                float scaleModeModifier = 1f / (gem.radiusX / 2);
+                float scaleModeModifier = 1f / (gem.width / 2);
                 float cubeSize = Mathf.Clamp(0.05f / scaleModeModifier, 0.05f, 0.3f);
                 Gizmos.DrawCube(spawnPosition, new Vector3(cubeSize, cubeSize, cubeSize));
                 Gizmos.color = Color.blue;

@@ -63,7 +63,7 @@ namespace RockBuilder
             FocusDiamond(diamond);
             diamond.vertexPositions = DiamondMeshGenerator.Instance.CreateVertexPositions(diamond);
             diamond.mesh = DiamondMeshGenerator.Instance.CreateMesh(diamond);
-            //CreateLods(diamond);
+            CreateLods(diamond);
             CreateMeshCollider(diamond);
             return diamond;
         }
@@ -101,69 +101,78 @@ namespace RockBuilder
             }
         }
 
-        //public void CreateLods(Diamond diamond)
-        //{
-        //    if (diamond.childrens != null)
-        //    {
-        //        diamond.RemoveLOD();
-        //    }
+        public void CreateLods(Diamond diamond)
+        {
+            if (diamond.childrens != null)
+            {
+                diamond.RemoveLOD();
+            }
 
-        //    int lodCounter = diamond.lodCount;
+            int lodCounter = diamond.lodCount;
 
-        //    if (lodCounter != 0 && 3 <= diamond.edges / diamond.lodCount)
-        //    {
-        //        // Programmatically create a LOD group and add LOD levels.
-        //        // Create a GUI that allows for forcing a specific LOD level.
-        //        lodCounter += 1;
-        //        LODGroup group = diamond.gameObject.AddComponent<LODGroup>();
-        //        Transform[] childrens = new Transform[lodCounter - 1];
+            if (lodCounter != 0 && 6 <= diamond.edges / diamond.lodCount)
+            {
+                // Programmatically create a LOD group and add LOD levels.
+                // Create a GUI that allows for forcing a specific LOD level.
+                lodCounter += 1;
+                LODGroup group = diamond.gameObject.AddComponent<LODGroup>();
+                Transform[] childrens = new Transform[lodCounter - 1];
 
-        //        // Add 4 LOD levels
-        //        LOD[] lods = new LOD[lodCounter];
-        //        for (int i = 0; i < lodCounter; i++)
-        //        {
+                // Add 4 LOD levels
+                LOD[] lods = new LOD[lodCounter];
+                for (int i = 0; i < lodCounter; i++)
+                {
 
-        //            Renderer[] renderers;
-        //            Diamond childDiamond;
+                    Renderer[] renderers;
+                    Diamond childDiamond;
 
-        //            if (i != 0)
-        //            {
-        //                childDiamond = new GameObject().AddComponent(typeof(Diamond)) as Diamond;
-        //                childDiamond.edges = diamond.edges / (i + 1);
-        //                childDiamond.pavillonHeight = diamond.pavillonHeight;
-        //                childDiamond.crownHeight = diamond.crownHeight;
-        //                childDiamond.smooth = diamond.smooth;
-        //                childDiamond.vertexPositions = DiamondMeshGenerator.Instance.CreateVertexPositions(childDiamond);
-        //                childDiamond.mesh = DiamondMeshGenerator.Instance.CreateMesh(childDiamond);
-        //                childDiamond.name = diamond.name + "_LOD_0" + i;
-        //                childDiamond.transform.parent = diamond.transform;
-        //                childDiamond.transform.localPosition = new Vector3(0f, 0f, 0f);
-        //                childDiamond.GetComponent<MeshRenderer>().material = diamond.GetComponent<MeshRenderer>().sharedMaterial;
-        //                renderers = new Renderer[1];
-        //                renderers[0] = childDiamond.GetComponent<Renderer>();
-        //                childrens[i - 1] = childDiamond.transform;
-        //                //childDiamond.RemoveDiamondClass();
-        //            }
-        //            else
-        //            {
-        //                renderers = new Renderer[1];
-        //                renderers[0] = diamond.GetComponent<Renderer>();
-        //            }
+                    if (i != 0)
+                    {
+                        int edges = diamond.edges / (i + 1);
+                        if (edges % 2 != 0)
+                        {
+                            edges += 1;
+                        }
 
-        //            if (i != lodCounter - 1)
-        //            {
-        //                lods[i] = new LOD((1f / lodCounter) * (lodCounter - i - 1) / 2, renderers);
-        //            }
-        //            else
-        //            {
-        //                lods[i] = new LOD(0f, renderers);
-        //            }
+                        childDiamond = new GameObject().AddComponent(typeof(Diamond)) as Diamond;
+                        childDiamond.edges = edges;
+                        childDiamond.radius = diamond.radius;
+                        childDiamond.bottomRadiusPosition = diamond.bottomRadiusPosition;
+                        childDiamond.pavillonHeight = diamond.pavillonHeight;
+                        childDiamond.crownHeight = diamond.crownHeight;
+                        childDiamond.smoothFlag = diamond.smoothFlag;
+                        childDiamond.vertexPositions = DiamondMeshGenerator.Instance.CreateVertexPositions(childDiamond);
+                        childDiamond.mesh = DiamondMeshGenerator.Instance.CreateMesh(childDiamond);
+                        childDiamond.name = diamond.name + "_LOD_0" + i;
+                        childDiamond.transform.parent = diamond.transform;
+                        childDiamond.transform.localPosition = Vector3.zero;
+                        childDiamond.transform.localRotation = new Quaternion(0f, 0f, 0f, 0f);
+                        childDiamond.GetComponent<MeshRenderer>().material = diamond.GetComponent<MeshRenderer>().sharedMaterial;
+                        renderers = new Renderer[1];
+                        renderers[0] = childDiamond.GetComponent<Renderer>();
+                        childrens[i - 1] = childDiamond.transform;
+                        childDiamond.RemoveDiamondClass();
+                    }
+                    else
+                    {
+                        renderers = new Renderer[1];
+                        renderers[0] = diamond.GetComponent<Renderer>();
+                    }
 
-        //        }
-        //        diamond.childrens = childrens;
-        //        group.SetLODs(lods);
-        //        group.RecalculateBounds();
-        //    }
-        //}
+                    if (i != lodCounter - 1)
+                    {
+                        lods[i] = new LOD((1f / lodCounter) * (lodCounter - i - 1) / 2, renderers);
+                    }
+                    else
+                    {
+                        lods[i] = new LOD(0f, renderers);
+                    }
+
+                }
+                diamond.childrens = childrens;
+                group.SetLODs(lods);
+                group.RecalculateBounds();
+            }
+        }
     }
 }
