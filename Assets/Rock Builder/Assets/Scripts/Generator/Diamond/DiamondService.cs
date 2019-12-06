@@ -56,13 +56,14 @@ namespace RockBuilder
             return diamond;
         }
 
-        public Diamond CreateDiamond(Diamond diamond)
+        public Diamond CreateDiamond(Diamond diamond, Material material)
         {
             //Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
             SceneView.lastActiveSceneView.camera.transform.LookAt(diamond.transform);
             FocusDiamond(diamond);
             diamond.vertexPositions = DiamondMeshGenerator.Instance.CreateVertexPositions(diamond);
             diamond.mesh = DiamondMeshGenerator.Instance.CreateMesh(diamond);
+            diamond.GetComponent<MeshRenderer>().material = material;
             CreateLods(diamond);
             CreateMeshCollider(diamond);
             return diamond;

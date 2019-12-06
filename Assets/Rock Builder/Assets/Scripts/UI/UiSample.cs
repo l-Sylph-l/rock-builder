@@ -244,18 +244,15 @@ namespace RockBuilder
                         // generate existing mesh if diamondgenerator exists, otherwise create a new diamond generator
                         if (crystal)
                         {
-                            crystal = CrystalService.Instance.CreateCrystal(crystal);
-                            crystal.GetComponent<MeshRenderer>().material = gemstoneMaterial;
+                            crystal = CrystalService.Instance.CreateCrystal(crystal, gemstoneMaterial);
                         }
                         if (gem)
                         {
-                            gem = GemService.Instance.CreateGem(gem);
-                            gem.GetComponent<MeshRenderer>().material = gemstoneMaterial;
+                            gem = GemService.Instance.CreateGem(gem, gemstoneMaterial);
                         }
                         if (diamond)
                         {
-                            diamond = DiamondService.Instance.CreateDiamond(diamond);
-                            diamond.GetComponent<MeshRenderer>().material = gemstoneMaterial;
+                            diamond = DiamondService.Instance.CreateDiamond(diamond, gemstoneMaterial);
                         }
                     }
                 }

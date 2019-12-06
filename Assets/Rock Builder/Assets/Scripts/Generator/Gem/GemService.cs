@@ -54,13 +54,14 @@ namespace RockBuilder
             return gem;
         }
 
-        public Gem CreateGem(Gem gem)
+        public Gem CreateGem(Gem gem, Material material)
         {
             //Undo.RegisterCreatedObjectUndo(gemGenerator, "Created gem");
             SceneView.lastActiveSceneView.camera.transform.LookAt(gem.transform);
             FocusGem(gem);
             gem.vertexPositions = GemMeshGenerator.Instance.CreateVertexPositions(gem);
             gem.mesh = GemMeshGenerator.Instance.CreateMesh(gem);
+            gem.GetComponent<MeshRenderer>().material = material;
             CreateLods(gem);
             CreateMeshCollider(gem);
             return gem;

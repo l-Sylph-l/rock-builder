@@ -54,13 +54,14 @@ namespace RockBuilder
             return crystal;
         }
 
-        public Crystal CreateCrystal(Crystal crystal)
+        public Crystal CreateCrystal(Crystal crystal, Material material)
         {
             //Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
             SceneView.lastActiveSceneView.camera.transform.LookAt(crystal.transform);
             FocusCrystal(crystal);
             crystal.vertexPositions = CrystalMeshGenerator.Instance.CreateVertexPositions(crystal);
             crystal.mesh = CrystalMeshGenerator.Instance.CreateMesh(crystal);
+            crystal.GetComponent<MeshRenderer>().material = material;
             CreateLods(crystal);
             CreateMeshCollider(crystal);
             return crystal;
@@ -138,7 +139,7 @@ namespace RockBuilder
                         childCrystal.transform.parent = crystal.transform;
                         childCrystal.transform.localPosition = Vector3.zero;
                         childCrystal.transform.localRotation = new Quaternion(0f, 0f, 0f, 0f);
-                        childCrystal.GetComponent<MeshRenderer>().sharedMaterial = crystal.GetComponent<MeshRenderer>().sharedMaterial;
+                        childCrystal.GetComponent<MeshRenderer>().material = crystal.GetComponent<MeshRenderer>().sharedMaterial;
                         renderers = new Renderer[1];
                         renderers[0] = childCrystal.GetComponent<Renderer>();
                         childrens[i - 1] = childCrystal.transform;

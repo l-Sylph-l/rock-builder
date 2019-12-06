@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RockBuilder
 {
-    public class DiamondPreview : MonoBehaviour
+    public class DiamondPreview
     {
         private static DiamondPreview instance = null;
         private static readonly object padlock = new object();
