@@ -7,7 +7,7 @@ namespace RockBuilder
     public class RockBuild : MonoBehaviour
     {
         //[HideInInspector]
-        public List<List<Vector3>> vertexPositions;
+        public List<RockBuildListIteration> sortedVertices;
         public List<Vector3> rockBuildPoints;
         private int verticalIterations;
         private int verticesPerIteration;

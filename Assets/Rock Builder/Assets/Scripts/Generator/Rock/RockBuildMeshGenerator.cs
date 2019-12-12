@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace RockBuilder
 {
@@ -28,7 +29,15 @@ namespace RockBuilder
             }
         }
 
-        private void CreateIterations(List<Vector3> buildPoints)
+        public Mesh CreateRockMesh(RockBuild rockBuildObject)
+        {
+            List<List<Vector3>> vertexIteratios = CreateIterations(rockBuildObject.rockBuildPoints);
+            rockBuildObject.sortedVertices = SortVerticesClockwise(vertexIteratios);
+
+            return null;
+        }
+
+        private List<List<Vector3>> CreateIterations(List<Vector3> buildPoints)
         {
             float highestBuildPoint = buildPoints[0].y;
             float lowestBuildPoint = buildPoints[0].y;
@@ -48,40 +57,61 @@ namespace RockBuilder
 
             float meshHeight = Mathf.Abs(highestBuildPoint - lowestBuildPoint);
 
-
+            return null;
         }
 
-        private void SortVerticesClockwise(List<List<Vector3>> unsortedVertexPositions)
+        private List<RockBuildListIteration> SortVerticesClockwise(List<List<Vector3>> unsortedVertexPositions)
         {
-            List<List<Vector3>> sortedVertexPositions = new List<List<Vector3>>();
+            List<RockBuildListIteration> sortedVertexPositions = new List<RockBuildListIteration>();
 
             foreach (List<Vector3> iteration in unsortedVertexPositions)
             {
+                RockBuildListIteration sortedIteration = new RockBuildListIteration(iteration);
+
+                Vector3 centerPoint = sortedIteration.GetCenterPoint();
+
                 foreach (Vector3 vertexPosition in iteration)
                 {
-                    
                     // from 0 to 3 o'clock
-                    if (vertexPosition.x > 0 && vertexPosition.z > 0)
+                    if (vertexPosition.x > centerPoint.x && vertexPosition.z > centerPoint.z)
                     {
-
+                        sortedIteration.firstQuarter.Add(vertexPosition);
                     }
                     // from 3 to 6 o'clock
-                    if (vertexPosition.x > 0 && vertexPosition.z < 0)
+                    if (vertexPosition.x > centerPoint.x && vertexPosition.z < centerPoint.z)
                     {
-
+                        sortedIteration.secondQuarter.Add(vertexPosition);
                     }
                     // from 6 to 9 o'clock
-                    if (vertexPosition.x < 0 && vertexPosition.z < 0)
+                    if (vertexPosition.x < centerPoint.x && vertexPosition.z < centerPoint.z)
                     {
-
+                        sortedIteration.thirdQuarter.Add(vertexPosition);
                     }
                     // from 9 to 12 o'clock
-                    if (vertexPosition.x < 0 && vertexPosition.z > 0)
+                    if (vertexPosition.x < centerPoint.x && vertexPosition.z > centerPoint.z)
                     {
-
+                        sortedIteration.fourthQuarter.Add(vertexPosition);
                     }
-
                 }
+
+                sortedIteration.Sort();
+
+                sortedVertexPositions.Add(sortedIteration);
+            }
+
+            return sortedVertexPositions;
+        }
+
+        private void equalizeVertexCount(List<RockBuildListIteration> sortedVertexPositions)
+        {
+            int highestCount = 0;
+            foreach (RockBuildListIteration iteration in sortedVertexPositions)
+            {
+                highestCount = iteration.GetHighestCount();
+            }
+            foreach (RockBuildListIteration iteration in sortedVertexPositions)
+            {
+                
             }
         }
     }

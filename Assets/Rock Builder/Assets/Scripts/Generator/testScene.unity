@@ -24,7 +24,7 @@ RenderSettings:
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 4
+  m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.64522886, g: 0.7016568, b: 0.7963873, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -391,14 +391,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rockBuildPoints:
-  - {x: -4.838277, y: -1.4482403, z: -2.2983656}
-  - {x: 2.5958338, y: 1.2673626, z: -2.8631191}
+  - {x: -5.584258, y: -1.4482403, z: -2.2983656}
+  - {x: 2.5958347, y: 1.2673626, z: -3.3187532}
   - {x: 4.18773, y: 0.81945825, z: 1.2531099}
-  - {x: -1.8122988, y: -1.0391629, z: 5.5727015}
-  - {x: -1.8865099, y: 1.6289456, z: -3.1029015}
+  - {x: -1.8122969, y: -1.0391629, z: 5.5727015}
+  - {x: -2.3915586, y: 1.6289456, z: -3.1029015}
   - {x: 3.7852688, y: -0.88534737, z: 3.8110576}
-  - {x: -4.449519, y: 1, z: 4.787197}
-  - {x: -7.203067, y: 2.661211, z: 2.5811067}
+  - {x: -4.4495077, y: 1, z: 4.787197}
+  - {x: -7.029704, y: 2.661211, z: 2.5811067}
+  - {x: 0, y: 1, z: -6.0211973}
 --- !u!4 &724573109
 Transform:
   m_ObjectHideFlags: 0
@@ -407,7 +408,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 724573107}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15.95, y: 1.22, z: -8.65}
+  m_LocalPosition: {x: -14.61, y: 1.22, z: -8.13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
