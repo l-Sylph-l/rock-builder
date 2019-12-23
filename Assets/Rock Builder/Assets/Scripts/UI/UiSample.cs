@@ -94,16 +94,16 @@ namespace RockBuilder
 
                 GUILayout.BeginHorizontal();
                 //GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Gem_Icon_2.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
-                if (GUILayout.Button("   Standard   ", GUILayout.Height(32)))
+                if (GUILayout.Button("Standard", GUILayout.Height(32)))
                 {
                     Debug.Log("Standard Button was pressed"); // Gibt eine Logmeldung aus
                     secondParameterRocks = "Standard";
                 }
                 //GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Crystal_icon.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
-                if (GUILayout.Button("Make a Shape", GUILayout.Height(32)))
+                if (GUILayout.Button("   Custom   ", GUILayout.Height(32)))
                 {
-                    Debug.Log("Make a Shape Button was pressed"); // Gibt eine Logmeldung aus
-                    secondParameterRocks = "Make a Shape";
+                    Debug.Log("Custom Button was pressed"); // Gibt eine Logmeldung aus
+                    secondParameterRocks = "Custom";
                 }
                 GUILayout.EndHorizontal();
 
@@ -120,13 +120,13 @@ namespace RockBuilder
                     GUILayout.Space(10);
 
                     GUILayout.BeginHorizontal();
-                    GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Gem_Icon_2.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
+                    GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Rounded_Icon.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
                     if (GUILayout.Button("Rounded", GUILayout.Height(32)))
                     {
                         Debug.Log("Rounded Button was pressed"); // Gibt eine Logmeldung aus
                         eightParameterRocks = "Rounded";
                     }
-                    GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Crystal_icon.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
+                    GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Edgy_icon.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
                     if (GUILayout.Button("      Edgy      ", GUILayout.Height(32)))
                     {
                         Debug.Log("Edgy Button was pressed"); // Gibt eine Logmeldung aus
