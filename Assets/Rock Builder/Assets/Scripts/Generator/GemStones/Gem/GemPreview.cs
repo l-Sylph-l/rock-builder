@@ -39,7 +39,6 @@ namespace RockBuilder
             }
 
             int halfAmountOfEdges = edges / 2;
-            int innerRingIndex = 1;
             int middleRingIndex = 1 + halfAmountOfEdges;
             int outerRingIndex = 1 + edges;
             int secondMiddleRingIndex = 1 + edges * 2;

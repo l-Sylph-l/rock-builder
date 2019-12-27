@@ -5,14 +5,14 @@ using UnityEditor;
 
 namespace RockBuilder
 {
-    [CustomEditor(typeof(RockBuild))]
-    public class RockBuildHandles : Editor
+    [CustomEditor(typeof(CustomRock))]
+    public class CustomRockHandles : Editor
     {
-        RockBuild rock;
+        CustomRock rock;
 
         void OnEnable()
         {
-            rock = (RockBuild)target;
+            rock = (CustomRock)target;
             //RockBuilderWindow.ShowWindow();
             //Debug.Log("Current Pipeline: " + RenderPipelineManager.currentPipeline);
         }
@@ -24,11 +24,6 @@ namespace RockBuilder
 
         void OnSceneGUI()
         {
-            float a = -10;
-            float b = 1;
-
-            Debug.Log(Mathf.Abs(b - a));
-            Debug.Log(Mathf.RoundToInt(Mathf.Abs(b - a)/2));
             if (rock.rockBuildPoints != null)
             {
                 Handles.color = new Color(0.0f, 1f, 1f, 0.6f);

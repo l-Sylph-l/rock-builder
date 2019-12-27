@@ -43,6 +43,12 @@ namespace RockBuilder
         private Material gemstoneMaterial; // Material
         float specialParameterDiamond = 0.5f; // Top Radius Diamant
 
+        // Objectreference for a standard rock
+        StandardRock standardRock;
+
+        // Objectreference for a custom rock
+        CustomRock customRock;
+
         // Objecktreferenz für einen Kristall
         Crystal crystal;
 
@@ -104,6 +110,7 @@ namespace RockBuilder
                 {
                     Debug.Log("Custom Button was pressed"); // Gibt eine Logmeldung aus
                     secondParameterRocks = "Custom";
+                    customRock = CustomRockService.Instance.CreateEmptyCustomRock(firstParameterRocks);
                 }
                 GUILayout.EndHorizontal();
 
@@ -194,6 +201,9 @@ namespace RockBuilder
                 // Dies ist der Rocks Teil, falls der User eine eigene Shape erstellen möchte
                 if (secondParameterRocks != "" && secondParameterRocks != "Standard")
                 {
+                    // Update UI depending on the selected custom rock.
+                    UpdateRocks();
+
                     // Dritter Rocks-Parameter => Button für die Anzahl an Points, um eine eigene Steinform zu kreieren
                     if (GUILayout.Button("Add Point", GUILayout.Height(25)))
                     {
@@ -229,6 +239,11 @@ namespace RockBuilder
                     // Button für das Generieren des Steins
                     if (GUILayout.Button("Let's rock!", GUILayout.Height(25)))
                     {
+                        // generate existing mesh if diamondgenerator exists, otherwise create a new diamond generator
+                        if (customRock)
+                        {
+                            customRock = CustomRockService.Instance.CreateCustomRock(customRock, rockMaterial);
+                        }
                         Debug.Log("Rocks-Generate Button was pressed"); // Gibt eine Logmeldung aus
                     }
                 }
@@ -427,6 +442,7 @@ namespace RockBuilder
             CheckIfCrystalSelected();
             CheckIfGemSelected();
             CheckIfDiamondSelected();
+            CheckIfCustomRockSelected();
         }
 
         // Wird benötigt um PNG-Dateien auf dem UI anzeigen zu können
@@ -544,6 +560,63 @@ namespace RockBuilder
             }
         }
 
+        private void CheckIfStandardRockSelected()
+        {
+            if (standardRock == null)
+            {
+                standardRock = StandardRockService.Instance.GetStandardRockFromSelection();
+                if (standardRock != null)
+                {
+                    firstParameterRocks = standardRock.name;
+                    secondParameterRocks = "Standard";
+                    fifthParamaterRocks = standardRock.smoothFlag;
+                    seventhParamaterRocks = standardRock.lodCount;
+                    sixthParamaterRocks = standardRock.colliderFlag;
+                    if (standardRock.GetComponent<MeshRenderer>().sharedMaterial != null)
+                    {
+                        rockMaterial = standardRock.GetComponent<MeshRenderer>().sharedMaterial;
+                    }
+                    this.Repaint();
+                }
+            }
+            else
+            {
+                if (standardRock != CustomRockService.Instance.GetCustomRockFromSelection())
+                {
+                    standardRock = null;
+                    this.Repaint();
+                }
+            }
+        }
+        private void CheckIfCustomRockSelected()
+        {
+            if (customRock == null)
+            {
+                customRock = CustomRockService.Instance.GetCustomRockFromSelection();
+                if (customRock != null)
+                {
+                    firstParameterRocks = customRock.name;
+                    secondParameterRocks = "Custom";
+                    fifthParamaterRocks = customRock.smoothFlag;
+                    seventhParamaterRocks = customRock.lodCount;
+                    sixthParamaterRocks = customRock.colliderFlag;
+                    if (customRock.GetComponent<MeshRenderer>().sharedMaterial != null)
+                    {
+                        rockMaterial = customRock.GetComponent<MeshRenderer>().sharedMaterial;
+                    }
+                    this.Repaint();
+                }
+            }
+            else
+            {
+                if (customRock != CustomRockService.Instance.GetCustomRockFromSelection())
+                {
+                    customRock = null;
+                    this.Repaint();
+                }
+            }
+        }
+
         private void UpdateGemStones()
         {
             if (crystal != null)
@@ -578,6 +651,22 @@ namespace RockBuilder
             }
         }
 
+         private void UpdateRocks()
+        {
+            if (standardRock != null)
+            {
+                standardRock.smoothFlag = seventhParameterGemstones;
+                standardRock.lodCount = eightParamaterGemstones;
+                standardRock.colliderFlag = ninthParameterGemstones;
+            }
+            if (customRock != null)
+            {
+                customRock.smoothFlag = seventhParameterGemstones;
+                customRock.lodCount = eightParamaterGemstones;
+                customRock.colliderFlag = ninthParameterGemstones;
+            }
+        }
+
         private void OnDestroy()
         {
             if (crystal && crystal.mesh == null)
@@ -593,6 +682,16 @@ namespace RockBuilder
             if (diamond && diamond.mesh == null)
             {
                 DestroyImmediate(diamond.gameObject);
+            }
+
+            if (standardRock && standardRock.mesh == null)
+            {
+                DestroyImmediate(standardRock.gameObject);
+            }
+
+            if (customRock && customRock.mesh == null)
+            {
+                DestroyImmediate(customRock.gameObject);
             }
         }
     }
