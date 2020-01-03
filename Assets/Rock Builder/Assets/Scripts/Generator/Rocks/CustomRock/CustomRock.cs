@@ -99,5 +99,11 @@ namespace RockBuilder
                 DestroyImmediate(this.GetComponent<MeshCollider>());
             }
         }
+
+        public void OnDrawGizmosSelected() {
+            Gizmos.color = Color.red;
+
+            Gizmos.DrawSphere(transform.position, 0.5f);
+        }
     }
 }

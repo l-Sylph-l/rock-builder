@@ -43,6 +43,20 @@ namespace RockBuilder
                 }
             }
 
+            if(rock != null){
+                Handles.Label(rock.transform.position + new Vector3(0f, 1f, 0f), "Center point");
+            }
+
+             if (rock.mesh != null && rock.mesh.vertices != null) 
+            {   
+                int loopCount = 0;
+                    foreach(Vector3 vertex in rock.mesh.vertices){
+                        Handles.Label(rock.transform.position + vertex, loopCount + ". " + vertex);
+                        loopCount++;
+                    }
+
+            }
+
             Handles.BeginGUI();
 
             GUILayout.BeginHorizontal();

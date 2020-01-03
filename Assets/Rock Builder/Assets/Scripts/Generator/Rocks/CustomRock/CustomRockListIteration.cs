@@ -61,13 +61,16 @@ namespace RockBuilder
             List<Vector3> vertexList = unsortedVertexList.ToList();
             if (vertexList != null || vertexList.Count != 0)
             {
-                float maxCoordinateX = vertexList.OrderBy(vector => vector.x).First().x;
-                float maxCoordinateZ = vertexList.OrderBy(vector => vector.z).First().z;
-                float minCoordinateX = vertexList.OrderByDescending(vector => vector.x).First().x;
-                float minCoordinateZ = vertexList.OrderByDescending(vector => vector.z).First().z;
+                float maxCoordinateX = vertexList.OrderByDescending(vector => vector.x).First().x;
+                float maxCoordinateZ = vertexList.OrderByDescending(vector => vector.z).First().z;
+                float minCoordinateX = vertexList.OrderBy(vector => vector.x).First().x;
+                float minCoordinateZ = vertexList.OrderBy(vector => vector.z).First().z;
 
-                float middlePointX = minCoordinateX + (maxCoordinateX - minCoordinateX);
-                float middlePointZ = minCoordinateZ + (maxCoordinateZ - minCoordinateZ);
+                float differenceX = (maxCoordinateX - minCoordinateX);
+                float differenceZ = (maxCoordinateZ - minCoordinateZ);
+
+                float middlePointX = minCoordinateX + differenceX / 2;
+                float middlePointZ = minCoordinateZ + differenceZ / 2;
 
                 return new Vector3(middlePointX, 0f, middlePointZ);
             }
@@ -77,23 +80,47 @@ namespace RockBuilder
             }
         }
 
-        public void EqualizeVertexCount(int vertexCount)
+        public float GetAverageHeight()
+        {
+            List<Vector3> vertexList = unsortedVertexList.ToList();
+            int loopCount = 0;
+            float totalHeight = 0f;
+
+            foreach (Vector3 vertex in vertexList)
+            {
+                loopCount++;
+                totalHeight += vertex.y;
+            }
+
+            return totalHeight / loopCount;
+        }
+
+        public void EqualizeVertexCountOnFirstQuarter(int vertexCount)
         {
             if (firstQuarter.Count != vertexCount)
             {
                 InterpolateVertices(firstQuarter, fourthQuarter, secondQuarter, vertexCount);
             }
+        }
 
+        public void EqualizeVertexCountOnSecondQuarter(int vertexCount)
+        {
             if (secondQuarter.Count != vertexCount)
             {
                 InterpolateVertices(secondQuarter, firstQuarter, thirdQuarter, vertexCount);
             }
+        }
 
+        public void EqualizeVertexCountOnThirdQuarter(int vertexCount)
+        {
             if (thirdQuarter.Count != vertexCount)
             {
                 InterpolateVertices(thirdQuarter, secondQuarter, fourthQuarter, vertexCount);
             }
+        }
 
+        public void EqualizeVertexCountOnFourthQuarter(int vertexCount)
+        {
             if (fourthQuarter.Count != vertexCount)
             {
                 InterpolateVertices(fourthQuarter, thirdQuarter, firstQuarter, vertexCount);
@@ -117,10 +144,11 @@ namespace RockBuilder
             }
             else
             {
-                interpolationCountBefore = Mathf.RoundToInt(interpolationCount / 2);
+                float newValue = (float) interpolationCount / 2 + 0.5f;
+                interpolationCountBefore = (int)newValue;
                 interpolationCountAfter = interpolationCountBefore - 1;
-                interpolationFactorBefore = 1f / (interpolationCountBefore);
-                interpolationFactorAfter = 1f / (interpolationCountAfter);
+                interpolationFactorBefore = 1f / (interpolationCountBefore + 1);
+                interpolationFactorAfter = 1f / (interpolationCountAfter + 1);
             }
 
             Vector3 firstVertex = listToInterpolate.First();
@@ -128,15 +156,18 @@ namespace RockBuilder
             for (int loopCount = 0; interpolationCountBefore > loopCount; loopCount++)
             {
                 Vector3 interpolatedVertex = Vector3.Lerp(firstVertex, listBefore.Last(), interpolationFactorBefore * (loopCount + 1));
-                listBefore.Add(interpolatedVertex);
+                listToInterpolate.Add(interpolatedVertex);
             }
 
-            Vector3 lastVertex = listToInterpolate.First();
+            Vector3 lastVertex = listToInterpolate.Last();
 
             for (int loopCount = 0; interpolationCountBefore > loopCount; loopCount++)
             {
-                Vector3 interpolatedVertex = Vector3.Lerp(lastVertex, listAfter.Last(), interpolationFactorAfter * (loopCount + 1));
-                listAfter.Add(interpolatedVertex);
+                if (interpolationCount != 1)
+                {
+                    Vector3 interpolatedVertex = Vector3.Lerp(lastVertex, listAfter.First(), interpolationFactorAfter * (loopCount + 1));
+                    listToInterpolate.Add(interpolatedVertex);
+                }
             }
 
             Sort();
