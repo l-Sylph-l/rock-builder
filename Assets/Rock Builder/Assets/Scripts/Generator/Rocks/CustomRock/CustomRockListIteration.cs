@@ -72,7 +72,7 @@ namespace RockBuilder
                 float middlePointX = minCoordinateX + differenceX / 2;
                 float middlePointZ = minCoordinateZ + differenceZ / 2;
 
-                return new Vector3(middlePointX, 0f, middlePointZ);
+                return new Vector3(middlePointX, GetAverageHeight(), middlePointZ);
             }
             else
             {

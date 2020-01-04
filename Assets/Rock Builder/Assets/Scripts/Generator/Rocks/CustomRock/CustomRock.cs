@@ -11,7 +11,7 @@ namespace RockBuilder
     {
         [HideInInspector]
         public List<CustomRockListIteration> sortedVertices;
-        [HideInInspector]
+      
         public List<Vector3> rockBuildPoints = new List<Vector3>();
         private int verticalIterations;
         private int verticesPerIteration;

@@ -43,37 +43,55 @@ namespace RockBuilder
                 }
             }
 
-            if(rock != null){
+            if (rock != null)
+            {
                 Handles.Label(rock.transform.position + new Vector3(0f, 1f, 0f), "Center point");
             }
 
-             if (rock.mesh != null && rock.mesh.vertices != null) 
-            {   
+            if (rock.mesh != null && rock.mesh.vertices != null)
+            {
                 int loopCount = 0;
-                    foreach(Vector3 vertex in rock.mesh.vertices){
-                        Handles.Label(rock.transform.position + vertex, loopCount + ". " + vertex);
-                        loopCount++;
-                    }
+                foreach (Vector3 vertex in rock.mesh.vertices)
+                {
+                    Handles.Label(rock.transform.position + vertex, loopCount + ". " + vertex);
+                    loopCount++;
+                }
 
             }
 
             Handles.BeginGUI();
 
+            float width = SceneView.lastActiveSceneView.camera.pixelRect.width / 2;
+            float height = SceneView.lastActiveSceneView.camera.pixelRect.height / 2;
+
+            GUI.BeginGroup(new Rect(0, height - 200, width, 100));
+
             GUILayout.BeginHorizontal();
 
-            GUILayout.Space(50);
+            GUILayout.BeginVertical(GUILayout.Width(100));
 
-            if (GUILayout.Button("Edit Rock", GUILayout.Width(150)))
+            if (GUILayout.Button("Edit Rock", GUILayout.Width(100)))
             {
                 RockBuilderWindow.ShowWindow();
             }
 
-            if (GUILayout.Button("Add point", GUILayout.Width(150)))
+            if (GUILayout.Button("Add point", GUILayout.Width(100)))
             {
                 rock.AddNewBuildPoint();
             }
 
+            GUILayout.EndVertical();
+            GUILayout.BeginVertical(GUILayout.Width(100));
+
+            if (rock != null && rock.mesh != null)
+            {
+                GUILayout.Label("Polycount: " + rock.mesh.triangles.Length / 3, GUILayout.Width(125));
+                GUILayout.Label("Vertices: " + rock.mesh.vertexCount, GUILayout.Width(125));
+            }
+            GUILayout.EndVertical();
             GUILayout.EndHorizontal();
+
+            GUI.EndGroup();
 
             Handles.EndGUI();
         }

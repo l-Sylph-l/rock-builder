@@ -41,7 +41,8 @@ namespace RockBuilder
         {
             List<List<Vector3>> vertexIteratios = CreateIterations(customRock.rockBuildPoints);
             customRock.sortedVertices = SortVerticesClockwise(vertexIteratios);
-            equalizeVertexCount(customRock.sortedVertices);
+            customRock.sortedVertices = equalizeVertexCount(customRock.sortedVertices);
+            customRock.sortedVertices = InterpolateBetweenIteration(customRock.sortedVertices);
             return CreateSmoothMesh(customRock);
         }
 
@@ -135,12 +136,8 @@ namespace RockBuilder
             return sortedVertexPositions;
         }
 
-        private void equalizeVertexCount(List<CustomRockListIteration> sortedVertexPositions)
+        private List<CustomRockListIteration> equalizeVertexCount(List<CustomRockListIteration> sortedVertexPositions)
         {
-            int firstQuarterHighestCount = 0;
-            int secondQuarterHighestCount = 0;
-            int thirdQuarterHighestCount = 0;
-            int fourthQuarterHighestCount = 0;
             int highestCount = 0;
 
             int loopCount = 0;
@@ -154,25 +151,6 @@ namespace RockBuilder
 
             foreach (CustomRockListIteration iteration in sortedVertexPositions)
             {
-                // if (iteration.firstQuarter.Count > firstQuarterHighestCount)
-                // {
-                //     firstQuarterHighestCount = iteration.firstQuarter.Count;
-                // }
-                // if (iteration.secondQuarter.Count > secondQuarterHighestCount)
-                // {
-                //     secondQuarterHighestCount = iteration.secondQuarter.Count;
-                // }
-                // if (iteration.thirdQuarter.Count > thirdQuarterHighestCount)
-                // {
-                //     thirdQuarterHighestCount = iteration.thirdQuarter.Count;
-                // }
-                // if (iteration.fourthQuarter.Count > fourthQuarterHighestCount)
-                // {
-                //     fourthQuarterHighestCount = iteration.fourthQuarter.Count;
-                // }
-
-
-
                 if (iteration.firstQuarter.Count > highestCount)
                 {
                     highestCount = iteration.firstQuarter.Count;
@@ -238,11 +216,26 @@ namespace RockBuilder
 
             foreach (CustomRockListIteration iteration in sortedVertexPositions)
             {
+                
                 iteration.EqualizeVertexCountOnFirstQuarter(highestCount);
                 iteration.EqualizeVertexCountOnSecondQuarter(highestCount);
                 iteration.EqualizeVertexCountOnThirdQuarter(highestCount);
                 iteration.EqualizeVertexCountOnFourthQuarter(highestCount);
             }
+
+            return sortedVertexPositions;
+        }
+
+        private List<CustomRockListIteration> EqualizeToNewVertexCount(List<CustomRockListIteration> sortedList, int newCount){
+             foreach (CustomRockListIteration iteration in sortedList)
+            {
+                iteration.EqualizeVertexCountOnFirstQuarter(newCount);
+                iteration.EqualizeVertexCountOnSecondQuarter(newCount);
+                iteration.EqualizeVertexCountOnThirdQuarter(newCount);
+                iteration.EqualizeVertexCountOnFourthQuarter(newCount);
+            }
+
+            return sortedList;
         }
 
         private void RemoveEmptyIterations(List<CustomRockListIteration> sortedLists)
@@ -275,43 +268,6 @@ namespace RockBuilder
                     float newValueY = sortedLists[index].GetAverageHeight();
                     bool vertexFound = false;
                     Vector3 vertex;
-
-                    // foreach (CustomRockListIteration iteration in sortedLists)
-                    // {
-
-                    //     if (iteration.firstQuarter.Count != 0 && !vertexFound && type == IterationType.firstQuarter)
-                    //     {
-                    //         vertexFound = true;
-                    //         vertex = iteration.firstQuarter.First();
-                    //         vertex = new Vector3(vertex.x, newValueY, vertex.z);
-                    //         sortedLists[index].firstQuarter.Add(vertex);
-                    //     }
-
-                    //     if (iteration.secondQuarter.Count != 0 && !vertexFound && type == IterationType.secondQuarter)
-                    //     {
-                    //         vertexFound = true;
-                    //         vertex = iteration.secondQuarter.First();
-                    //         vertex = new Vector3(vertex.x, newValueY, vertex.z);
-                    //         sortedLists[index].secondQuarter.Add(vertex);
-                    //     }
-
-                    //     if (iteration.thirdQuarter.Count != 0 && !vertexFound && type == IterationType.thirdQuarter)
-                    //     {
-                    //         vertexFound = true;
-                    //         vertex = iteration.thirdQuarter.First();
-                    //         vertex = new Vector3(vertex.x, newValueY, vertex.z);
-                    //         sortedLists[index].thirdQuarter.Add(vertex);
-                    //     }
-
-                    //     if (iteration.fourthQuarter.Count != 0 && !vertexFound && type == IterationType.fourthQuarter)
-                    //     {
-                    //         vertexFound = true;
-                    //         vertex = iteration.fourthQuarter.First();
-                    //         vertex = new Vector3(vertex.x, newValueY, vertex.z);
-                    //         sortedLists[index].fourthQuarter.Add(vertex);
-
-                    //     }
-                    // }
 
                     int loopCount = 1;
 
@@ -402,23 +358,115 @@ namespace RockBuilder
             }
         }
 
+        private List<CustomRockListIteration> InterpolateBetweenIteration(List<CustomRockListIteration> sortedList)
+        {
+            List<CustomRockListIteration> newSortedList = new List<CustomRockListIteration>();
+
+            int nextIterationIndex = 1;
+
+            foreach (CustomRockListIteration iteration in sortedList)
+            {
+                if (nextIterationIndex != sortedList.Count)
+                {
+                    CustomRockListIteration nextIteration = sortedList[nextIterationIndex];
+                    float lowestHeight = iteration.GetAverageHeight();
+                    float highestHeight = nextIteration.GetAverageHeight();
+                    float heightDifference = Mathf.Abs(highestHeight - lowestHeight);
+                    int interpolationsBetweenIterations = Mathf.RoundToInt(heightDifference);
+                    List<CustomRockListIteration> interpolationsBetween = new List<CustomRockListIteration>();
+
+                    for (int interpolationCount = 1; interpolationsBetweenIterations > interpolationCount; interpolationCount++)
+                    {
+                        float lerpFactor = 1f / (interpolationsBetweenIterations + 1);
+                        lerpFactor *= interpolationCount;
+                        CustomRockListIteration newIteration = new CustomRockListIteration(new List<Vector3>());
+                        float minNoise = -1f;
+                        float maxNoise = 1f;
+
+                        for (int loopCount = 0; loopCount < iteration.firstQuarter.Count; loopCount++)
+                        {
+                            Vector3 firstVertex = iteration.firstQuarter[loopCount];
+                            Vector3 lastVertex = nextIteration.firstQuarter[loopCount];
+                            Vector3 interpolatedVertex = Vector3.Lerp(firstVertex, lastVertex, lerpFactor);
+                            interpolatedVertex = AddNoise(interpolatedVertex, minNoise, maxNoise);
+                            newIteration.firstQuarter.Add(interpolatedVertex);
+                        }
+
+                        for (int loopCount = 0; loopCount < iteration.secondQuarter.Count; loopCount++)
+                        {
+                            Vector3 firstVertex = iteration.secondQuarter[loopCount];
+                            Vector3 lastVertex = nextIteration.secondQuarter[loopCount];
+                            Vector3 interpolatedVertex = Vector3.Lerp(firstVertex, lastVertex, lerpFactor);
+                            interpolatedVertex = AddNoise(interpolatedVertex, minNoise, maxNoise);
+                            newIteration.secondQuarter.Add(interpolatedVertex);
+                        }
+
+                        for (int loopCount = 0; loopCount < iteration.thirdQuarter.Count; loopCount++)
+                        {
+                            Vector3 firstVertex = iteration.thirdQuarter[loopCount];
+                            Vector3 lastVertex = nextIteration.thirdQuarter[loopCount];
+                            Vector3 interpolatedVertex = Vector3.Lerp(firstVertex, lastVertex, lerpFactor);
+                            interpolatedVertex = AddNoise(interpolatedVertex, minNoise, maxNoise);
+                            newIteration.thirdQuarter.Add(interpolatedVertex);
+                        }
+
+                        for (int loopCount = 0; loopCount < iteration.fourthQuarter.Count; loopCount++)
+                        {
+                            Vector3 firstVertex = iteration.fourthQuarter[loopCount];
+                            Vector3 lastVertex = nextIteration.fourthQuarter[loopCount];
+                            Vector3 interpolatedVertex = Vector3.Lerp(firstVertex, lastVertex, lerpFactor);
+                            interpolatedVertex = AddNoise(interpolatedVertex, minNoise, maxNoise);
+                            newIteration.fourthQuarter.Add(interpolatedVertex);
+                        }
+                        interpolationsBetween.Add(newIteration);
+                    }
+
+                    newSortedList.Add(iteration);
+                    newSortedList.AddRange(interpolationsBetween);
+                }
+                else
+                {
+                    newSortedList.Add(iteration);
+                }
+
+                nextIterationIndex++;
+            }
+
+            return newSortedList;
+        }
+
+        private Vector3 AddNoise(Vector3 vertex, float min, float max)
+        {
+            float x = vertex.x + Random.Range(min, max);
+            float z = vertex.z + Random.Range(min, max);
+            return new Vector3(x, vertex.y, z);
+        }
         private Mesh CreateSmoothMesh(CustomRock rockBuildData)
         {
 
             //List<Vector3> vertexPositions = rockBuildData.GetVertexCount();
-
-            int vrticesCount = rockBuildData.GetVertexCount();
+            int vrticesCount = rockBuildData.GetVertexCount() + 2;
             Vector3[] vertices = new Vector3[vrticesCount];
             Vector2[] uv = new Vector2[vrticesCount];
             int vertexLoop = 0;
-
+            int vertexCountPerIteration = rockBuildData.sortedVertices[0].GetVertexCount();
+            int uvIterationY = 0;      
             foreach (CustomRockListIteration iterationList in rockBuildData.sortedVertices)
             {
+                
+                float uvHeightIteration = 1f / rockBuildData.sortedVertices.Count;
+                float uvWidthIteration = 1f / vertexCountPerIteration;
+                float uvPositionY = uvIterationY * uvHeightIteration;
+                int uvIterationX = 0; 
                 foreach (Vector3 vertex in iterationList.GetSortedVertexList())
                 {
+                    float uvPositionX = uvIterationX * uvWidthIteration;
                     vertices[vertexLoop] = vertex;
+                    uv[vertexLoop] = new Vector2(uvPositionX, uvPositionY);
                     vertexLoop++;
+                    uvIterationX++;
                 }
+                uvIterationY++;
             }
 
             //    for (int loopCount = 0; rockBuildData.sortedVertices.Count > loopCount; loopCount++)
@@ -430,10 +478,10 @@ namespace RockBuilder
             //    }
             //}
 
-            int[] triangles = new int[rockBuildData.GetVertexCount() * 6];
+            int[] triangles = new int[rockBuildData.GetVertexCount() * 9];
             int verticesCount = 0;
             int triangleVerticesCount = 0;
-            int vertexCountPerIteration = rockBuildData.sortedVertices[0].GetVertexCount();
+
 
             for (int literationCount = 0; literationCount < rockBuildData.sortedVertices.Count; literationCount++)
             {
@@ -468,6 +516,43 @@ namespace RockBuilder
                 }
             }
 
+            int lastVertexCount = vertexLoop - 1;
+            CustomRockListIteration firstIteration = rockBuildData.sortedVertices.First();
+            int lowerMiddlePointIndex = vertexLoop;
+            vertices[lowerMiddlePointIndex] = firstIteration.GetCenterPoint();
+
+            for (int loopCount = 0; loopCount < vertexCountPerIteration; loopCount++)
+            {
+                triangles[triangleVerticesCount] = loopCount;
+                triangles[triangleVerticesCount + 1] = lowerMiddlePointIndex;
+                triangles[triangleVerticesCount + 2] = loopCount + 1;
+
+                if (loopCount == vertexCountPerIteration - 1)
+                {
+                    triangles[triangleVerticesCount + 2] = 0;
+                }
+
+                triangleVerticesCount += 3;
+            }
+
+            CustomRockListIteration lastIteration = rockBuildData.sortedVertices.Last();
+            int upperMiddlePointIndex = vertexLoop + 1;
+            vertices[upperMiddlePointIndex] = lastIteration.GetCenterPoint();
+
+            for (int loopCount = 0; loopCount < vertexCountPerIteration; loopCount++)
+            {
+                triangles[triangleVerticesCount] = upperMiddlePointIndex;
+                triangles[triangleVerticesCount + 1] = lastVertexCount - (loopCount + 1);
+                triangles[triangleVerticesCount + 2] = lastVertexCount - loopCount;
+
+                if (loopCount == vertexCountPerIteration - 1)
+                {
+                    triangles[triangleVerticesCount + 1] = lastVertexCount;
+                }
+
+                triangleVerticesCount += 3;
+            }
+
             Mesh mesh = new Mesh();
             mesh.Clear();
             mesh.vertices = vertices;
@@ -497,7 +582,7 @@ namespace RockBuilder
             //#endregion
 
 
-            mesh.Optimize();
+            //mesh.Optimize();
             return mesh;
         }
     }
