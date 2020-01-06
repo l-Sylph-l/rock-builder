@@ -7,7 +7,7 @@ namespace RockBuilder
 
     [RequireComponent(typeof(MeshFilter))]
     [RequireComponent(typeof(MeshRenderer))]
-    public class StandardRock : MonoBehaviour
+    public class SphereRock : MonoBehaviour
     {
         [HideInInspector]
         public List<CustomRockListIteration> sortedVertices;
@@ -65,26 +65,6 @@ namespace RockBuilder
                     DestroyImmediate(child.gameObject);
                 }
             }
-        }
-
-        public void AddNewBuildPoint()
-        {
-            AddNewBuildPoint(Vector3.up);
-        }
-
-        public void AddNewBuildPoint(Vector3 position)
-        {
-            rockBuildPoints.Add(position);
-        }
-
-        public int GetVertexCount()
-        {
-            int vertexCount = 0;
-            foreach (CustomRockListIteration iteration in sortedVertices)
-            {
-                vertexCount += iteration.GetVertexCount();
-            }
-            return vertexCount;
         }
 
         public void RemoveCustomRockClass()

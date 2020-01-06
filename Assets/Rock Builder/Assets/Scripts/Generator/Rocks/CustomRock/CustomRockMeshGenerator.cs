@@ -42,7 +42,7 @@ namespace RockBuilder
             List<List<Vector3>> vertexIteratios = CreateIterations(customRock.rockBuildPoints);
             customRock.sortedVertices = SortVerticesClockwise(vertexIteratios);
             customRock.sortedVertices = equalizeVertexCount(customRock.sortedVertices);
-            customRock.sortedVertices = InterpolateBetweenIteration(customRock.sortedVertices);
+            // customRock.sortedVertices = InterpolateBetweenIteration(customRock.sortedVertices);
             return CreateSmoothMesh(customRock);
         }
 
@@ -221,6 +221,8 @@ namespace RockBuilder
                 iteration.EqualizeVertexCountOnSecondQuarter(highestCount);
                 iteration.EqualizeVertexCountOnThirdQuarter(highestCount);
                 iteration.EqualizeVertexCountOnFourthQuarter(highestCount);
+
+                iteration.Sort();
             }
 
             return sortedVertexPositions;

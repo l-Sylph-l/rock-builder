@@ -5,16 +5,16 @@ using UnityEngine;
 
 namespace RockBuilder
 {
-    public class StandardRockService
+    public class SphereRockService
     {
-        private static StandardRockService instance = null;
+        private static SphereRockService instance = null;
         private static readonly object padlock = new object();
 
-        StandardRockService()
+        SphereRockService()
         {
         }
 
-        public static StandardRockService Instance
+        public static SphereRockService Instance
         {
             get
             {
@@ -22,16 +22,16 @@ namespace RockBuilder
                 {
                     if (instance == null)
                     {
-                        instance = new StandardRockService();
+                        instance = new SphereRockService();
                     }
                     return instance;
                 }
             }
         }
 
-        public StandardRock CreateEmptyStandardRock()
+        public CubeRock CreateEmptyStandardRock()
         {
-            StandardRock standardRock = new GameObject().AddComponent(typeof(StandardRock)) as StandardRock;
+            CubeRock standardRock = new GameObject().AddComponent(typeof(CubeRock)) as CubeRock;
             standardRock.smoothFlag = false;
             standardRock.lodCount = 0;
             standardRock.colliderFlag = true;
@@ -42,37 +42,37 @@ namespace RockBuilder
             return standardRock;
         }
 
-        public StandardRock CreateEmptyStandardRock(string name)
+        public CubeRock CreateEmptyStandardRock(string name)
         {
-            StandardRock standardRock = CreateEmptyStandardRock();
+            CubeRock standardRock = CreateEmptyStandardRock();
             standardRock.name = name;
             return standardRock;
         }
 
-        public StandardRock CreateStandardRock(StandardRock standardRock, Material material)
+        public CubeRock CreateStandardRock(CubeRock standardRock, Material material)
         {
             //Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
             SceneView.lastActiveSceneView.camera.transform.LookAt(standardRock.transform);
             FocusStandardRock(standardRock);
 
-            standardRock.mesh = StandardRockMeshGenerator.Instance.CreateRockMesh(standardRock);
+            standardRock.mesh = CubeRockMeshGenerator.Instance.CreateRockMesh(standardRock);
             standardRock.GetComponent<MeshRenderer>().material = material;
             //CreateLods(standardRock);
             CreateMeshCollider(standardRock);
             return standardRock;
         }
 
-        public StandardRock GetStandardRockFromSelection()
+        public CubeRock GetStandardRockFromSelection()
         {
             if (Selection.activeGameObject)
             {
-                return Selection.activeGameObject.GetComponent<StandardRock>();
+                return Selection.activeGameObject.GetComponent<CubeRock>();
             }
 
             return null;
         }
 
-        private void FocusStandardRock(StandardRock standardRock)
+        private void FocusStandardRock(CubeRock standardRock)
         {
             Selection.activeGameObject = standardRock.gameObject;
             SceneView.lastActiveSceneView.FrameSelected();
@@ -84,7 +84,7 @@ namespace RockBuilder
             return (cameraTransform.forward * (3f * 2f)) + cameraTransform.position;
         }
 
-        private void CreateMeshCollider(StandardRock standardRock)
+        private void CreateMeshCollider(CubeRock standardRock)
         {
             standardRock.RemoveMeshCollider();
             if (standardRock.colliderFlag)
