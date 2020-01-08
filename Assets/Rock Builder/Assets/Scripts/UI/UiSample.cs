@@ -605,7 +605,7 @@ namespace RockBuilder
                     rockHeight = cubeRock.heigth;
                     rockWidth = cubeRock.width;
                     rockDepth = cubeRock.depth;
-                    rockNoise = cubeRock.noise; // Stef, do gits etz nor no de normal noise, nümme X, Y und Z, muesch de no ahpasse, de set alles weder klappe :)
+                    rockNoise = cubeRock.noise;
                     rockBevelSize = cubeRock.bezelSize;
                     seventhParamaterRocks = cubeRock.lodCount;
                     sixthParamaterRocks = cubeRock.colliderFlag;
@@ -726,7 +726,7 @@ namespace RockBuilder
                 cubeRock.heigth = rockHeight;
                 cubeRock.width = rockWidth;
                 cubeRock.depth = rockDepth;
-                cubeRock.noiseX = rockNoise;
+                cubeRock.noise = rockNoise;
                 cubeRock.bezelSize = rockBevelSize;
                 cubeRock.colliderFlag = ninthParameterGemstones;
             }

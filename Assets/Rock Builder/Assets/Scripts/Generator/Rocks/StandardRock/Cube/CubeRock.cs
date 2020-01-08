@@ -16,11 +16,7 @@ namespace RockBuilder
         [HideInInspector]
         public float depth;
          [HideInInspector]
-        public float noiseX;
-        [HideInInspector]
-        public float noiseY;
-        [HideInInspector]
-        public float noiseZ;
+        public float noise;
         [HideInInspector]
         public float bezelSize;
         [HideInInspector]
