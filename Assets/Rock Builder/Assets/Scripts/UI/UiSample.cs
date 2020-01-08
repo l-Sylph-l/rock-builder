@@ -72,6 +72,9 @@ namespace RockBuilder
 
         void OnGUI()
         {
+
+            UpdateSelectedTab();
+
             // UI Code for all the rock builder tabs (rocks, gemstones and help)
             toolbarInt = GUILayout.Toolbar(toolbarInt, toolbarStrings);
 
@@ -219,15 +222,15 @@ namespace RockBuilder
                         // Button to generate the rock
                         if (GUILayout.Button("Let's rock!", GUILayout.Height(25)))
                         {
-                        // Generate existing mesh if diamondgenerator exists, otherwise create a new diamond generator
-                        if (cubeRock)
-                        {
-                            cubeRock = CubeRockService.Instance.CreateCubeRock(cubeRock, rockMaterial);
-                        }
-                        if (sphereRock)
-                        {
-                            
-                        }                    
+                            // Generate existing mesh if diamondgenerator exists, otherwise create a new diamond generator
+                            if (cubeRock)
+                            {
+                                cubeRock = CubeRockService.Instance.CreateCubeRock(cubeRock, rockMaterial);
+                            }
+                            if (sphereRock)
+                            {
+
+                            }
                             Debug.Log("Rocks-Generate Button was pressed"); // Log message output
                         }
                     }
@@ -469,12 +472,25 @@ namespace RockBuilder
                     Application.OpenURL("mailto:rockbuilder-help@hotmail.com?");
             }
         }
+        private void UpdateSelectedTab()
+        {
+            if (cubeRock != null || sphereRock != null || customRock != null)
+            {
+                toolbarInt = 0;
+            }
 
+            if (diamond != null || crystal != null || gem != null)
+            {
+                toolbarInt = 1;
+            }
+        }
         private void Update()
         {
             CheckIfCrystalSelected();
             CheckIfGemSelected();
             CheckIfDiamondSelected();
+            CheckIfCubeRockSelected();
+            CheckIfSphereRockSelected();
             CheckIfCustomRockSelected();
         }
 
@@ -609,6 +625,7 @@ namespace RockBuilder
                     rockBevelSize = cubeRock.bezelSize;
                     seventhParamaterRocks = cubeRock.lodCount;
                     sixthParamaterRocks = cubeRock.colliderFlag;
+                    eightParameterRocks = "Edgy";
                     if (cubeRock.GetComponent<MeshRenderer>().sharedMaterial != null)
                     {
                         rockMaterial = cubeRock.GetComponent<MeshRenderer>().sharedMaterial;
@@ -638,6 +655,7 @@ namespace RockBuilder
                     fifthParamaterRocks = sphereRock.smoothFlag;
                     seventhParamaterRocks = sphereRock.lodCount;
                     sixthParamaterRocks = sphereRock.colliderFlag;
+                    eightParameterRocks = "Rounded";
                     if (sphereRock.GetComponent<MeshRenderer>().sharedMaterial != null)
                     {
                         rockMaterial = sphereRock.GetComponent<MeshRenderer>().sharedMaterial;

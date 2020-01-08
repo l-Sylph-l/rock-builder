@@ -135,6 +135,33 @@ namespace RockBuilder
         {
 
             int vrticesCount = 10 * 6;
+
+            List<List<Vector3>> frontPlane = new List<List<Vector3>>();
+            List<List<Vector3>> upperPlane = new List<List<Vector3>>();
+            List<List<Vector3>> backPlane = new List<List<Vector3>>();
+            List<List<Vector3>> bottomPlane = new List<List<Vector3>>();
+            List<List<Vector3>> rightPlane = new List<List<Vector3>>();
+            List<List<Vector3>> leftPlane = new List<List<Vector3>>();
+
+            List<List<Vector3>> frontBevelRight = new List<List<Vector3>>();
+            List<List<Vector3>> frontBevelLeft = new List<List<Vector3>>();
+            List<List<Vector3>> backBevelRight = new List<List<Vector3>>();
+            List<List<Vector3>> backBevelLeft = new List<List<Vector3>>();
+
+            List<List<Vector3>> upperBevelFront = new List<List<Vector3>>();
+            List<List<Vector3>> bottomBevelFront = new List<List<Vector3>>();
+            List<List<Vector3>> upperBevelBack = new List<List<Vector3>>();
+            List<List<Vector3>> bottomBevelBack = new List<List<Vector3>>();
+
+            List<List<Vector3>> upperRightBevelCrossFront = new List<List<Vector3>>();
+            List<List<Vector3>> upperLeftBevelCrossFront = new List<List<Vector3>>();
+            List<List<Vector3>> upperLeftBevelCrossBack = new List<List<Vector3>>();
+            List<List<Vector3>> upperRightBevelCrossBack  = new List<List<Vector3>>();
+            List<List<Vector3>> bottomRightBevelCrossFront = new List<List<Vector3>>();
+            List<List<Vector3>> bottomLeftBevelCrossFront = new List<List<Vector3>>();
+            List<List<Vector3>> bottomLeftBevelCrossBack  = new List<List<Vector3>>();
+            List<List<Vector3>> bottomRightBevelCrossBack  = new List<List<Vector3>>();
+
             Vector3[] vertices = new Vector3[vrticesCount];
             Vector2[] uv = new Vector2[vrticesCount];
             int vertexLoop = 0;
