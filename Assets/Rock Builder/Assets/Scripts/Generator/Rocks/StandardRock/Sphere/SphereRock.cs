@@ -22,6 +22,8 @@ namespace RockBuilder
         [HideInInspector]
         public bool colliderFlag;
         [HideInInspector]
+        public List<Vector3> vertexPositions;
+        [HideInInspector]
         public Transform[] childrens;
         public Mesh mesh
         {

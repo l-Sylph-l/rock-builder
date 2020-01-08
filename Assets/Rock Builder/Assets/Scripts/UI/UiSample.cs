@@ -28,6 +28,10 @@ namespace RockBuilder
         float rockHeight = 1.0f; // Höhe
         float rockWidth = 1.0f; // Breite
         float rockDepth = 1.0f; // Tiefe
+        float rockNoiseX = 0.1f; // Verschiebungen in der X Achse von einzelnen Vertices
+        float rockNoiseY = 0.1f; // Verschiebungen in der Y Achse von einzelnen Vertices
+        float rockNoiseZ = 0.1f; // Verschiebungen in der Z Achse von einzelnen Vertices
+        float rockBezelSize = 0.1f; // Grösse der Kantenbrüche
         private Material rockMaterial; // Material
 
         // Parameter für die Kristalle/Edelsteine
@@ -43,8 +47,11 @@ namespace RockBuilder
         private Material gemstoneMaterial; // Material
         float specialParameterDiamond = 0.5f; // Top Radius Diamant
 
-        // Objectreference for a standard rock
-        StandardRock standardRock;
+        // Objectreference for a cube rock
+        CubeRock cubeRock;
+
+        // Objectreference for a cube rock
+        SphereRock sphereRock;
 
         // Objectreference for a custom rock
         CustomRock customRock;
@@ -119,6 +126,8 @@ namespace RockBuilder
                 // Der zweite Rocks Teil, wird erst eingeblendet, wenn eine Shape ausgewählt wurde
                 if (secondParameterRocks != "" && secondParameterRocks == "Standard")
                 {
+                    UpdateRocks();
+
                     // Auswahl der Art des Steins (rund oder eckig)     
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.TextField(eightParameterRocks);
@@ -137,6 +146,7 @@ namespace RockBuilder
                     if (GUILayout.Button("      Edgy      ", GUILayout.Height(32)))
                     {
                         Debug.Log("Edgy Button was pressed"); // Gibt eine Logmeldung aus
+                        cubeRock = CubeRockService.Instance.CreateEmptyCubeRock(firstParameterRocks);
                         eightParameterRocks = "Edgy";
                     }
                     GUILayout.EndHorizontal();
@@ -167,6 +177,14 @@ namespace RockBuilder
                         }
                         rockDepth = EditorGUILayout.FloatField("Depth", rockDepth);
 
+                        rockBezelSize = EditorGUILayout.FloatField("Bezel Size", rockBezelSize);
+
+                        rockNoiseX = EditorGUILayout.FloatField("Noise X", rockNoiseX);
+
+                        rockNoiseY = EditorGUILayout.FloatField("Noise Y", rockNoiseY);
+
+                        rockNoiseZ = EditorGUILayout.FloatField("Noise Z", rockNoiseZ);
+
                         // Vierter Rocks-Parameter => Slidebar für den gewünschten Polycount zwischen 10 und 10'000  
                         fourthParamaterRocks = EditorGUILayout.IntSlider("Polycount", fourthParamaterRocks, 10, 10000);
 
@@ -193,6 +211,16 @@ namespace RockBuilder
                         // Button für das Generieren des Steins
                         if (GUILayout.Button("Let's rock!", GUILayout.Height(25)))
                         {
+                             // generate existing mesh if diamondgenerator exists, otherwise create a new diamond generator
+                        if (cubeRock)
+                        {
+                            cubeRock = CubeRockService.Instance.CreateCubeRock(cubeRock, rockMaterial);
+                        }
+                        if (sphereRock)
+                        {
+                            
+                        }
+                     
                             Debug.Log("Rocks-Generate Button was pressed"); // Gibt eine Logmeldung aus
                         }
                     }
@@ -476,7 +504,7 @@ namespace RockBuilder
                     sixthParamaterGemstones = crystal.heightPeak;
                     seventhParameterGemstones = crystal.smoothFlag;
                     eightParamaterGemstones = crystal.lodCount;
-                    ninthParameterGemstones = crystal.colliderFlag; 
+                    ninthParameterGemstones = crystal.colliderFlag;
                     if (crystal.GetComponent<MeshRenderer>().sharedMaterial != null)
                     {
                         gemstoneMaterial = crystal.GetComponent<MeshRenderer>().sharedMaterial;
@@ -505,7 +533,7 @@ namespace RockBuilder
                     secondParameterGemstones = "Gem";
                     thirdParamaterGemstones = gem.edges;
                     sixthParamaterGemstones = gem.width;
-                    fourthParamaterGemstones  = gem.height;
+                    fourthParamaterGemstones = gem.height;
                     fifthParamaterGemstones = gem.depth;
                     seventhParameterGemstones = gem.smoothFlag;
                     eightParamaterGemstones = gem.lodCount;
@@ -560,30 +588,65 @@ namespace RockBuilder
             }
         }
 
-        private void CheckIfStandardRockSelected()
+        private void CheckIfCubeRockSelected()
         {
-            if (standardRock == null)
+            if (cubeRock == null)
             {
-                standardRock = StandardRockService.Instance.GetStandardRockFromSelection();
-                if (standardRock != null)
+                cubeRock = CubeRockService.Instance.GetCubeRockFromSelection();
+                if (cubeRock != null)
                 {
-                    firstParameterRocks = standardRock.name;
+                    firstParameterRocks = cubeRock.name;
                     secondParameterRocks = "Standard";
-                    fifthParamaterRocks = standardRock.smoothFlag;
-                    seventhParamaterRocks = standardRock.lodCount;
-                    sixthParamaterRocks = standardRock.colliderFlag;
-                    if (standardRock.GetComponent<MeshRenderer>().sharedMaterial != null)
+                    rockHeight = cubeRock.heigth;
+                    rockWidth = cubeRock.width;
+                    rockDepth = cubeRock.depth;
+                    rockNoiseX = cubeRock.noiseX;
+                    rockNoiseY = cubeRock.noiseY;
+                    rockNoiseZ = cubeRock.noiseZ;
+                    rockBezelSize = cubeRock.bezelSize;
+                    seventhParamaterRocks = cubeRock.lodCount;
+                    sixthParamaterRocks = cubeRock.colliderFlag;
+                    if (cubeRock.GetComponent<MeshRenderer>().sharedMaterial != null)
                     {
-                        rockMaterial = standardRock.GetComponent<MeshRenderer>().sharedMaterial;
+                        rockMaterial = cubeRock.GetComponent<MeshRenderer>().sharedMaterial;
                     }
                     this.Repaint();
                 }
             }
             else
             {
-                if (standardRock != CustomRockService.Instance.GetCustomRockFromSelection())
+                if (cubeRock != CubeRockService.Instance.GetCubeRockFromSelection())
                 {
-                    standardRock = null;
+                    cubeRock = null;
+                    this.Repaint();
+                }
+            }
+        }
+
+        private void CheckIfSphereRockSelected()
+        {
+            if (sphereRock == null)
+            {
+                sphereRock = SphereRockService.Instance.GetSphereRockFromSelection();
+                if (sphereRock != null)
+                {
+                    firstParameterRocks = sphereRock.name;
+                    secondParameterRocks = "Standard";
+                    fifthParamaterRocks = sphereRock.smoothFlag;
+                    seventhParamaterRocks = sphereRock.lodCount;
+                    sixthParamaterRocks = sphereRock.colliderFlag;
+                    if (sphereRock.GetComponent<MeshRenderer>().sharedMaterial != null)
+                    {
+                        rockMaterial = sphereRock.GetComponent<MeshRenderer>().sharedMaterial;
+                    }
+                    this.Repaint();
+                }
+            }
+            else
+            {
+                if (sphereRock != SphereRockService.Instance.GetSphereRockFromSelection())
+                {
+                    sphereRock = null;
                     this.Repaint();
                 }
             }
@@ -651,13 +714,20 @@ namespace RockBuilder
             }
         }
 
-         private void UpdateRocks()
+        private void UpdateRocks()
         {
-            if (standardRock != null)
+            if (cubeRock != null)
             {
-                standardRock.smoothFlag = seventhParameterGemstones;
-                standardRock.lodCount = eightParamaterGemstones;
-                standardRock.colliderFlag = ninthParameterGemstones;
+                cubeRock.smoothFlag = seventhParameterGemstones;
+                cubeRock.lodCount = eightParamaterGemstones;
+                cubeRock.heigth = rockHeight;
+                cubeRock.width = rockWidth;
+                cubeRock.depth = rockDepth;
+                cubeRock.noiseX = rockNoiseX;
+                cubeRock.noiseY = rockNoiseY;
+                cubeRock.noiseZ = rockNoiseZ;
+                cubeRock.bezelSize = rockBezelSize;
+                cubeRock.colliderFlag = ninthParameterGemstones;
             }
             if (customRock != null)
             {
@@ -684,9 +754,9 @@ namespace RockBuilder
                 DestroyImmediate(diamond.gameObject);
             }
 
-            if (standardRock && standardRock.mesh == null)
+            if (cubeRock && cubeRock.mesh == null)
             {
-                DestroyImmediate(standardRock.gameObject);
+                DestroyImmediate(cubeRock.gameObject);
             }
 
             if (customRock && customRock.mesh == null)
