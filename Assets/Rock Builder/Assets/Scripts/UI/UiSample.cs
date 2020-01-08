@@ -16,26 +16,24 @@ namespace RockBuilder
         int toolbarInt = 0;
         string[] toolbarStrings = { "Rocks", "Gemstones", "Help" };
 
-        // Parameter für die Steine
-        string firstParameterRocks = "Rock_01"; // Objektname
-        string secondParameterRocks = ""; // Auswahl der Shape
-        int thirdParameterRocks = 0; // Anzahl an Points für die eigene Shape
+        // Rocks Parameter
+        string firstParameterRocks = "Rock_01"; // Name of the object
+        string secondParameterRocks = ""; // Shape selection
+        int thirdParameterRocks = 0; // Number of points for the own shape
         int fourthParamaterRocks = 10; // Polycount
         bool fifthParamaterRocks = false; // Smooth
         bool sixthParamaterRocks = false; // Collider
         int seventhParamaterRocks = 0; // LODs
-        string eightParameterRocks = ""; // Stein eher rund oder eckig
-        float rockHeight = 1.0f; // Höhe
-        float rockWidth = 1.0f; // Breite
-        float rockDepth = 1.0f; // Tiefe
-        float rockNoiseX = 0.1f; // Verschiebungen in der X Achse von einzelnen Vertices
-        float rockNoiseY = 0.1f; // Verschiebungen in der Y Achse von einzelnen Vertices
-        float rockNoiseZ = 0.1f; // Verschiebungen in der Z Achse von einzelnen Vertices
-        float rockBezelSize = 0.1f; // Grösse der Kantenbrüche
+        string eightParameterRocks = ""; // Rock rather round or edgy
+        float rockHeight = 1.0f; // Height of the rock
+        float rockWidth = 1.0f; // Width of the rock
+        float rockDepth = 1.0f; // Deepth of the rock
+        float rockNoise = 0.1f; // Displacement of all axes of the individual vertices
+        float rockBevelSize = 0.1f; // Size of the edges
         private Material rockMaterial; // Material
 
-        // Parameter für die Kristalle/Edelsteine
-        string firstParameterGemstones = "Gemstone_01"; // Objektname
+        // Gemstones Parameter
+        string firstParameterGemstones = "Gemstone_01"; // Name of the object
         string secondParameterGemstones = ""; // Shape
         int thirdParamaterGemstones = 3; // Vertices
         float fourthParamaterGemstones = 1.0f; // Radius
@@ -50,19 +48,19 @@ namespace RockBuilder
         // Objectreference for a cube rock
         CubeRock cubeRock;
 
-        // Objectreference for a cube rock
+        // Objectreference for a sphere rock
         SphereRock sphereRock;
 
         // Objectreference for a custom rock
         CustomRock customRock;
 
-        // Objecktreferenz für einen Kristall
+        // Objectreference for a crystal
         Crystal crystal;
 
-        // Objecktreferenz für ein Juwel
+        // Objectreference for a gem
         Gem gem;
 
-        // Objecktreferenz für einen Diamant
+        // Objectreference for a diamond
         Diamond diamond;
 
         [MenuItem("Tools/RockBuilder")]
@@ -74,10 +72,10 @@ namespace RockBuilder
 
         void OnGUI()
         {
-            // Code für das UI des RockBuilder Fensters ALLE Tabs
+            // UI Code for all the rock builder tabs (rocks, gemstones and help)
             toolbarInt = GUILayout.Toolbar(toolbarInt, toolbarStrings);
 
-            // Anzeige für den "Rocks"-Teil
+            // UI Part "Rocks"
             if (toolbarInt == 0)
             {
                 GUILayout.Space(5);
@@ -89,12 +87,12 @@ namespace RockBuilder
 
                 GUILayout.Space(20);
 
-                // Erster Rocks-Parameter => Der Name des Objekts(Steins), welches anschliessend generiert werden soll           
+                // First rocks parameter => The name of the generated object           
                 firstParameterRocks = EditorGUILayout.TextField("Object Name", firstParameterRocks);
 
                 GUILayout.Space(15);
 
-                // Auswahl der Art des Steins     
+                // Selection of the rock shape     
                 GUILayout.Label("Choose Shape");
 
                 GUILayout.Space(5);
@@ -109,13 +107,13 @@ namespace RockBuilder
                 //GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Gem_Icon_2.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
                 if (GUILayout.Button("Standard", GUILayout.Height(32)))
                 {
-                    Debug.Log("Standard Button was pressed"); // Gibt eine Logmeldung aus
+                    Debug.Log("Standard Button was pressed"); // Log message output
                     secondParameterRocks = "Standard";
                 }
                 //GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Crystal_icon.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
                 if (GUILayout.Button("   Custom   ", GUILayout.Height(32)))
                 {
-                    Debug.Log("Custom Button was pressed"); // Gibt eine Logmeldung aus
+                    Debug.Log("Custom Button was pressed"); // Log message output
                     secondParameterRocks = "Custom";
                     customRock = CustomRockService.Instance.CreateEmptyCustomRock(firstParameterRocks);
                 }
@@ -123,12 +121,12 @@ namespace RockBuilder
 
                 GUILayout.Space(15);
 
-                // Der zweite Rocks Teil, wird erst eingeblendet, wenn eine Shape ausgewählt wurde
+                // The second part of rocks is only shown, when a shape has been selected
                 if (secondParameterRocks != "" && secondParameterRocks == "Standard")
                 {
                     UpdateRocks();
 
-                    // Auswahl der Art des Steins (rund oder eckig)     
+                    // Selection of the stone shape (round or edgy)     
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.TextField(eightParameterRocks);
                     EditorGUI.EndDisabledGroup();
@@ -139,13 +137,13 @@ namespace RockBuilder
                     GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Rounded_Icon.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
                     if (GUILayout.Button("Rounded", GUILayout.Height(32)))
                     {
-                        Debug.Log("Rounded Button was pressed"); // Gibt eine Logmeldung aus
+                        Debug.Log("Rounded Button was pressed"); // Log message output
                         eightParameterRocks = "Rounded";
                     }
                     GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Edgy_icon.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
                     if (GUILayout.Button("      Edgy      ", GUILayout.Height(32)))
                     {
-                        Debug.Log("Edgy Button was pressed"); // Gibt eine Logmeldung aus
+                        Debug.Log("Edgy Button was pressed"); // Log message output
                         cubeRock = CubeRockService.Instance.CreateEmptyCubeRock(firstParameterRocks);
                         eightParameterRocks = "Edgy";
                     }
@@ -153,53 +151,63 @@ namespace RockBuilder
 
                     GUILayout.Space(15);
 
-                    // Zeigt die restlichen Parameter nur an, wenn rund oder eckig gewählt wurde
+                    // Displays the other rocks parameter just, if rounded or edgy was selected
                     if (eightParameterRocks != "")
                     {
-                        // Beschränkt die Usereingaben für die Höhe des Steins => 0.01 - 1000
+                        // Restricts the user inputs for the rock height => 0.01 - 1000
                         if (rockHeight < 0.009 || rockHeight > 1000)
                         {
                             rockHeight = 1.0f;
                         }
                         rockHeight = EditorGUILayout.FloatField("Height", rockHeight);
 
-                        // Beschränkt die Usereingaben für die Breite des Steins => 0.01 - 1000
+                        // Restricts the user inputs for the rock width => 0.01 - 1000
                         if (rockWidth < 0.009 || rockWidth > 1000)
                         {
                             rockWidth = 1.0f;
                         }
                         rockWidth = EditorGUILayout.FloatField("Width", rockWidth);
 
-                        // Beschränkt die Usereingaben für die Tiefe des Steins => 0.01 - 1000
+                        // Restricts the user inputs for the rock depth => 0.01 - 1000
                         if (rockDepth < 0.009 || rockDepth > 1000)
                         {
                             rockDepth = 1.0f;
                         }
                         rockDepth = EditorGUILayout.FloatField("Depth", rockDepth);
 
-                        rockBezelSize = EditorGUILayout.FloatField("Bezel Size", rockBezelSize);
+                        // Bevel size just for the edgy stones
+                        if (eightParameterRocks == "Edgy")
+                        {
+                            // Restricts the user inputs for the bevel size => 0.01 - 1000
+                            if (rockBevelSize < 0.009 || rockBevelSize > 1000)
+                            {
+                                rockBevelSize = 0.1f;
+                            }
+                            rockBevelSize = EditorGUILayout.FloatField("Bevel Size", rockBevelSize);
+                        }
 
-                        rockNoiseX = EditorGUILayout.FloatField("Noise X", rockNoiseX);
+                        // Restricts the user inputs for the noise => 0.01 - 1000
+                        if (rockNoise < 0.009 || rockNoise > 1000)
+                        {
+                            rockNoise = 0.1f;
+                        }
+                        rockNoise = EditorGUILayout.FloatField("Noise", rockNoise);
 
-                        rockNoiseY = EditorGUILayout.FloatField("Noise Y", rockNoiseY);
-
-                        rockNoiseZ = EditorGUILayout.FloatField("Noise Z", rockNoiseZ);
-
-                        // Vierter Rocks-Parameter => Slidebar für den gewünschten Polycount zwischen 10 und 10'000  
+                        // Fourth rocks parameter => Slidebar for the desired polycount between 10 and 10'000
                         fourthParamaterRocks = EditorGUILayout.IntSlider("Polycount", fourthParamaterRocks, 10, 10000);
 
-                        // Fünfter Rocks-Paramter => Die Checkbox, um ein Objekt zu smoothen         
+                        // Fifth rocks parameter => The checkbox to smooth an object        
                         fifthParamaterRocks = EditorGUILayout.Toggle("Smooth", fifthParamaterRocks);
 
-                        // Sechster Rocks-Paramter => Die Checkbox, um dem Objekt einen Collider zu verpassen         
+                        // Sixth rocks parameter => The checkbox to give the object a collider        
                         sixthParamaterRocks = EditorGUILayout.Toggle("Collider", sixthParamaterRocks);
 
-                        // Siebter Rocks-Parameter => Slidebar für die Anzahl der LODs  
+                        // Seventh rocks parameter => Slidebar for the number of LODs
                         seventhParamaterRocks = EditorGUILayout.IntSlider("LODs", seventhParamaterRocks, 0, 3);
 
                         GUILayout.Space(15);
 
-                        // Auswahl der Stein-Materialien      
+                        // Selection of the rock materials     
                         GUILayout.Label("Choose Material");
 
                         GUILayout.Space(5);
@@ -208,10 +216,10 @@ namespace RockBuilder
 
                         GUILayout.Space(15);
 
-                        // Button für das Generieren des Steins
+                        // Button to generate the rock
                         if (GUILayout.Button("Let's rock!", GUILayout.Height(25)))
                         {
-                             // generate existing mesh if diamondgenerator exists, otherwise create a new diamond generator
+                        // Generate existing mesh if diamondgenerator exists, otherwise create a new diamond generator
                         if (cubeRock)
                         {
                             cubeRock = CubeRockService.Instance.CreateCubeRock(cubeRock, rockMaterial);
@@ -219,43 +227,42 @@ namespace RockBuilder
                         if (sphereRock)
                         {
                             
-                        }
-                     
-                            Debug.Log("Rocks-Generate Button was pressed"); // Gibt eine Logmeldung aus
+                        }                    
+                            Debug.Log("Rocks-Generate Button was pressed"); // Log message output
                         }
                     }
                 }
 
-                // Dies ist der Rocks Teil, falls der User eine eigene Shape erstellen möchte
+                // This is the rock part, if the user wants to create his own shape
                 if (secondParameterRocks != "" && secondParameterRocks != "Standard")
                 {
-                    // Update UI depending on the selected custom rock.
+                    // Update UI depending on the selected custom rock
                     UpdateRocks();
 
-                    // Dritter Rocks-Parameter => Button für die Anzahl an Points, um eine eigene Steinform zu kreieren
+                    // Third rocks parameter => Button for the number of points to create your own stone shape
                     if (GUILayout.Button("Add Point", GUILayout.Height(25)))
                     {
-                        Debug.Log("Add Point Button was pressed"); // Gibt eine Logmeldung aus
+                        Debug.Log("Add Point Button was pressed"); // Log message output
                         thirdParameterRocks = thirdParameterRocks + 1;
                     }
 
                     GUILayout.Space(15);
 
-                    // Vierter Rocks-Parameter => Slidebar für den gewünschten Polycount zwischen 10 und 10'000  
+                    // Fourth rocks parameter => Slidebar for the desired polycount between 10 and 10'000  
                     fourthParamaterRocks = EditorGUILayout.IntSlider("Polycount", fourthParamaterRocks, 10, 10000);
 
-                    // Fünfter Rocks-Paramter => Die Checkbox, um ein Objekt zu smoothen         
+                    // Fifth rocks parameter => The checkbox to smooth an object         
                     fifthParamaterRocks = EditorGUILayout.Toggle("Smooth", fifthParamaterRocks);
 
-                    // Sechster Rocks-Paramter => Die Checkbox, um dem Objekt einen Collider zu verpassen         
+                    // Sixth rocks parameter => The checkbox to give the object a collider         
                     sixthParamaterRocks = EditorGUILayout.Toggle("Collider", sixthParamaterRocks);
 
-                    // Siebter Rocks-Parameter => Slidebar für die Anzahl der LODs  
+                    // Seventh rocks parameter => Slidebar for the number of LODs
                     seventhParamaterRocks = EditorGUILayout.IntSlider("LODs", seventhParamaterRocks, 0, 3);
 
                     GUILayout.Space(15);
 
-                    // Auswahl der Stein-Materialien      
+                    // Selection of the rock materials      
                     GUILayout.Label("Choose Material");
 
                     GUILayout.Space(5);
@@ -264,20 +271,20 @@ namespace RockBuilder
 
                     GUILayout.Space(15);
 
-                    // Button für das Generieren des Steins
+                    // Button to generate the rock
                     if (GUILayout.Button("Let's rock!", GUILayout.Height(25)))
                     {
-                        // generate existing mesh if diamondgenerator exists, otherwise create a new diamond generator
+                        // Generate existing mesh if diamondgenerator exists, otherwise create a new diamond generator
                         if (customRock)
                         {
                             customRock = CustomRockService.Instance.CreateCustomRock(customRock, rockMaterial);
                         }
-                        Debug.Log("Rocks-Generate Button was pressed"); // Gibt eine Logmeldung aus
+                        Debug.Log("Rocks-Generate Button was pressed"); // Log message output
                     }
                 }
             }
 
-            // Anzeige für den "Gemstones"-Teil
+            // UI Part "Gemstones"
             if (toolbarInt == 1)
             {
                 GUILayout.Space(5);
@@ -288,12 +295,12 @@ namespace RockBuilder
 
                 GUILayout.Space(20);
 
-                // Erster Gemstones-Parameter => Der Name des Objekts, welches anschliessend generiert werden soll           
+                // First gemstones parameter => The name of the generated object           
                 firstParameterGemstones = EditorGUILayout.TextField("Object Name", firstParameterGemstones);
 
                 GUILayout.Space(15);
 
-                // Auswahl der Art des Kristalls/Edelstein     
+                // Selection of the gemstone shape     
                 GUILayout.Label("Choose Shape");
 
                 GUILayout.Space(5);
@@ -308,21 +315,21 @@ namespace RockBuilder
                 GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Crystal_icon.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
                 if (GUILayout.Button(" Crystal ", GUILayout.Height(32)) && crystal == null)
                 {
-                    Debug.Log("Crystal Button was pressed"); // Gibt eine Logmeldung aus
+                    Debug.Log("Crystal Button was pressed"); // Log message output
                     secondParameterGemstones = "Crystal";
                     crystal = CrystalService.Instance.CreateEmptyCrystal(firstParameterGemstones);
                 }
                 GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Gem_Icon_2.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
                 if (GUILayout.Button("   Gem   ", GUILayout.Height(32)))
                 {
-                    Debug.Log("Gem Button was pressed"); // Gibt eine Logmeldung aus
+                    Debug.Log("Gem Button was pressed"); // Log message output
                     secondParameterGemstones = "Gem";
                     gem = GemService.Instance.CreateEmptyGem(firstParameterGemstones);
                 }
                 GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Diamond_icon.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
                 if (GUILayout.Button("Diamond", GUILayout.Height(32)) && diamond == null)
                 {
-                    Debug.Log("Diamond Button was pressed"); // Gibt eine Logmeldung aus
+                    Debug.Log("Diamond Button was pressed"); // Log message output
                     secondParameterGemstones = "Diamond";
                     diamond = DiamondService.Instance.CreateEmptyDiamond(firstParameterGemstones);
                 }
@@ -330,17 +337,17 @@ namespace RockBuilder
 
                 GUILayout.Space(15);
 
-                // Der zweite Teil der Gemstones, wird erst eingeblendet, wenn eine Shape ausgewählt wurde
+                // The second part of gemstones is only shown, when a shape has been selected
                 if (secondParameterGemstones != "" && (crystal != null || diamond != null || gem != null))
                 {
                     UpdateGemStones();
 
-                    // Dritter Gemstones-Parameter => Slidebar für die Anzahl Vertices
+                    // Third gemstones parameter => Slidebar for the number of vertices
                     if (secondParameterGemstones == "Crystal")
                         thirdParamaterGemstones = EditorGUILayout.IntSlider("Edges", thirdParamaterGemstones, 3, 200);
                     if (secondParameterGemstones == "Diamond" || secondParameterGemstones == "Gem")
                     {
-                        // Bei den Diamanten darf die Anzahl Edges nicht ungerade sein, deshalb diese Prüfung hier
+                        // The number of the diamond and gem edges has to be even
                         thirdParamaterGemstones = EditorGUILayout.IntSlider("Edges", thirdParamaterGemstones, 6, 200);
                         if (thirdParamaterGemstones % 2 != 0)
                         {
@@ -348,23 +355,23 @@ namespace RockBuilder
                         }
                     }
 
-                    // Beschränkt die Usereingaben für den Radius => 0.01 - 1000
+                    // Restricts the user inputs for the radius => 0.01 - 1000
                     if (fourthParamaterGemstones < 0.009 || fourthParamaterGemstones > 1000)
                     {
                         fourthParamaterGemstones = 1.0f;
                     }
-                    // Vierter Gemstones-Parameter für den Radius der Objekte
+                    // Fourth gemstones parameter => Radius of the object
                     if (secondParameterGemstones != "Gem")
                         fourthParamaterGemstones = EditorGUILayout.FloatField("Radius", fourthParamaterGemstones);
                     else
                         fourthParamaterGemstones = EditorGUILayout.FloatField("Height", fourthParamaterGemstones);
 
-                    // Beschränkt die Usereingaben für die Höhe der Spitze der Kristalle => 0.01 - 1000
+                    // Restricts the user inputs for the crystal peak height => 0.01 - 1000
                     if (sixthParamaterGemstones < 0.009 || sixthParamaterGemstones > 1000)
                     {
                         sixthParamaterGemstones = 0.5f;
                     }
-                    // Sechster Gemstones-Parameter für die Höhe der Spitze oder der Krone
+                    // Sixth gemstones parameter => Crown or peak height 
                     if (secondParameterGemstones == "Crystal")
                         sixthParamaterGemstones = EditorGUILayout.FloatField("Peak Height", sixthParamaterGemstones);
                     if (secondParameterGemstones == "Gem")
@@ -372,44 +379,42 @@ namespace RockBuilder
                     if (secondParameterGemstones == "Diamond")
                         sixthParamaterGemstones = EditorGUILayout.FloatField("Crown Height", sixthParamaterGemstones);
 
-                    // Beschränkt die Usereingaben für die Höhe => 0.01 - 1000
+                    // Restricts the user inputs for the height => 0.01 - 1000
                     if (fifthParamaterGemstones < 0.009 || fifthParamaterGemstones > 1000)
                     {
                         fifthParamaterGemstones = 1.0f;
                     }
-                    // Fünfter Gemstones-Parameter für die Höhe der Objekte
+                    // Fifth gemstones parameter => Body height if crystal or diamond / Depth if gem
                     if (secondParameterGemstones != "Gem")
                         fifthParamaterGemstones = EditorGUILayout.FloatField("Body Height", fifthParamaterGemstones);
                     else
                         fifthParamaterGemstones = EditorGUILayout.FloatField("Depth", fifthParamaterGemstones);
 
-                    // Siebter Gemstones-Paramter => Die Checkbox, um ein Objekt zu smoothen         
+                    // Seventh gemstones parameter => The checkbox to smooth an object         
                     seventhParameterGemstones = EditorGUILayout.Toggle("Smooth", seventhParameterGemstones);
 
-                    // Neunter Gemstones-Paramter => Die Checkbox, um dem Objekt einen Collider zu verpassen         
+                    // Ninth gemstones parameter => The checkbox to give the object a collider         
                     ninthParameterGemstones = EditorGUILayout.Toggle("Collider", ninthParameterGemstones);
 
-                    // Achter Gemstones-Parameter => Slidebar für die Anzahl der LODs  
+                    // Eight gemstones parameter => Slidebar for the number of LODs  
                     eightParamaterGemstones = EditorGUILayout.IntSlider("LODs", eightParamaterGemstones, 0, 3);
 
                     GUILayout.Space(15);
 
-                    // Auswahl der Gemstones-Materialien      
+                    // Selection of the gemstone materials      
                     GUILayout.Label("Choose Material");
 
                     GUILayout.Space(5);
 
-                    // Diese Prüfung entscheidet, welche Shader angezeigt werden => Lightweight/Universal oder HD-Renderpipeline (wird momentan nicht mehr benötigt)
-                    //if (RenderPipelineManager.currentPipeline != null && RenderPipelineManager.currentPipeline.ToString().Contains("HD"))
                     gemstoneMaterial = (Material)EditorGUILayout.ObjectField(gemstoneMaterial, typeof(Material), true);
 
                     GUILayout.Space(15);
 
-                    // Button für das Generieren des Gemstones
+                    // Button to generate the gemstone
                     if (GUILayout.Button("Let's rock!", GUILayout.Height(25)))
                     {
 
-                        // generate existing mesh if diamondgenerator exists, otherwise create a new diamond generator
+                        // Generate existing mesh if diamondgenerator exists, otherwise create a new diamond generator
                         if (crystal)
                         {
                             crystal = CrystalService.Instance.CreateCrystal(crystal, gemstoneMaterial);
@@ -426,7 +431,7 @@ namespace RockBuilder
                 }
             }
 
-            // Anzeige für den Helpteil => Infos etc.
+            // UI Part "Help"
             if (toolbarInt == 2)
             {
                 GUILayout.Space(5);
@@ -444,9 +449,9 @@ namespace RockBuilder
 
                 if (GUILayout.Button("Open User Manual", GUILayout.Height(25)))
                 {
-                    // Öffnet das Usermanual PDF-File
+                    // Opens the user manual PDF file
                     Application.OpenURL(System.Environment.CurrentDirectory + "/Assets/Rock Builder/Assets/Resources/Dummy.pdf");
-                    Debug.Log("User Manual Button was pressed"); // Gibt eine Logmeldung aus
+                    Debug.Log("User Manual Button was pressed"); // Log message output
                 }
 
                 GUILayout.Space(20);
@@ -459,7 +464,7 @@ namespace RockBuilder
 
                 GUILayout.Space(15);
 
-                // Mit einem Klick öffnet sich direkt die Mailmaske
+                // The mail mask opens with a click
                 if (GUILayout.Button("Email: rockbuilder-help@hotmail.com", EditorStyles.label))
                     Application.OpenURL("mailto:rockbuilder-help@hotmail.com?");
             }
@@ -473,7 +478,7 @@ namespace RockBuilder
             CheckIfCustomRockSelected();
         }
 
-        // Wird benötigt um PNG-Dateien auf dem UI anzeigen zu können
+        // Required to display PNG files on the UI
         private Texture2D LoadPNG(string filePath)
         {
 
@@ -600,10 +605,8 @@ namespace RockBuilder
                     rockHeight = cubeRock.heigth;
                     rockWidth = cubeRock.width;
                     rockDepth = cubeRock.depth;
-                    rockNoiseX = cubeRock.noiseX;
-                    rockNoiseY = cubeRock.noiseY;
-                    rockNoiseZ = cubeRock.noiseZ;
-                    rockBezelSize = cubeRock.bezelSize;
+                    rockNoise = cubeRock.noise; // Stef, do gits etz nor no de normal noise, nümme X, Y und Z, muesch de no ahpasse, de set alles weder klappe :)
+                    rockBevelSize = cubeRock.bezelSize;
                     seventhParamaterRocks = cubeRock.lodCount;
                     sixthParamaterRocks = cubeRock.colliderFlag;
                     if (cubeRock.GetComponent<MeshRenderer>().sharedMaterial != null)
@@ -723,10 +726,8 @@ namespace RockBuilder
                 cubeRock.heigth = rockHeight;
                 cubeRock.width = rockWidth;
                 cubeRock.depth = rockDepth;
-                cubeRock.noiseX = rockNoiseX;
-                cubeRock.noiseY = rockNoiseY;
-                cubeRock.noiseZ = rockNoiseZ;
-                cubeRock.bezelSize = rockBezelSize;
+                cubeRock.noiseX = rockNoise;
+                cubeRock.bezelSize = rockBevelSize;
                 cubeRock.colliderFlag = ninthParameterGemstones;
             }
             if (customRock != null)
