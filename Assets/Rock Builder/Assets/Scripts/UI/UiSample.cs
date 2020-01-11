@@ -25,6 +25,7 @@ namespace RockBuilder
         bool sixthParamaterRocks = false; // Collider
         int seventhParamaterRocks = 0; // LODs
         string eightParameterRocks = ""; // Rock rather round or edgy
+        int ninthParamaterRocks = 10; // Edges 
         float rockHeight = 1.0f; // Height of the rock
         float rockWidth = 1.0f; // Width of the rock
         float rockDepth = 1.0f; // Deepth of the rock
@@ -158,6 +159,12 @@ namespace RockBuilder
                     // Displays the other rocks parameter just, if rounded or edgy was selected
                     if (eightParameterRocks != "")
                     {
+                        if (eightParameterRocks == "Rounded")
+                        {
+                            // Ninth rocks parameter => Slidebar for the desired edge count between 6 and 300 
+                            ninthParamaterRocks = EditorGUILayout.IntSlider("Edges", ninthParamaterRocks, 6, 300);
+                        }
+
                         // Restricts the user inputs for the rock height => 0.01 - 1000
                         if (rockHeight < 0.009 || rockHeight > 1000)
                         {
@@ -188,6 +195,9 @@ namespace RockBuilder
                                 rockBevelSize = 0.1f;
                             }
                             rockBevelSize = EditorGUILayout.FloatField("Bevel Size", rockBevelSize);
+
+                            // Fourth rocks parameter => Slidebar for the desired polycount between 10 and 10'000
+                            fourthParamaterRocks = EditorGUILayout.IntSlider("Polycount", fourthParamaterRocks, 10, 10000);
                         }
 
                         // Restricts the user inputs for the noise => 0.01 - 1000
@@ -196,9 +206,6 @@ namespace RockBuilder
                             rockNoise = 0.1f;
                         }
                         rockNoise = EditorGUILayout.FloatField("Noise", rockNoise);
-
-                        // Fourth rocks parameter => Slidebar for the desired polycount between 10 and 10'000
-                        fourthParamaterRocks = EditorGUILayout.IntSlider("Polycount", fourthParamaterRocks, 10, 10000);
 
                         // Fifth rocks parameter => The checkbox to smooth an object        
                         fifthParamaterRocks = EditorGUILayout.Toggle("Smooth", fifthParamaterRocks);
@@ -252,8 +259,8 @@ namespace RockBuilder
 
                     GUILayout.Space(15);
 
-                    // Fourth rocks parameter => Slidebar for the desired polycount between 10 and 10'000  
-                    fourthParamaterRocks = EditorGUILayout.IntSlider("Polycount", fourthParamaterRocks, 10, 10000);
+                    // Fourth rocks parameter => Slidebar for the desired polycount between 10 and 10'000
+                        fourthParamaterRocks = EditorGUILayout.IntSlider("Polycount", fourthParamaterRocks, 10, 10000);
 
                     // Fifth rocks parameter => The checkbox to smooth an object         
                     fifthParamaterRocks = EditorGUILayout.Toggle("Smooth", fifthParamaterRocks);
@@ -661,6 +668,7 @@ namespace RockBuilder
                     seventhParamaterRocks = sphereRock.lodCount;
                     sixthParamaterRocks = sphereRock.colliderFlag;
                     eightParameterRocks = "Rounded";
+                    ninthParamaterRocks = sphereRock.edges;
                     if (sphereRock.GetComponent<MeshRenderer>().sharedMaterial != null)
                     {
                         rockMaterial = sphereRock.GetComponent<MeshRenderer>().sharedMaterial;
@@ -744,32 +752,33 @@ namespace RockBuilder
         {
             if (cubeRock != null)
             {
-                cubeRock.smoothFlag = seventhParameterGemstones;
-                cubeRock.lodCount = eightParamaterGemstones;
+                cubeRock.smoothFlag = fifthParamaterRocks;
+                cubeRock.lodCount = seventhParamaterRocks;
                 cubeRock.height = rockHeight;
                 cubeRock.width = rockWidth;
                 cubeRock.depth = rockDepth;
                 cubeRock.noise = rockNoise;
                 cubeRock.bezelSize = rockBevelSize;
-                cubeRock.colliderFlag = ninthParameterGemstones;
+                cubeRock.colliderFlag = sixthParamaterRocks;
             }
 
             if (sphereRock != null)
             {
-                sphereRock.smoothFlag = seventhParameterGemstones;
-                sphereRock.lodCount = eightParamaterGemstones;
+                sphereRock.smoothFlag = fifthParamaterRocks;
+                sphereRock.lodCount = seventhParamaterRocks;
+                sphereRock.edges = ninthParamaterRocks;
                 sphereRock.height = rockHeight;
                 sphereRock.width = rockWidth;
                 sphereRock.depth = rockDepth;
                 sphereRock.noise = rockNoise;
-                sphereRock.colliderFlag = ninthParameterGemstones;
+                sphereRock.colliderFlag = sixthParamaterRocks;
             }
 
             if (customRock != null)
             {
-                customRock.smoothFlag = seventhParameterGemstones;
-                customRock.lodCount = eightParamaterGemstones;
-                customRock.colliderFlag = ninthParameterGemstones;
+                customRock.smoothFlag = fifthParamaterRocks;
+                customRock.lodCount = seventhParamaterRocks;
+                customRock.colliderFlag = sixthParamaterRocks;
             }
         }
 

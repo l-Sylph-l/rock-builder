@@ -40,16 +40,13 @@ namespace RockBuilder
             List<List<Vector3>> circularIerationList = new List<List<Vector3>>();
 
             float startPositionY = -sphereRock.height / 2;
-            int edges = 6;
-
+            int edges = sphereRock.edges;
 
             float radiusX = sphereRock.width;
             float radiusY = sphereRock.height;
             float radiusZ = sphereRock.depth;
 
-
             float positionZ = radiusZ / 2;
-
 
             List<Vector3> circularIeration = new List<Vector3>();
             // Get the vertices for the body
@@ -115,7 +112,134 @@ namespace RockBuilder
 
         public Mesh CreateRockMesh(SphereRock sphereRock)
         {
-            return CreateSmoothMesh(sphereRock);
+            if (sphereRock.smoothFlag)
+            {
+                return CreateSmoothMesh(sphereRock);
+            }
+            else
+            {
+                return CreateHardMesh(sphereRock);
+            }
+
+        }
+
+
+        private Mesh CreateHardMesh(SphereRock sphereRock)
+        {
+            List<List<Vector3>> circularIterations = sphereRock.vertexPositions;
+            int verticesPerIteration = circularIterations.Count;
+            vertexLoop = 0;
+            triangleVerticesCount = 0;
+            int verticesCount = (verticesPerIteration * verticesPerIteration) * 100;
+            Vector3[] noiseVertices = new Vector3[verticesCount];
+            Vector2[] noiseUv = new Vector2[verticesCount];
+            vertices = new Vector3[verticesCount];
+            uv = new Vector2[verticesCount];
+            triangles = new int[verticesCount * 21];
+            noiseFactor = sphereRock.noise;
+
+            int iterationCount = 0;
+
+            foreach (List<Vector3> iteration in circularIterations)
+            {
+                iterationCount++;
+                float uvHeightIteration = (1f / circularIterations.Count) * iterationCount;
+                int vertexCount = 1;
+
+                foreach (Vector3 vertex in iteration)
+                {
+                    float uvWidthIteration = (1f / circularIterations.Count) * vertexCount / 1;
+                    noiseVertices[vertexLoop] = vertex;
+                    noiseUv[vertexLoop] = new Vector2(uvWidthIteration, uvHeightIteration);
+
+                    vertexLoop++;
+                    vertexCount++;
+                }
+            }
+
+            vertexLoop = 0;
+            int heightCount = 0;
+            int noiseVertexLoop = 0;
+
+
+            foreach (Vector3 vertex in noiseVertices)
+            {
+                int vertexCount = 1;
+                float firstUvWidthIteration = (1f / circularIterations.Count) * vertexCount;
+                float secondUvWidthIteration = (1f / circularIterations.Count) * (vertexCount + 1);
+                float firstUvHeightIteration = (1f / circularIterations.Count) * heightCount;
+                float secondUvHeightIteration = (1f / circularIterations.Count) * (heightCount + 1);
+
+                int firstLowerIndex = vertexLoop;
+                int secondLowerIndex = vertexLoop + 1;
+                int firstUpperIndex = vertexLoop + verticesPerIteration;
+                int secondUpperIndex = vertexLoop + verticesPerIteration + 1;
+
+                int firstLowerNoiseIndex = noiseVertexLoop;
+                int secondLowerNoiseIndex = noiseVertexLoop + 1;
+                int firstUpperNoiseIndex = noiseVertexLoop + verticesPerIteration;
+                int secondUpperNoiseIndex = noiseVertexLoop + verticesPerIteration + 1;
+
+                if (vertexCount == verticesPerIteration)
+                {
+                    // secondLowerIndex = vertexLoop + 1 - verticesPerIteration;
+                    // secondUpperIndex = vertexLoop + 1;
+
+                    secondLowerNoiseIndex = noiseVertexLoop + 1 - verticesPerIteration;
+                    secondUpperNoiseIndex = noiseVertexLoop + 1;
+                }
+
+                vertices[vertexLoop] = noiseVertices[firstLowerNoiseIndex];
+                vertices[vertexLoop + 1] = noiseVertices[secondLowerNoiseIndex];
+                vertices[vertexLoop + 2] = noiseVertices[firstUpperNoiseIndex];
+                vertices[vertexLoop + 3] = noiseVertices[secondUpperNoiseIndex];
+
+                uv[vertexLoop] = new Vector2(firstUvWidthIteration, firstUvHeightIteration);
+                uv[vertexLoop + 1] = new Vector2(secondUvWidthIteration, firstUvHeightIteration);
+                uv[vertexLoop + 2] = new Vector2(firstUvWidthIteration, secondUvHeightIteration);
+                uv[vertexLoop + 3] = new Vector2(secondUvWidthIteration, secondUvHeightIteration);
+
+                if (iterationCount != circularIterations.Count)
+                {
+                    triangles[triangleVerticesCount] = vertexLoop;
+                    triangles[triangleVerticesCount + 1] = secondLowerIndex;
+                    triangles[triangleVerticesCount + 2] = firstUpperIndex;
+                    triangles[triangleVerticesCount + 3] = secondLowerIndex;
+                    triangles[triangleVerticesCount + 4] = secondUpperIndex;
+                    triangles[triangleVerticesCount + 5] = firstUpperIndex;
+
+                    // if (vertexCount == verticesPerIteration)
+                    // {
+                    //     triangles[triangleVerticesCount + 1] = vertexLoop + 1 - verticesPerIteration;
+                    //     triangles[triangleVerticesCount + 3] = vertexLoop + 1 - verticesPerIteration;
+                    //     triangles[triangleVerticesCount + 4] = vertexLoop + 1;
+                    // }
+
+                    triangleVerticesCount += 6;
+
+                }
+
+                vertexLoop += 4;
+                noiseVertexLoop++;
+                vertexCount++;
+
+                if (vertexCount == verticesPerIteration)
+                {
+                    vertexCount = 1;
+                    heightCount++;
+                }
+            }
+
+            Mesh mesh = new Mesh();
+            mesh.Clear();
+            mesh.vertices = vertices;
+            mesh.triangles = triangles;
+            mesh.uv = uv;
+            mesh.name = "generated sphere mesh";
+            mesh.RecalculateNormals();
+
+            mesh.Optimize();
+            return mesh;
         }
 
         private Mesh CreateSmoothMesh(SphereRock sphereRock)
@@ -127,7 +251,7 @@ namespace RockBuilder
             int verticesCount = verticesPerIteration * verticesPerIteration;
             vertices = new Vector3[verticesCount];
             uv = new Vector2[verticesCount];
-            triangles = new int[verticesCount * 5];
+            triangles = new int[verticesCount * 6];
             noiseFactor = sphereRock.noise;
 
             int iterationCount = 0;
@@ -140,7 +264,7 @@ namespace RockBuilder
                 foreach (Vector3 vertex in iteration)
                 {
                     float uvWidthIteration = (1f / circularIterations.Count) * vertexCount / 1;
-                    vertices[vertexLoop] = vertex;
+                    vertices[vertexLoop] = AddNoise(vertex);
                     uv[vertexLoop] = new Vector2(uvWidthIteration, uvHeightIteration);
 
                     if (iterationCount != circularIterations.Count)
@@ -204,6 +328,17 @@ namespace RockBuilder
         private Vector3 GetMiddlePoint(SphereRock sphereRock, float positionY)
         {
             return sphereRock.transform.position + (Vector3.up * positionY);
+        }
+
+          private Vector3 AddNoise(Vector3 vertex)
+        {
+            float halfNoiseFactor = noiseFactor / 2;
+            float noiseX = Random.Range(-halfNoiseFactor, halfNoiseFactor);
+            float noiseY = Random.Range(-halfNoiseFactor, halfNoiseFactor);
+            float noiseZ = Random.Range(-halfNoiseFactor, halfNoiseFactor);
+
+            Vector3 noiseVector = new Vector3(noiseX, noiseY, noiseZ);
+            return vertex + noiseVector;
         }
     }
 }

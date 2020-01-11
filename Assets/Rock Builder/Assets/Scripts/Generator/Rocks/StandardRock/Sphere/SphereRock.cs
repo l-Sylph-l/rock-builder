@@ -18,7 +18,7 @@ namespace RockBuilder
         [HideInInspector]
         public float noise;
         [HideInInspector]
-        public int polyCount;
+        public int edges;
         [HideInInspector]
         public int lodCount;
         [HideInInspector]
