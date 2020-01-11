@@ -256,6 +256,31 @@ namespace RockBuilder
 
             int iterationCount = 0;
 
+            Vector3 firstVertex = circularIterations.First().First();
+            Vector3 lastVertex = circularIterations.Last().Last();
+
+            circularIterations.RemoveAt(sphereRock.edges - 1);
+            circularIterations.RemoveAt(0);
+
+            vertices[vertexLoop] = AddNoise(firstVertex);
+            uv[vertexLoop] = new Vector2(0.5f, 0f);
+
+            for (int loopCount = 0; loopCount < sphereRock.edges; loopCount++)
+            {
+                triangles[triangleVerticesCount] = vertexLoop;
+                triangles[triangleVerticesCount + 1] = vertexLoop + loopCount + 2;
+                triangles[triangleVerticesCount + 2] = vertexLoop + loopCount + 1;
+
+                if (loopCount == sphereRock.edges - 1)
+                {
+                    triangles[triangleVerticesCount + 1] = vertexLoop + 1;
+                }
+
+                triangleVerticesCount += 3;
+            }
+
+            vertexLoop++;
+
             foreach (List<Vector3> iteration in circularIterations)
             {
                 iterationCount++;
@@ -263,7 +288,7 @@ namespace RockBuilder
                 int vertexCount = 1;
                 foreach (Vector3 vertex in iteration)
                 {
-                    float uvWidthIteration = (1f / circularIterations.Count) * vertexCount / 1;
+                    float uvWidthIteration = (1f / circularIterations.Count) * vertexCount;
                     vertices[vertexLoop] = AddNoise(vertex);
                     uv[vertexLoop] = new Vector2(uvWidthIteration, uvHeightIteration);
 
@@ -291,6 +316,24 @@ namespace RockBuilder
                     vertexCount++;
                 }
             }
+
+            vertices[vertexLoop] = AddNoise(lastVertex);
+            uv[vertexLoop] = new Vector2(0.5f, 1.1f);
+
+            for (int loopCount = 0; loopCount < sphereRock.edges; loopCount++)
+            {
+                triangles[triangleVerticesCount] = vertexLoop;
+                triangles[triangleVerticesCount + 1] = vertexLoop - loopCount - 2;
+                triangles[triangleVerticesCount + 2] = vertexLoop - loopCount - 1;
+
+                if (loopCount == sphereRock.edges - 1)
+                {
+                    triangles[triangleVerticesCount + 1] = vertexLoop - 1;
+                }
+
+                triangleVerticesCount += 3;
+            }
+
 
             Mesh mesh = new Mesh();
             mesh.Clear();
@@ -330,7 +373,7 @@ namespace RockBuilder
             return sphereRock.transform.position + (Vector3.up * positionY);
         }
 
-          private Vector3 AddNoise(Vector3 vertex)
+        private Vector3 AddNoise(Vector3 vertex)
         {
             float halfNoiseFactor = noiseFactor / 2;
             float noiseX = Random.Range(-halfNoiseFactor, halfNoiseFactor);
