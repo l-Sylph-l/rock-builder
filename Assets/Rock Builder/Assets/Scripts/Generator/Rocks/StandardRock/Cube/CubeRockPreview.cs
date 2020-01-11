@@ -36,7 +36,7 @@ namespace RockBuilder
             int verticalBezelLoopCount = 0;
             int bottomLoopCount = 1;
             int linkLoopCount = 0;
-            foreach (var vertex in cubeRock.bottomCornerVertices)
+            foreach (var vertex in cubeRock.bottomPlaneVertices)
             {
                 Vector3 vertexFrom = vertex;
                 Vector3 vertexTo;
@@ -52,11 +52,11 @@ namespace RockBuilder
 
                 if (bottomLoopCount == 4)
                 {
-                    vertexTo = cubeRock.bottomCornerVertices[0];
+                    vertexTo = cubeRock.bottomPlaneVertices[0];
                 }
                 else
                 {
-                    vertexTo = cubeRock.bottomCornerVertices[bottomLoopCount];
+                    vertexTo = cubeRock.bottomPlaneVertices[bottomLoopCount];
                 }
 
                 Gizmos.DrawLine(vertexFrom, vertexTo);
@@ -69,7 +69,7 @@ namespace RockBuilder
 
             verticalBezelLoopCount = 0;
             int upperLoopCount = 1;
-            foreach (var vertex in cubeRock.upperCornerVertices)
+            foreach (var vertex in cubeRock.upperPlaneVertices)
             {
                 Vector3 vertexFrom = vertex;
                 Vector3 vertexTo;
@@ -85,11 +85,11 @@ namespace RockBuilder
 
                 if (upperLoopCount == 4)
                 {
-                    vertexTo = cubeRock.upperCornerVertices[0];
+                    vertexTo = cubeRock.upperPlaneVertices[0];
                 }
                 else
                 {
-                    vertexTo = cubeRock.upperCornerVertices[upperLoopCount];
+                    vertexTo = cubeRock.upperPlaneVertices[upperLoopCount];
                 }
 
                 Gizmos.DrawLine(vertexFrom, vertexTo);
@@ -177,7 +177,7 @@ namespace RockBuilder
             DrawLines(cubeRock);
 
             // Draw black cubes on every vertex position of the cubeRock
-            foreach (Vector3 spawnPosition in cubeRock.bottomCornerVertices)
+            foreach (Vector3 spawnPosition in cubeRock.bottomPlaneVertices)
             {
                 VisualizeVertex(spawnPosition, cubeRock);
             }
@@ -187,7 +187,7 @@ namespace RockBuilder
                 VisualizeVertex(spawnPosition, cubeRock);
             }
 
-            foreach (Vector3 spawnPosition in cubeRock.upperCornerVertices)
+            foreach (Vector3 spawnPosition in cubeRock.upperPlaneVertices)
             {
                 VisualizeVertex(spawnPosition, cubeRock);
             }

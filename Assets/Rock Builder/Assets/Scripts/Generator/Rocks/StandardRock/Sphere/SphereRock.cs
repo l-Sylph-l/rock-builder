@@ -10,11 +10,15 @@ namespace RockBuilder
     public class SphereRock : MonoBehaviour
     {
         [HideInInspector]
-        public List<CustomRockListIteration> sortedVertices;
+        public float height;
         [HideInInspector]
-        public List<Vector3> rockBuildPoints = new List<Vector3>();
-        private int verticalIterations;
-        private int verticesPerIteration;
+        public float width;
+        [HideInInspector]
+        public float depth;
+        [HideInInspector]
+        public float noise;
+        [HideInInspector]
+        public int polyCount;
         [HideInInspector]
         public int lodCount;
         [HideInInspector]
@@ -22,7 +26,7 @@ namespace RockBuilder
         [HideInInspector]
         public bool colliderFlag;
         [HideInInspector]
-        public List<Vector3> vertexPositions;
+        public List<List<Vector3>> vertexPositions;
         [HideInInspector]
         public Transform[] childrens;
         public Mesh mesh
@@ -69,9 +73,19 @@ namespace RockBuilder
             }
         }
 
-        public void RemoveCustomRockClass()
+        private void OnDrawGizmosSelected()
         {
-            DestroyImmediate(this.GetComponent<CustomRock>());
+            if (vertexPositions != null )
+            {
+                // update vertex positions
+                vertexPositions = SphereRockMeshGenerator.Instance.CreateVertexPositions(this);
+                SphereRockPreview.Instance.DrawGizmo(this);
+            }
+        }
+
+        public void RemoveSphereRockClass()
+        {
+            DestroyImmediate(this.GetComponent<SphereRock>());
         }
 
         public void RemoveMeshCollider()

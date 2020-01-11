@@ -10,8 +10,7 @@ namespace RockBuilder
     public class CustomRock : MonoBehaviour
     {
         [HideInInspector]
-        public List<CustomRockListIteration> sortedVertices;
-      
+        public List<CustomRockListIteration> sortedVertices; 
         public List<Vector3> rockBuildPoints = new List<Vector3>();
         private int verticalIterations;
         private int verticesPerIteration;

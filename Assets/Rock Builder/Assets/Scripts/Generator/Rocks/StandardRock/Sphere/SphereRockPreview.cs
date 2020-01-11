@@ -28,142 +28,73 @@ namespace RockBuilder
             }
         }
 
-        public void DrawLines(List<Vector3> spawnPoints, int edges, Gem gem)
+        public void DrawLines(SphereRock sphereRock)
         {
             Gizmos.color = Color.blue;
-            Gizmos.matrix = gem.transform.localToWorldMatrix;
 
-            for (int loopCount = 0; spawnPoints.Count > loopCount; loopCount++)
+            Vector3 vertexFrom = Vector3.zero;
+
+            foreach (List<Vector3> iteration in sphereRock.vertexPositions)
             {
-                spawnPoints[loopCount] = spawnPoints[loopCount] - gem.transform.position;
-            }
 
-            int halfAmountOfEdges = edges / 2;
-            int middleRingIndex = 1 + halfAmountOfEdges;
-            int outerRingIndex = 1 + edges;
-            int secondMiddleRingIndex = 1 + edges * 2;
-            int secondInnerRingIndex = 1 + halfAmountOfEdges + edges * 2;
-
-            for (int loopCount = 0; halfAmountOfEdges > loopCount; loopCount++)
-            {
-                int index = loopCount + 1;
-                int nextIndex;
-                if (halfAmountOfEdges - 1 == loopCount)
+                bool skipFirstVertex = true;
+                foreach (Vector3 vertex in iteration)
                 {
-                    nextIndex = 1;
+                    if (!skipFirstVertex)
+                    {
+                        Gizmos.DrawLine(vertexFrom, vertex);
+                    }
 
-                }
-                else
-                {
-                    nextIndex = index + 1;
-                }
+                    vertexFrom = vertex;
+                    skipFirstVertex = false;
 
-                if (0 == loopCount)
-                {
-                    Gizmos.DrawLine(spawnPoints[index], spawnPoints[index + edges - 1]);
-                }
-                else
-                {
-                    Gizmos.DrawLine(spawnPoints[index], spawnPoints[index + halfAmountOfEdges - 1]);
-                }
 
-                Gizmos.DrawLine(spawnPoints[index], spawnPoints[nextIndex]);
-                Gizmos.DrawLine(spawnPoints[index], spawnPoints[index + halfAmountOfEdges]);
-            }
 
-            for (int loopCount = 0; halfAmountOfEdges > loopCount; loopCount++)
-            {
-                int index = middleRingIndex + loopCount;
-                int nextIndex = (outerRingIndex + loopCount * 2) + 1;
-
-                Gizmos.DrawLine(spawnPoints[index], spawnPoints[nextIndex]);
-                Gizmos.DrawLine(spawnPoints[index], spawnPoints[nextIndex - 1]);
-
-                if (halfAmountOfEdges - 1 == loopCount)
-                {
-                    Gizmos.DrawLine(spawnPoints[index], spawnPoints[outerRingIndex]);
-                }
-                else
-                {
-                    Gizmos.DrawLine(spawnPoints[index], spawnPoints[nextIndex + 1]);
                 }
             }
 
-            for (int loopCount = 0; edges > loopCount; loopCount++)
+            for (int loopCount = 0; loopCount < sphereRock.vertexPositions.Count; loopCount++)
             {
-                int index = outerRingIndex + loopCount;
-                int nextIndex = index + 1;
 
-                if (edges - 1 == loopCount)
+                for (int innerLoopCount = 0; innerLoopCount < sphereRock.vertexPositions[loopCount].Count; innerLoopCount++)
                 {
-                    Gizmos.DrawLine(spawnPoints[index], spawnPoints[outerRingIndex]);
-                }
-                else
-                {
-                    Gizmos.DrawLine(spawnPoints[index], spawnPoints[nextIndex]);
-                }
-            }
+                    Vector3 verticalVertexFrom = sphereRock.vertexPositions[innerLoopCount][loopCount];
+                    Vector3 verticalVertexTo;
 
-            for (int loopCount = 0; halfAmountOfEdges > loopCount; loopCount++)
-            {
-                int index = secondMiddleRingIndex + loopCount;
-                int nextIndex = (outerRingIndex + loopCount * 2) + 1;
+                    if (sphereRock.vertexPositions.Count - 1 != innerLoopCount)
+                    {
+                        verticalVertexTo = sphereRock.vertexPositions[innerLoopCount + 1][loopCount];
+                    }
+                    else
+                    {
+                        verticalVertexTo = sphereRock.vertexPositions[0][loopCount];
+                    }
 
-                Gizmos.DrawLine(spawnPoints[index], spawnPoints[nextIndex]);
-                Gizmos.DrawLine(spawnPoints[index], spawnPoints[nextIndex - 1]);
+                    Gizmos.DrawLine(verticalVertexFrom, verticalVertexTo);
 
-                if (halfAmountOfEdges - 1 == loopCount)
-                {
-                    Gizmos.DrawLine(spawnPoints[index], spawnPoints[outerRingIndex]);
                 }
-                else
-                {
-                    Gizmos.DrawLine(spawnPoints[index], spawnPoints[nextIndex + 1]);
-                }
-            }
-
-            for (int loopCount = 0; halfAmountOfEdges > loopCount; loopCount++)
-            {
-                int index = loopCount + secondInnerRingIndex;
-                int nextIndex;
-                if (halfAmountOfEdges - 1 == loopCount)
-                {
-                    nextIndex = secondInnerRingIndex;
-                }
-                else
-                {
-                    nextIndex = index + 1;
-                }
-
-                if (0 == loopCount)
-                {
-                    Gizmos.DrawLine(spawnPoints[index], spawnPoints[index - 1]);
-                }
-                else
-                {
-                    Gizmos.DrawLine(spawnPoints[index], spawnPoints[index - halfAmountOfEdges - 1]);
-                }
-
-                Gizmos.DrawLine(spawnPoints[index], spawnPoints[nextIndex]);
-                Gizmos.DrawLine(spawnPoints[index], spawnPoints[index - halfAmountOfEdges]);
             }
 
         }
 
         public void DrawGizmo(SphereRock sphereRock)
         {
+            Gizmos.matrix = sphereRock.transform.localToWorldMatrix;
 
-            // DrawLines(sphereRock.vertexPositions, sphereRock.edges, sphereRock);
+            //  DrawLines(sphereRock);
 
-            // // Draw black cubes on every vertex position of the gem
-            // foreach (Vector3 spawnPosition in sphereRock.vertexPositions)
-            // {
-            //     Gizmos.color = Color.black;
-            //     float scaleModeModifier = 1f / (sphereRock.width / 2);
-            //     float cubeSize = Mathf.Clamp(0.05f / scaleModeModifier, 0.05f, 0.3f);
-            //     Gizmos.DrawSphere(spawnPosition, new Vector3(cubeSize, cubeSize, cubeSize));
-            //     Gizmos.color = Color.blue;
-            // }
+            // Draw black cubes on every vertex position of the gem
+            foreach (List<Vector3> iteration in sphereRock.vertexPositions)
+            {
+                foreach (Vector3 spawnPosition in iteration)
+                {
+                    Gizmos.color = Color.black;
+                    float scaleModeModifier = 1f / (sphereRock.width / 2);
+                    float cubeSize = Mathf.Clamp(0.05f / scaleModeModifier, 0.05f, 0.3f);
+                    Gizmos.DrawCube(spawnPosition, new Vector3(cubeSize, cubeSize, cubeSize));
+                    Gizmos.color = Color.blue;
+                }
+            }
 
         }
     }

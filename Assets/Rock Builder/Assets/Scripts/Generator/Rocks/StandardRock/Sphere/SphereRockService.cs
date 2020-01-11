@@ -31,35 +31,36 @@ namespace RockBuilder
 
         public SphereRock CreateEmptySphereRock()
         {
-            SphereRock standardRock = new GameObject().AddComponent(typeof(SphereRock)) as SphereRock;
-            standardRock.smoothFlag = false;
-            standardRock.lodCount = 0;
-            standardRock.colliderFlag = true;
+            SphereRock sphereRock = new GameObject().AddComponent(typeof(SphereRock)) as SphereRock;
+            sphereRock.smoothFlag = false;
+            sphereRock.lodCount = 0;
+            sphereRock.colliderFlag = true;
             //Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
-            standardRock.transform.position = CalculateSphereRockSpawnPosition();
-            SceneView.lastActiveSceneView.camera.transform.LookAt(standardRock.transform);
-            FocusSphereRock(standardRock);
-            return standardRock;
+            sphereRock.vertexPositions = SphereRockMeshGenerator.Instance.CreateVertexPositions(sphereRock);
+            sphereRock.transform.position = CalculateSphereRockSpawnPosition();
+            SceneView.lastActiveSceneView.camera.transform.LookAt(sphereRock.transform);
+            FocusSphereRock(sphereRock);
+            return sphereRock;
         }
 
         public SphereRock CreateEmptySphereRock(string name)
         {
-            SphereRock standardRock = CreateEmptySphereRock();
-            standardRock.name = name;
-            return standardRock;
+            SphereRock sphereRock = CreateEmptySphereRock();
+            sphereRock.name = name;
+            return sphereRock;
         }
 
-        public SphereRock CreateSphereRock(SphereRock standardRock, Material material)
+        public SphereRock CreateSphereRock(SphereRock sphereRock, Material material)
         {
             //Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
-            SceneView.lastActiveSceneView.camera.transform.LookAt(standardRock.transform);
-            FocusSphereRock(standardRock);
+            SceneView.lastActiveSceneView.camera.transform.LookAt(sphereRock.transform);
+            FocusSphereRock(sphereRock);
 
-            standardRock.mesh = SphereRockMeshGenerator.Instance.CreateRockMesh(standardRock);
-            standardRock.GetComponent<MeshRenderer>().material = material;
-            //CreateLods(standardRock);
-            CreateMeshCollider(standardRock);
-            return standardRock;
+            sphereRock.mesh = SphereRockMeshGenerator.Instance.CreateRockMesh(sphereRock);
+            sphereRock.GetComponent<MeshRenderer>().material = material;
+            //CreateLods(sphereRock);
+            CreateMeshCollider(sphereRock);
+            return sphereRock;
         }
 
         public SphereRock GetSphereRockFromSelection()
@@ -72,9 +73,9 @@ namespace RockBuilder
             return null;
         }
 
-        private void FocusSphereRock(SphereRock standardRock)
+        private void FocusSphereRock(SphereRock sphereRock)
         {
-            Selection.activeGameObject = standardRock.gameObject;
+            Selection.activeGameObject = sphereRock.gameObject;
             SceneView.lastActiveSceneView.FrameSelected();
         }
 
@@ -84,32 +85,32 @@ namespace RockBuilder
             return (cameraTransform.forward * (3f * 2f)) + cameraTransform.position;
         }
 
-        private void CreateMeshCollider(SphereRock standardRock)
+        private void CreateMeshCollider(SphereRock sphereRock)
         {
-            standardRock.RemoveMeshCollider();
-            if (standardRock.colliderFlag)
+            sphereRock.RemoveMeshCollider();
+            if (sphereRock.colliderFlag)
             {
-                MeshCollider meshCollider = standardRock.gameObject.AddComponent<MeshCollider>();
-                meshCollider.sharedMesh = standardRock.mesh;
+                MeshCollider meshCollider = sphereRock.gameObject.AddComponent<MeshCollider>();
+                meshCollider.sharedMesh = sphereRock.mesh;
                 meshCollider.convex = true;
             }
         } 
 
-        // public void CreateLods(SphereRock standardRock)
+        // public void CreateLods(SphereRock sphereRock)
         // {
-        //     if (standardRock.childrens != null)
+        //     if (sphereRock.childrens != null)
         //     {
-        //         standardRock.RemoveLOD();
+        //         sphereRock.RemoveLOD();
         //     }
 
-        //     int lodCounter = standardRock.lodCount;
+        //     int lodCounter = sphereRock.lodCount;
 
-        //     if (lodCounter != 0 && 3 <= standardRock.edges / standardRock.lodCount)
+        //     if (lodCounter != 0 && 3 <= sphereRock.edges / sphereRock.lodCount)
         //     {
         //         // Programmatically create a LOD group and add LOD levels.
         //         // Create a GUI that allows for forcing a specific LOD level.
         //         lodCounter += 1;
-        //         LODGroup group = standardRock.gameObject.AddComponent<LODGroup>();
+        //         LODGroup group = sphereRock.gameObject.AddComponent<LODGroup>();
         //         Transform[] childrens = new Transform[lodCounter - 1];
 
         //         // Add 4 LOD levels
@@ -123,18 +124,18 @@ namespace RockBuilder
         //             if (i != 0)
         //             {
         //                 childSphereRock = new GameObject().AddComponent(typeof(SphereRock)) as SphereRock;
-        //                 childSphereRock.edges = standardRock.edges / (i + 1);
-        //                 childSphereRock.radius = standardRock.radius;
-        //                 childSphereRock.height = standardRock.height;
-        //                 childSphereRock.heightPeak = standardRock.heightPeak;
-        //                 childSphereRock.smoothFlag = standardRock.smoothFlag;
+        //                 childSphereRock.edges = sphereRock.edges / (i + 1);
+        //                 childSphereRock.radius = sphereRock.radius;
+        //                 childSphereRock.height = sphereRock.height;
+        //                 childSphereRock.heightPeak = sphereRock.heightPeak;
+        //                 childSphereRock.smoothFlag = sphereRock.smoothFlag;
         //                 childSphereRock.vertexPositions = SphereRockMeshGenerator.Instance.CreateVertexPositions(childSphereRock);
         //                 childSphereRock.mesh = SphereRockMeshGenerator.Instance.CreateMesh(childSphereRock);
-        //                 childSphereRock.name = standardRock.name + "_LOD_0" + i;
-        //                 childSphereRock.transform.parent = standardRock.transform;
+        //                 childSphereRock.name = sphereRock.name + "_LOD_0" + i;
+        //                 childSphereRock.transform.parent = sphereRock.transform;
         //                 childSphereRock.transform.localPosition = Vector3.zero;
         //                 childSphereRock.transform.localRotation = new Quaternion(0f, 0f, 0f, 0f);
-        //                 childSphereRock.GetComponent<MeshRenderer>().material = standardRock.GetComponent<MeshRenderer>().sharedMaterial;
+        //                 childSphereRock.GetComponent<MeshRenderer>().material = sphereRock.GetComponent<MeshRenderer>().sharedMaterial;
         //                 renderers = new Renderer[1];
         //                 renderers[0] = childSphereRock.GetComponent<Renderer>();
         //                 childrens[i - 1] = childSphereRock.transform;
@@ -143,7 +144,7 @@ namespace RockBuilder
         //             else
         //             {
         //                 renderers = new Renderer[1];
-        //                 renderers[0] = standardRock.GetComponent<Renderer>();
+        //                 renderers[0] = sphereRock.GetComponent<Renderer>();
         //             }
 
         //             if (i != lodCounter - 1)
@@ -156,7 +157,7 @@ namespace RockBuilder
         //             }
 
         //         }
-        //         standardRock.childrens = childrens;
+        //         sphereRock.childrens = childrens;
         //         group.SetLODs(lods);
         //         group.RecalculateBounds();
         //     }

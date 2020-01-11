@@ -141,6 +141,7 @@ namespace RockBuilder
                     if (GUILayout.Button("Rounded", GUILayout.Height(32)))
                     {
                         Debug.Log("Rounded Button was pressed"); // Log message output
+                        sphereRock = SphereRockService.Instance.CreateEmptySphereRock(firstParameterRocks);
                         eightParameterRocks = "Rounded";
                     }
                     GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Edgy_icon.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
@@ -190,7 +191,7 @@ namespace RockBuilder
                         }
 
                         // Restricts the user inputs for the noise => 0.01 - 1000
-                        if (rockNoise < 0.009 || rockNoise > 1000)
+                        if (rockNoise < 0 || rockNoise > 100)
                         {
                             rockNoise = 0.1f;
                         }
@@ -229,7 +230,7 @@ namespace RockBuilder
                             }
                             if (sphereRock)
                             {
-
+                                sphereRock = SphereRockService.Instance.CreateSphereRock(sphereRock, rockMaterial);
                             }
                             Debug.Log("Rocks-Generate Button was pressed"); // Log message output
                         }
@@ -618,7 +619,7 @@ namespace RockBuilder
                 {
                     firstParameterRocks = cubeRock.name;
                     secondParameterRocks = "Standard";
-                    rockHeight = cubeRock.heigth;
+                    rockHeight = cubeRock.height;
                     rockWidth = cubeRock.width;
                     rockDepth = cubeRock.depth;
                     rockNoise = cubeRock.noise;
@@ -652,6 +653,10 @@ namespace RockBuilder
                 {
                     firstParameterRocks = sphereRock.name;
                     secondParameterRocks = "Standard";
+                    rockHeight = sphereRock.height;
+                    rockWidth = sphereRock.width;
+                    rockDepth = sphereRock.depth;
+                    rockNoise = sphereRock.noise;
                     fifthParamaterRocks = sphereRock.smoothFlag;
                     seventhParamaterRocks = sphereRock.lodCount;
                     sixthParamaterRocks = sphereRock.colliderFlag;
@@ -741,13 +746,25 @@ namespace RockBuilder
             {
                 cubeRock.smoothFlag = seventhParameterGemstones;
                 cubeRock.lodCount = eightParamaterGemstones;
-                cubeRock.heigth = rockHeight;
+                cubeRock.height = rockHeight;
                 cubeRock.width = rockWidth;
                 cubeRock.depth = rockDepth;
                 cubeRock.noise = rockNoise;
                 cubeRock.bezelSize = rockBevelSize;
                 cubeRock.colliderFlag = ninthParameterGemstones;
             }
+
+            if (sphereRock != null)
+            {
+                sphereRock.smoothFlag = seventhParameterGemstones;
+                sphereRock.lodCount = eightParamaterGemstones;
+                sphereRock.height = rockHeight;
+                sphereRock.width = rockWidth;
+                sphereRock.depth = rockDepth;
+                sphereRock.noise = rockNoise;
+                sphereRock.colliderFlag = ninthParameterGemstones;
+            }
+
             if (customRock != null)
             {
                 customRock.smoothFlag = seventhParameterGemstones;
@@ -776,6 +793,11 @@ namespace RockBuilder
             if (cubeRock && cubeRock.mesh == null)
             {
                 DestroyImmediate(cubeRock.gameObject);
+            }
+
+            if (sphereRock && sphereRock.mesh == null)
+            {
+                DestroyImmediate(sphereRock.gameObject);
             }
 
             if (customRock && customRock.mesh == null)

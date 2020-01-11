@@ -31,36 +31,35 @@ namespace RockBuilder
 
         public CubeRock CreateEmptyCubeRock()
         {
-            CubeRock standardRock = new GameObject().AddComponent(typeof(CubeRock)) as CubeRock;
-            standardRock.smoothFlag = false;
-            standardRock.lodCount = 0;
-            standardRock.colliderFlag = true;
+            CubeRock cubeRock = new GameObject().AddComponent(typeof(CubeRock)) as CubeRock;
+            cubeRock.smoothFlag = false;
+            cubeRock.lodCount = 0;
+            cubeRock.colliderFlag = true;
             //Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
-            standardRock = CubeRockMeshGenerator.Instance.CreateVertexPositions(standardRock);
-            standardRock.transform.position = CalculateCubeRockSpawnPosition();
-            SceneView.lastActiveSceneView.camera.transform.LookAt(standardRock.transform);
-            FocusCubeRock(standardRock);
-            return standardRock;
+            cubeRock = CubeRockMeshGenerator.Instance.CreateVertexPositions(cubeRock);
+            cubeRock.transform.position = CalculateCubeRockSpawnPosition();
+            SceneView.lastActiveSceneView.camera.transform.LookAt(cubeRock.transform);
+            FocusCubeRock(cubeRock);
+            return cubeRock;
         }
 
         public CubeRock CreateEmptyCubeRock(string name)
         {
-            CubeRock standardRock = CreateEmptyCubeRock();
-            standardRock.name = name;
-            return standardRock;
+            CubeRock cubeRock = CreateEmptyCubeRock();
+            cubeRock.name = name;
+            return cubeRock;
         }
 
-        public CubeRock CreateCubeRock(CubeRock standardRock, Material material)
+        public CubeRock CreateCubeRock(CubeRock cubeRock, Material material)
         {
             //Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");
-            SceneView.lastActiveSceneView.camera.transform.LookAt(standardRock.transform);
-            FocusCubeRock(standardRock);
-
-            standardRock.mesh = CubeRockMeshGenerator.Instance.CreateRockMesh(standardRock);
-            standardRock.GetComponent<MeshRenderer>().material = material;
-            //CreateLods(standardRock);
-            CreateMeshCollider(standardRock);
-            return standardRock;
+            SceneView.lastActiveSceneView.camera.transform.LookAt(cubeRock.transform);
+            FocusCubeRock(cubeRock);
+            cubeRock.mesh = CubeRockMeshGenerator.Instance.CreateRockMesh(cubeRock);
+            cubeRock.GetComponent<MeshRenderer>().material = material;
+            //CreateLods(cubeRock);
+            CreateMeshCollider(cubeRock);
+            return cubeRock;
         }
 
         public CubeRock GetCubeRockFromSelection()
@@ -73,9 +72,9 @@ namespace RockBuilder
             return null;
         }
 
-        private void FocusCubeRock(CubeRock standardRock)
+        private void FocusCubeRock(CubeRock cubeRock)
         {
-            Selection.activeGameObject = standardRock.gameObject;
+            Selection.activeGameObject = cubeRock.gameObject;
             SceneView.lastActiveSceneView.FrameSelected();
         }
 
@@ -85,32 +84,32 @@ namespace RockBuilder
             return (cameraTransform.forward * (3f * 2f)) + cameraTransform.position;
         }
 
-        private void CreateMeshCollider(CubeRock standardRock)
+        private void CreateMeshCollider(CubeRock cubeRock)
         {
-            standardRock.RemoveMeshCollider();
-            if (standardRock.colliderFlag)
+            cubeRock.RemoveMeshCollider();
+            if (cubeRock.colliderFlag)
             {
-                MeshCollider meshCollider = standardRock.gameObject.AddComponent<MeshCollider>();
-                meshCollider.sharedMesh = standardRock.mesh;
+                MeshCollider meshCollider = cubeRock.gameObject.AddComponent<MeshCollider>();
+                meshCollider.sharedMesh = cubeRock.mesh;
                 meshCollider.convex = true;
             }
         } 
 
-        // public void CreateLods(CubeRock standardRock)
+        // public void CreateLods(CubeRock cubeRock)
         // {
-        //     if (standardRock.childrens != null)
+        //     if (cubeRock.childrens != null)
         //     {
-        //         standardRock.RemoveLOD();
+        //         cubeRock.RemoveLOD();
         //     }
 
-        //     int lodCounter = standardRock.lodCount;
+        //     int lodCounter = cubeRock.lodCount;
 
-        //     if (lodCounter != 0 && 3 <= standardRock.edges / standardRock.lodCount)
+        //     if (lodCounter != 0 && 3 <= cubeRock.edges / cubeRock.lodCount)
         //     {
         //         // Programmatically create a LOD group and add LOD levels.
         //         // Create a GUI that allows for forcing a specific LOD level.
         //         lodCounter += 1;
-        //         LODGroup group = standardRock.gameObject.AddComponent<LODGroup>();
+        //         LODGroup group = cubeRock.gameObject.AddComponent<LODGroup>();
         //         Transform[] childrens = new Transform[lodCounter - 1];
 
         //         // Add 4 LOD levels
@@ -124,18 +123,18 @@ namespace RockBuilder
         //             if (i != 0)
         //             {
         //                 childCubeRock = new GameObject().AddComponent(typeof(CubeRock)) as CubeRock;
-        //                 childCubeRock.edges = standardRock.edges / (i + 1);
-        //                 childCubeRock.radius = standardRock.radius;
-        //                 childCubeRock.height = standardRock.height;
-        //                 childCubeRock.heightPeak = standardRock.heightPeak;
-        //                 childCubeRock.smoothFlag = standardRock.smoothFlag;
+        //                 childCubeRock.edges = cubeRock.edges / (i + 1);
+        //                 childCubeRock.radius = cubeRock.radius;
+        //                 childCubeRock.height = cubeRock.height;
+        //                 childCubeRock.heightPeak = cubeRock.heightPeak;
+        //                 childCubeRock.smoothFlag = cubeRock.smoothFlag;
         //                 childCubeRock.vertexPositions = CubeRockMeshGenerator.Instance.CreateVertexPositions(childCubeRock);
         //                 childCubeRock.mesh = CubeRockMeshGenerator.Instance.CreateMesh(childCubeRock);
-        //                 childCubeRock.name = standardRock.name + "_LOD_0" + i;
-        //                 childCubeRock.transform.parent = standardRock.transform;
+        //                 childCubeRock.name = cubeRock.name + "_LOD_0" + i;
+        //                 childCubeRock.transform.parent = cubeRock.transform;
         //                 childCubeRock.transform.localPosition = Vector3.zero;
         //                 childCubeRock.transform.localRotation = new Quaternion(0f, 0f, 0f, 0f);
-        //                 childCubeRock.GetComponent<MeshRenderer>().material = standardRock.GetComponent<MeshRenderer>().sharedMaterial;
+        //                 childCubeRock.GetComponent<MeshRenderer>().material = cubeRock.GetComponent<MeshRenderer>().sharedMaterial;
         //                 renderers = new Renderer[1];
         //                 renderers[0] = childCubeRock.GetComponent<Renderer>();
         //                 childrens[i - 1] = childCubeRock.transform;
@@ -144,7 +143,7 @@ namespace RockBuilder
         //             else
         //             {
         //                 renderers = new Renderer[1];
-        //                 renderers[0] = standardRock.GetComponent<Renderer>();
+        //                 renderers[0] = cubeRock.GetComponent<Renderer>();
         //             }
 
         //             if (i != lodCounter - 1)
@@ -157,7 +156,7 @@ namespace RockBuilder
         //             }
 
         //         }
-        //         standardRock.childrens = childrens;
+        //         cubeRock.childrens = childrens;
         //         group.SetLODs(lods);
         //         group.RecalculateBounds();
         //     }

@@ -10,7 +10,7 @@ namespace RockBuilder
     public class CubeRock : MonoBehaviour
     {
         [HideInInspector]
-        public float heigth;
+        public float height;
         [HideInInspector]
         public float width;
         [HideInInspector]
@@ -30,9 +30,9 @@ namespace RockBuilder
         [HideInInspector]
         public List<Vector3> vertexPositions;
         [HideInInspector]
-        public List<Vector3> bottomCornerVertices;
+        public List<Vector3> bottomPlaneVertices;
         [HideInInspector]
-        public List<Vector3> upperCornerVertices;
+        public List<Vector3> upperPlaneVertices;
          [HideInInspector]
         public List<Vector3> bottomBezelsVertices;
         [HideInInspector]
@@ -89,7 +89,7 @@ namespace RockBuilder
 
         private void OnDrawGizmosSelected()
         {
-            if (bottomCornerVertices != null && upperCornerVertices != null && bottomBezelsVertices != null && upperBezelsVertices != null)
+            if (bottomPlaneVertices != null && upperPlaneVertices != null && bottomBezelsVertices != null && upperBezelsVertices != null)
             {
                 // update vertex positions
                 CubeRock cubeRockCopy = CubeRockMeshGenerator.Instance.CreateVertexPositions(this);
@@ -98,9 +98,9 @@ namespace RockBuilder
         }
 
 
-        public void RemoveCustomRockClass()
+        public void RemoveCubeRockClass()
         {
-            DestroyImmediate(this.GetComponent<CustomRock>());
+            DestroyImmediate(this.GetComponent<CubeRock>());
         }
 
         public void RemoveMeshCollider()
