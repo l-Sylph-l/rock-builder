@@ -111,13 +111,11 @@ namespace RockBuilder
                 //GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Gem_Icon_2.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
                 if (GUILayout.Button("Standard", GUILayout.Height(32)))
                 {
-                    Debug.Log("Standard Button was pressed"); // Log message output
                     secondParameterRocks = "Standard";
                 }
                 //GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Crystal_icon.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
                 if (GUILayout.Button("   Custom   ", GUILayout.Height(32)))
                 {
-                    Debug.Log("Custom Button was pressed"); // Log message output
                     secondParameterRocks = "Custom";
                     customRock = CustomRockService.Instance.CreateEmptyCustomRock(firstParameterRocks);
                 }
@@ -141,14 +139,12 @@ namespace RockBuilder
                     GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Rounded_Icon.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
                     if (GUILayout.Button("Rounded", GUILayout.Height(32)))
                     {
-                        Debug.Log("Rounded Button was pressed"); // Log message output
                         sphereRock = SphereRockService.Instance.CreateEmptySphereRock(firstParameterRocks);
                         eightParameterRocks = "Rounded";
                     }
                     GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Edgy_icon.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
                     if (GUILayout.Button("      Edgy      ", GUILayout.Height(32)))
                     {
-                        Debug.Log("Edgy Button was pressed"); // Log message output
                         cubeRock = CubeRockService.Instance.CreateEmptyCubeRock(firstParameterRocks);
                         eightParameterRocks = "Edgy";
                     }
@@ -159,10 +155,18 @@ namespace RockBuilder
                     // Displays the other rocks parameter just, if rounded or edgy was selected
                     if (eightParameterRocks != "")
                     {
+                        // Edges just for the rounded stones
                         if (eightParameterRocks == "Rounded")
                         {
                             // Ninth rocks parameter => Slidebar for the desired edge count between 6 and 300 
                             ninthParamaterRocks = EditorGUILayout.IntSlider("Edges", ninthParamaterRocks, 6, 300);
+                        }
+
+                        // Divider just for the edgy stones
+                        if (eightParameterRocks == "Edgy")
+                        {
+                            // Fourth rocks parameter => Slidebar for the divider between 1 and 50
+                            fourthParamaterRocks = EditorGUILayout.IntSlider("Divider", fourthParamaterRocks, 1, 50);
                         }
 
                         // Restricts the user inputs for the rock height => 0.01 - 1000
@@ -195,9 +199,6 @@ namespace RockBuilder
                                 rockBevelSize = 0f;
                             }
                             rockBevelSize = EditorGUILayout.FloatField("Bevel Size", rockBevelSize);
-
-                            // Fourth rocks parameter => Slidebar for the desired polycount between 10 and 10'000
-                            fourthParamaterRocks = EditorGUILayout.IntSlider("Divider", fourthParamaterRocks, 1, 100);
                         }
 
                         // Restricts the user inputs for the noise => 0.01 - 1000
@@ -239,7 +240,6 @@ namespace RockBuilder
                             {
                                 sphereRock = SphereRockService.Instance.CreateSphereRock(sphereRock, rockMaterial);
                             }
-                            Debug.Log("Rocks-Generate Button was pressed"); // Log message output
                         }
                     }
                 }
@@ -253,7 +253,6 @@ namespace RockBuilder
                     // Third rocks parameter => Button for the number of points to create your own stone shape
                     if (GUILayout.Button("Add Point", GUILayout.Height(25)))
                     {
-                        Debug.Log("Add Point Button was pressed"); // Log message output
                         thirdParameterRocks = thirdParameterRocks + 1;
                     }
 
@@ -290,7 +289,6 @@ namespace RockBuilder
                         {
                             customRock = CustomRockService.Instance.CreateCustomRock(customRock, rockMaterial);
                         }
-                        Debug.Log("Rocks-Generate Button was pressed"); // Log message output
                     }
                 }
             }
@@ -326,21 +324,18 @@ namespace RockBuilder
                 GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Crystal_icon.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
                 if (GUILayout.Button(" Crystal ", GUILayout.Height(32)) && crystal == null)
                 {
-                    Debug.Log("Crystal Button was pressed"); // Log message output
                     secondParameterGemstones = "Crystal";
                     crystal = CrystalService.Instance.CreateEmptyCrystal(firstParameterGemstones);
                 }
                 GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Gem_Icon_2.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
                 if (GUILayout.Button("   Gem   ", GUILayout.Height(32)))
                 {
-                    Debug.Log("Gem Button was pressed"); // Log message output
                     secondParameterGemstones = "Gem";
                     gem = GemService.Instance.CreateEmptyGem(firstParameterGemstones);
                 }
                 GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Diamond_icon.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
                 if (GUILayout.Button("Diamond", GUILayout.Height(32)) && diamond == null)
                 {
-                    Debug.Log("Diamond Button was pressed"); // Log message output
                     secondParameterGemstones = "Diamond";
                     diamond = DiamondService.Instance.CreateEmptyDiamond(firstParameterGemstones);
                 }
@@ -462,7 +457,6 @@ namespace RockBuilder
                 {
                     // Opens the user manual PDF file
                     Application.OpenURL(System.Environment.CurrentDirectory + "/Assets/Rock Builder/Assets/Resources/Dummy.pdf");
-                    Debug.Log("User Manual Button was pressed"); // Log message output
                 }
 
                 GUILayout.Space(20);
