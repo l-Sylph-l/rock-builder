@@ -20,12 +20,12 @@ namespace RockBuilder
         string firstParameterRocks = "Rock_01"; // Name of the object
         string secondParameterRocks = ""; // Shape selection
         int thirdParameterRocks = 0; // Number of points for the own shape
-        int fourthParamaterRocks = 10; // Polycount
+        int fourthParamaterRocks = 1; // Divider
         bool fifthParamaterRocks = false; // Smooth
         bool sixthParamaterRocks = false; // Collider
         int seventhParamaterRocks = 0; // LODs
         string eightParameterRocks = ""; // Rock rather round or edgy
-        int ninthParamaterRocks = 10; // Edges 
+        int ninthParamaterRocks = 6; // Edges 
         float rockHeight = 1.0f; // Height of the rock
         float rockWidth = 1.0f; // Width of the rock
         float rockDepth = 1.0f; // Deepth of the rock
