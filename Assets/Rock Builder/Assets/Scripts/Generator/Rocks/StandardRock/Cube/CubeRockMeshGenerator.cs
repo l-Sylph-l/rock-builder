@@ -141,14 +141,15 @@ namespace RockBuilder
         private Mesh CreateHardMesh(CubeRock cubeRock)
         {
 
+            int increaseValue = cubeRock.divider;
             vertexLoop = 0;
             triangleVerticesCount = 0;
-            int verticesCount = 40 * 21;
+            int verticesCount = (12 * 4) + (6 * ((increaseValue*increaseValue) * 4) + (8*3));
             vertices = new Vector3[verticesCount];
             uv = new Vector2[verticesCount];
-            triangles = new int[40 * 21];
+            triangles = new int[(12 * 6) + (6 * ((increaseValue * increaseValue) * 6) + (8*3))];
             noiseFactor = cubeRock.noise;
-            int increaseValue = 2;
+
 
             List<Vector3> bottomPlaneVertices = cubeRock.bottomPlaneVertices;
             List<Vector3> upperPlaneVertices = cubeRock.upperPlaneVertices;
