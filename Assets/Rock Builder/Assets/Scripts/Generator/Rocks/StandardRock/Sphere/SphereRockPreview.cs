@@ -81,7 +81,7 @@ namespace RockBuilder
         {
             Gizmos.matrix = sphereRock.transform.localToWorldMatrix;
 
-            //  DrawLines(sphereRock);
+            DrawLines(sphereRock);
 
             // Draw black cubes on every vertex position of the gem
             foreach (List<Vector3> iteration in sphereRock.vertexPositions)
