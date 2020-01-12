@@ -156,8 +156,8 @@ namespace RockBuilder
                         // Edges just for the rounded stones
                         if (eightParameterRocks == "Rounded")
                         {
-                            // Ninth rocks parameter => Slidebar for the desired edge count between 6 and 300 
-                            ninthParamaterRocks = EditorGUILayout.IntSlider("Edges", ninthParamaterRocks, 6, 300);
+                            // Ninth rocks parameter => Slidebar for the desired edge count between 6 and 100 
+                            ninthParamaterRocks = EditorGUILayout.IntSlider("Edges", ninthParamaterRocks, 6, 100);
                         }
 
                         // Divider just for the edgy stones
