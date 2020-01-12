@@ -74,8 +74,6 @@ namespace RockBuilder
         void OnGUI()
         {
 
-            UpdateSelectedTab();
-
             // UI Code for all the rock builder tabs (rocks, gemstones and help)
             toolbarInt = GUILayout.Toolbar(toolbarInt, toolbarStrings);
 
@@ -474,18 +472,7 @@ namespace RockBuilder
                     Application.OpenURL("mailto:rockbuilder-help@hotmail.com?");
             }
         }
-        private void UpdateSelectedTab()
-        {
-            if (cubeRock != null || sphereRock != null || customRock != null)
-            {
-                toolbarInt = 0;
-            }
 
-            if (diamond != null || crystal != null || gem != null)
-            {
-                toolbarInt = 1;
-            }
-        }
         private void Update()
         {
             CheckIfCrystalSelected();
@@ -519,6 +506,7 @@ namespace RockBuilder
                 crystal = CrystalService.Instance.GetCrystalFromSelection();
                 if (crystal != null)
                 {
+                    toolbarInt = 1;
                     firstParameterGemstones = crystal.name;
                     secondParameterGemstones = "Crystal";
                     thirdParamaterGemstones = crystal.edges;
@@ -552,6 +540,7 @@ namespace RockBuilder
                 gem = GemService.Instance.GetGemFromSelection();
                 if (gem != null)
                 {
+                    toolbarInt = 1;
                     firstParameterGemstones = gem.name;
                     secondParameterGemstones = "Gem";
                     thirdParamaterGemstones = gem.edges;
@@ -585,6 +574,7 @@ namespace RockBuilder
                 diamond = DiamondService.Instance.GetDiamondFromSelection();
                 if (diamond != null)
                 {
+                    toolbarInt = 1;
                     firstParameterGemstones = diamond.name;
                     secondParameterGemstones = "Diamond";
                     thirdParamaterGemstones = diamond.edges;
@@ -618,6 +608,7 @@ namespace RockBuilder
                 cubeRock = CubeRockService.Instance.GetCubeRockFromSelection();
                 if (cubeRock != null)
                 {
+                    toolbarInt = 0;
                     firstParameterRocks = cubeRock.name;
                     secondParameterRocks = "Standard";
                     rockHeight = cubeRock.height;
@@ -653,6 +644,7 @@ namespace RockBuilder
                 sphereRock = SphereRockService.Instance.GetSphereRockFromSelection();
                 if (sphereRock != null)
                 {
+                    toolbarInt = 0;
                     firstParameterRocks = sphereRock.name;
                     secondParameterRocks = "Standard";
                     rockHeight = sphereRock.height;
@@ -687,6 +679,7 @@ namespace RockBuilder
                 customRock = CustomRockService.Instance.GetCustomRockFromSelection();
                 if (customRock != null)
                 {
+                    toolbarInt = 0;
                     firstParameterRocks = customRock.name;
                     secondParameterRocks = "Custom";
                     fifthParamaterRocks = customRock.smoothFlag;
