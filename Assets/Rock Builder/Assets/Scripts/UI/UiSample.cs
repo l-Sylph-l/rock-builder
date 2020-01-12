@@ -29,7 +29,7 @@ namespace RockBuilder
         float rockHeight = 1.0f; // Height of the rock
         float rockWidth = 1.0f; // Width of the rock
         float rockDepth = 1.0f; // Deepth of the rock
-        float rockNoise = 0.1f; // Displacement of all axes of the individual vertices
+        float rockNoise = 0f; // Displacement of all axes of the individual vertices
         float rockBevelSize = 0.1f; // Size of the edges
         private Material rockMaterial; // Material
 
@@ -199,7 +199,7 @@ namespace RockBuilder
                             rockBevelSize = EditorGUILayout.FloatField("Bevel Size", rockBevelSize);
                         }
 
-                        // Restricts the user inputs for the noise => 0.01 - 1000
+                        // Restricts the user inputs for the noise => 0 - 1000
                         if (rockNoise < 0 || rockNoise > 1000)
                         {
                             rockNoise = 0.1f;
