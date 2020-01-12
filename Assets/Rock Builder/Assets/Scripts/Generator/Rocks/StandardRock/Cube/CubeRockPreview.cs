@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace RockBuilder
 {
@@ -33,9 +34,32 @@ namespace RockBuilder
             Gizmos.color = Color.blue;
             Gizmos.matrix = cubeRock.transform.localToWorldMatrix;
 
+            List<Vector3> bottomPlaneVertices = cubeRock.bottomPlaneVertices;
+            List<Vector3> upperPlaneVertices = cubeRock.upperPlaneVertices;
+            List<Vector3> bottomBezelsVertices = cubeRock.bottomVerticalBezelsVertices;
+            List<Vector3> upperBezelsVertices = cubeRock.upperVerticalBezelsVertices;
+
+            // List<Vector3> frontPlaneList = new List<Vector3> { bottomBezelsVertices[0], bottomBezelsVertices[1], upperBezelsVertices[0], upperBezelsVertices[1] };
+            List<Vector3> frontPlaneList = new List<Vector3> { upperBezelsVertices[0], upperBezelsVertices[1], bottomBezelsVertices[1], bottomBezelsVertices[0] };
+            List<Vector3> leftPlaneList = new List<Vector3> { upperBezelsVertices[2], upperBezelsVertices[3], bottomBezelsVertices[3], bottomBezelsVertices[2] };
+            List<Vector3> backPlaneList = new List<Vector3> { upperBezelsVertices[4], upperBezelsVertices[5], bottomBezelsVertices[5], bottomBezelsVertices[4] };
+            List<Vector3> rightPlaneList = new List<Vector3> { upperBezelsVertices[6], upperBezelsVertices[7], bottomBezelsVertices[7], bottomBezelsVertices[6] };
+
+            DrawDividedLines(frontPlaneList, cubeRock.divider);
+            DrawDividedLines(leftPlaneList, cubeRock.divider);
+            DrawDividedLines(backPlaneList, cubeRock.divider);
+            DrawDividedLines(rightPlaneList, cubeRock.divider);
+            DrawDividedLines(cubeRock.bottomPlaneVertices, cubeRock.divider);
+            DrawDividedLines(cubeRock.upperPlaneVertices, cubeRock.divider);
+            // DrawDividedLines(cubeRock.upperPlaneVertices, cubeRock.divider);
+            // DrawDividedLines(cubeRock.upperPlaneVertices, cubeRock.divider);
+            // DrawDividedLines(cubeRock.upperPlaneVertices, cubeRock.divider);
+            // DrawDividedLines(cubeRock.upperPlaneVertices, cubeRock.divider);
+
             int verticalBezelLoopCount = 0;
             int bottomLoopCount = 1;
             int linkLoopCount = 0;
+
             foreach (var vertex in cubeRock.bottomPlaneVertices)
             {
                 Vector3 vertexFrom = vertex;
@@ -46,7 +70,9 @@ namespace RockBuilder
                 if (verticalBezelLoopCount == 0)
                 {
                     secondVerticalBezelTo = cubeRock.bottomVerticalBezelsVertices[7];
-                } else {
+                }
+                else
+                {
                     secondVerticalBezelTo = cubeRock.bottomVerticalBezelsVertices[verticalBezelLoopCount - 1];
                 }
 
@@ -79,7 +105,9 @@ namespace RockBuilder
                 if (verticalBezelLoopCount == 0)
                 {
                     secondVerticalBezelTo = cubeRock.upperVerticalBezelsVertices[7];
-                } else {
+                }
+                else
+                {
                     secondVerticalBezelTo = cubeRock.upperVerticalBezelsVertices[verticalBezelLoopCount - 1];
                 }
 
@@ -220,6 +248,28 @@ namespace RockBuilder
             Gizmos.color = Color.blue;
         }
 
+        private void DrawDividedLines(List<Vector3> vertexList, int divider)
+        {
+            float lerpFactor = 1f / divider;
+
+            Vector3 lowerRightCorner = vertexList[0];
+            Vector3 upperRightCorner = vertexList[1];
+            Vector3 upperLeftCorner = vertexList[2];
+            Vector3 lowerLeftCorner = vertexList[3];
+
+
+            for (int loopCount = 1; loopCount < divider; loopCount++)
+            {
+                float finalLerpFactor = lerpFactor * loopCount;
+                Vector3 verticalFrom = Vector3.Lerp(lowerLeftCorner, upperLeftCorner, finalLerpFactor);
+                Vector3 verticalTo = Vector3.Lerp(lowerRightCorner, upperRightCorner, finalLerpFactor);
+                Vector3 horizontalFrom = Vector3.Lerp(lowerLeftCorner, lowerRightCorner, finalLerpFactor);
+                Vector3 horizontalTo = Vector3.Lerp(upperLeftCorner, upperRightCorner, finalLerpFactor);
+
+                Gizmos.DrawLine(verticalFrom, verticalTo);
+                Gizmos.DrawLine(horizontalFrom, horizontalTo);
+            }
+        }
 
     }
 }
