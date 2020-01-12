@@ -200,7 +200,7 @@ namespace RockBuilder
                         }
 
                         // Restricts the user inputs for the noise => 0.01 - 1000
-                        if (rockNoise < 0 || rockNoise > 100)
+                        if (rockNoise < 0 || rockNoise > 1000)
                         {
                             rockNoise = 0.1f;
                         }
