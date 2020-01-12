@@ -151,7 +151,7 @@ namespace RockBuilder
                     GUILayout.Space(15);
 
                     // Displays the other rocks parameter just, if rounded or edgy was selected
-                    if (eightParameterRocks != "")
+                    if (eightParameterRocks != ""  && (cubeRock != null || sphereRock != null))
                     {
                         // Edges just for the rounded stones
                         if (eightParameterRocks == "Rounded")
@@ -243,7 +243,7 @@ namespace RockBuilder
                 }
 
                 // This is the rock part, if the user wants to create his own shape
-                if (secondParameterRocks != "" && secondParameterRocks != "Standard")
+                if (secondParameterRocks != "" && secondParameterRocks != "Standard" && customRock != null)
                 {
                     // Update UI depending on the selected custom rock
                     UpdateRocks();
