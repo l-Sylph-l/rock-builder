@@ -190,14 +190,14 @@ namespace RockBuilder
                         if (eightParameterRocks == "Edgy")
                         {
                             // Restricts the user inputs for the bevel size => 0.01 - 1000
-                            if (rockBevelSize < 0.009 || rockBevelSize > 1000)
+                            if (rockBevelSize < 0 || rockBevelSize > 1000)
                             {
-                                rockBevelSize = 0.1f;
+                                rockBevelSize = 0f;
                             }
                             rockBevelSize = EditorGUILayout.FloatField("Bevel Size", rockBevelSize);
 
                             // Fourth rocks parameter => Slidebar for the desired polycount between 10 and 10'000
-                            fourthParamaterRocks = EditorGUILayout.IntSlider("Polycount", fourthParamaterRocks, 10, 10000);
+                            fourthParamaterRocks = EditorGUILayout.IntSlider("Divider", fourthParamaterRocks, 1, 100);
                         }
 
                         // Restricts the user inputs for the noise => 0.01 - 1000
@@ -631,6 +631,7 @@ namespace RockBuilder
                     rockDepth = cubeRock.depth;
                     rockNoise = cubeRock.noise;
                     rockBevelSize = cubeRock.bezelSize;
+                    fourthParamaterRocks = cubeRock.divider;
                     seventhParamaterRocks = cubeRock.lodCount;
                     sixthParamaterRocks = cubeRock.colliderFlag;
                     eightParameterRocks = "Edgy";
@@ -759,6 +760,7 @@ namespace RockBuilder
                 cubeRock.depth = rockDepth;
                 cubeRock.noise = rockNoise;
                 cubeRock.bezelSize = rockBevelSize;
+                cubeRock.divider = fourthParamaterRocks;
                 cubeRock.colliderFlag = sixthParamaterRocks;
             }
 

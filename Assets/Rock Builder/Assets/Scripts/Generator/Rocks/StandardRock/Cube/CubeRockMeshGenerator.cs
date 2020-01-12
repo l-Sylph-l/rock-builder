@@ -308,13 +308,14 @@ namespace RockBuilder
         {
             float loopCount = 0;
             float rowCount = 0;
-            float widthIteration = uvWidth / (planeVertices.Count / increaseFactor);
-            float heightIteration = uvHeight / (planeVertices.Count / increaseFactor);
+            float divider = (float) planeVertices.Count / increaseFactor;
+            float widthIteration = uvWidth / divider;
+            float heightIteration = uvHeight / divider;
             float biggerIteration;
 
             if (widthIteration >= heightIteration)
             {
-                biggerIteration = uvHeight;
+                biggerIteration = widthIteration;
             }
             else
             {

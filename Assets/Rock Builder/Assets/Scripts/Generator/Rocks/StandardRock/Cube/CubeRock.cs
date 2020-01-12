@@ -20,7 +20,7 @@ namespace RockBuilder
         [HideInInspector]
         public float bezelSize;
         [HideInInspector]
-        public float bezelAngle;
+        public int divider;
         [HideInInspector]
         public int lodCount;
         [HideInInspector]
@@ -89,6 +89,7 @@ namespace RockBuilder
 
         private void OnDrawGizmosSelected()
         {
+            //
             if (bottomPlaneVertices != null && upperPlaneVertices != null && bottomBezelsVertices != null && upperBezelsVertices != null)
             {
                 // update vertex positions

@@ -9,7 +9,6 @@ namespace RockBuilder
     {
         private static SphereRockMeshGenerator instance = null;
         private static readonly object padlock = new object();
-
         private int triangleVerticesCount;
         private int vertexLoop;
         Vector3[] vertices;
@@ -79,27 +78,18 @@ namespace RockBuilder
         {
             Vector3 spawnPoint;
             float degree = (360f / edges) * loopCount;
-            // if (offset)
-            // {
-            //     degree += (360f / edges) / 2;
-            // }
             float radian = degree * Mathf.Deg2Rad;
             float x = Mathf.Cos(radian) * radiusX;
             float z = Mathf.Sin(radian) * radiusZ;
             spawnPoint = new Vector3(x, 0, z);
             spawnPoint.y = positionY;
-            //spawnPoint += sphereRock.transform.position;
             return spawnPoint;
         }
 
         private Vector3 DrawCircularVerticesXY(SphereRock sphereRock, float radiusX, float radiusY, float positionZ, int edges, int loopCount)
         {
             Vector3 spawnPoint;
-            float degree = (360f / edges) * loopCount + 90f;
-            // if (offset)
-            // {
-            //     degree += (360f / edges) / 2;
-            // }
+            float degree = (360f / edges) * loopCount + 270f;
             float radian = degree * Mathf.Deg2Rad;
             float x = Mathf.Cos(radian) * radiusX;
             float y = Mathf.Sin(radian) * radiusY;
@@ -120,7 +110,6 @@ namespace RockBuilder
             {
                 return CreateHardMesh(sphereRock);
             }
-
         }
 
 
@@ -248,7 +237,7 @@ namespace RockBuilder
             int verticesPerIteration = circularIterations.Count;
             vertexLoop = 0;
             triangleVerticesCount = 0;
-            int verticesCount = verticesPerIteration * verticesPerIteration;
+            int verticesCount = (verticesPerIteration + 1) * (verticesPerIteration - 1) + 2;
             vertices = new Vector3[verticesCount];
             uv = new Vector2[verticesCount];
             triangles = new int[verticesCount * 6];
@@ -268,13 +257,8 @@ namespace RockBuilder
             for (int loopCount = 0; loopCount < sphereRock.edges; loopCount++)
             {
                 triangles[triangleVerticesCount] = vertexLoop;
-                triangles[triangleVerticesCount + 1] = vertexLoop + loopCount + 2;
-                triangles[triangleVerticesCount + 2] = vertexLoop + loopCount + 1;
-
-                if (loopCount == sphereRock.edges - 1)
-                {
-                    triangles[triangleVerticesCount + 1] = vertexLoop + 1;
-                }
+                triangles[triangleVerticesCount + 1] = vertexLoop + loopCount + 1;
+                triangles[triangleVerticesCount + 2] = vertexLoop + loopCount + 2;
 
                 triangleVerticesCount += 3;
             }
@@ -284,32 +268,41 @@ namespace RockBuilder
             foreach (List<Vector3> iteration in circularIterations)
             {
                 iterationCount++;
-                float uvHeightIteration = (1f / circularIterations.Count) * iterationCount;
+                float uvHeightIteration = (1f / (circularIterations.Count + 1)) * iterationCount;
                 int vertexCount = 1;
+                Vector3 firstVertexOfIteration = AddNoise(iteration.First());
                 foreach (Vector3 vertex in iteration)
                 {
-                    float uvWidthIteration = (1f / circularIterations.Count) * vertexCount;
-                    vertices[vertexLoop] = AddNoise(vertex);
+                    float uvWidthIteration = (1f / (circularIterations.Count + 2)) * (vertexCount - 1);
+                    if (vertexCount == 1)
+                    {
+                        vertices[vertexLoop] = firstVertexOfIteration;
+                    }
+                    else
+                    {
+                        vertices[vertexLoop] = AddNoise(vertex);
+                    }
+
                     uv[vertexLoop] = new Vector2(uvWidthIteration, uvHeightIteration);
 
                     if (iterationCount != circularIterations.Count)
                     {
                         triangles[triangleVerticesCount] = vertexLoop;
-                        triangles[triangleVerticesCount + 1] = vertexLoop + 1;
-                        triangles[triangleVerticesCount + 2] = vertexLoop + verticesPerIteration;
-                        triangles[triangleVerticesCount + 3] = vertexLoop + 1;
-                        triangles[triangleVerticesCount + 4] = vertexLoop + verticesPerIteration + 1;
-                        triangles[triangleVerticesCount + 5] = vertexLoop + verticesPerIteration;
-
-                        if (vertexCount == verticesPerIteration)
-                        {
-                            triangles[triangleVerticesCount + 1] = vertexLoop + 1 - verticesPerIteration;
-                            triangles[triangleVerticesCount + 3] = vertexLoop + 1 - verticesPerIteration;
-                            triangles[triangleVerticesCount + 4] = vertexLoop + 1;
-                        }
+                        triangles[triangleVerticesCount + 1] = vertexLoop + verticesPerIteration + 1;
+                        triangles[triangleVerticesCount + 2] = vertexLoop + 1;
+                        triangles[triangleVerticesCount + 3] = vertexLoop + verticesPerIteration + 2;
+                        triangles[triangleVerticesCount + 4] = vertexLoop + 1;
+                        triangles[triangleVerticesCount + 5] = vertexLoop + verticesPerIteration + 1;
 
                         triangleVerticesCount += 6;
 
+                    }
+
+                    if (vertexCount == verticesPerIteration)
+                    {
+                        vertexLoop++;
+                        vertices[vertexLoop] = firstVertexOfIteration;
+                        uv[vertexLoop] = new Vector2(1, uvHeightIteration);
                     }
 
                     vertexLoop++;
@@ -318,22 +311,21 @@ namespace RockBuilder
             }
 
             vertices[vertexLoop] = AddNoise(lastVertex);
-            uv[vertexLoop] = new Vector2(0.5f, 1.1f);
+            uv[vertexLoop] = new Vector2(0.5f, 1f);
 
             for (int loopCount = 0; loopCount < sphereRock.edges; loopCount++)
             {
                 triangles[triangleVerticesCount] = vertexLoop;
-                triangles[triangleVerticesCount + 1] = vertexLoop - loopCount - 2;
-                triangles[triangleVerticesCount + 2] = vertexLoop - loopCount - 1;
+                triangles[triangleVerticesCount + 1] = vertexLoop - loopCount - 1;
+                triangles[triangleVerticesCount + 2] = vertexLoop - loopCount - 2;
 
                 if (loopCount == sphereRock.edges - 1)
                 {
-                    triangles[triangleVerticesCount + 1] = vertexLoop - 1;
+                    triangles[triangleVerticesCount + 2] = vertexLoop - 1;
                 }
 
                 triangleVerticesCount += 3;
             }
-
 
             Mesh mesh = new Mesh();
             mesh.Clear();
@@ -343,34 +335,25 @@ namespace RockBuilder
             mesh.name = "generated sphere mesh";
             mesh.RecalculateNormals();
 
-            //#region Recalculate some normals manually for smoother shading. 
-            //Vector3[] normals = mesh.normals;
+            #region Recalculate some normals manually for smoother shading. 
+            Vector3[] normals = mesh.normals;
 
-            //Vector3 averageNormal1 = (normals[0] + normals[(crystal.edges * 2)]) / 2;
-            //normals[0] = averageNormal1;
-            //normals[(crystal.edges * 2)] = averageNormal1;
+            for (int loopCount = 0; loopCount < sphereRock.edges-1; loopCount++)
+            {
+                int firstIndex = loopCount * (sphereRock.edges + 1) + 1;
+                int secondIndex = firstIndex + sphereRock.edges;
+                Vector3 firstNormal = normals[firstIndex];
+                Vector3 secondNormal = normals[secondIndex];
+                Vector3 averageNormal = (firstNormal + secondNormal) / 2;
+                normals[firstIndex] = averageNormal;
+                normals[secondIndex] = averageNormal;
+            }
 
-            //Vector3 averageNormal2 = (normals[1] + normals[(crystal.edges * 2) + 1]) / 2;
-            //normals[1] = averageNormal2;
-            //normals[(crystal.edges * 2) + 1] = averageNormal2;
-
-            //for (int i = 1; i < crystal.edges + 1; i++)
-            //{
-            //    normals[normals.Length - i] = new Vector3(0f, 1f, 0f);
-            //    normals[normals.Length - i - crystal.edges] = new Vector3(0f, -1f, 0f);
-            //}
-
-            //mesh.normals = normals;
-            //#endregion
-
+            mesh.normals = normals;
+            #endregion
 
             mesh.Optimize();
             return mesh;
-        }
-
-        private Vector3 GetMiddlePoint(SphereRock sphereRock, float positionY)
-        {
-            return sphereRock.transform.position + (Vector3.up * positionY);
         }
 
         private Vector3 AddNoise(Vector3 vertex)

@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-//[CustomEditor(typeof(MeshFilter))]
+// [CustomEditor(typeof(MeshFilter))]
 public class NormalsVisualizer : Editor
 {
 

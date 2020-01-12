@@ -57,7 +57,7 @@ namespace RockBuilder
             FocusCubeRock(cubeRock);
             cubeRock.mesh = CubeRockMeshGenerator.Instance.CreateRockMesh(cubeRock);
             cubeRock.GetComponent<MeshRenderer>().material = material;
-            //CreateLods(cubeRock);
+            CreateLods(cubeRock);
             CreateMeshCollider(cubeRock);
             return cubeRock;
         }
@@ -95,71 +95,72 @@ namespace RockBuilder
             }
         } 
 
-        // public void CreateLods(CubeRock cubeRock)
-        // {
-        //     if (cubeRock.childrens != null)
-        //     {
-        //         cubeRock.RemoveLOD();
-        //     }
+        public void CreateLods(CubeRock cubeRock)
+        {
+            if (cubeRock.childrens != null)
+            {
+                cubeRock.RemoveLOD();
+            }
 
-        //     int lodCounter = cubeRock.lodCount;
+            int lodCounter = cubeRock.lodCount;
 
-        //     if (lodCounter != 0 && 3 <= cubeRock.edges / cubeRock.lodCount)
-        //     {
-        //         // Programmatically create a LOD group and add LOD levels.
-        //         // Create a GUI that allows for forcing a specific LOD level.
-        //         lodCounter += 1;
-        //         LODGroup group = cubeRock.gameObject.AddComponent<LODGroup>();
-        //         Transform[] childrens = new Transform[lodCounter - 1];
+            if (lodCounter != 0 && 2 <= cubeRock.divider / cubeRock.lodCount)
+            {
+                // Programmatically create a LOD group and add LOD levels.
+                // Create a GUI that allows for forcing a specific LOD level.
+                lodCounter += 1;
+                LODGroup group = cubeRock.gameObject.AddComponent<LODGroup>();
+                Transform[] childrens = new Transform[lodCounter - 1];
 
-        //         // Add 4 LOD levels
-        //         LOD[] lods = new LOD[lodCounter];
-        //         for (int i = 0; i < lodCounter; i++)
-        //         {
+                // Add 4 LOD levels
+                LOD[] lods = new LOD[lodCounter];
+                for (int i = 0; i < lodCounter; i++)
+                {
 
-        //             Renderer[] renderers;
-        //             CubeRock childCubeRock;
+                    Renderer[] renderers;
+                    CubeRock childCubeRock;
 
-        //             if (i != 0)
-        //             {
-        //                 childCubeRock = new GameObject().AddComponent(typeof(CubeRock)) as CubeRock;
-        //                 childCubeRock.edges = cubeRock.edges / (i + 1);
-        //                 childCubeRock.radius = cubeRock.radius;
-        //                 childCubeRock.height = cubeRock.height;
-        //                 childCubeRock.heightPeak = cubeRock.heightPeak;
-        //                 childCubeRock.smoothFlag = cubeRock.smoothFlag;
-        //                 childCubeRock.vertexPositions = CubeRockMeshGenerator.Instance.CreateVertexPositions(childCubeRock);
-        //                 childCubeRock.mesh = CubeRockMeshGenerator.Instance.CreateMesh(childCubeRock);
-        //                 childCubeRock.name = cubeRock.name + "_LOD_0" + i;
-        //                 childCubeRock.transform.parent = cubeRock.transform;
-        //                 childCubeRock.transform.localPosition = Vector3.zero;
-        //                 childCubeRock.transform.localRotation = new Quaternion(0f, 0f, 0f, 0f);
-        //                 childCubeRock.GetComponent<MeshRenderer>().material = cubeRock.GetComponent<MeshRenderer>().sharedMaterial;
-        //                 renderers = new Renderer[1];
-        //                 renderers[0] = childCubeRock.GetComponent<Renderer>();
-        //                 childrens[i - 1] = childCubeRock.transform;
-        //                 childCubeRock.RemoveCubeRockClass();
-        //             }
-        //             else
-        //             {
-        //                 renderers = new Renderer[1];
-        //                 renderers[0] = cubeRock.GetComponent<Renderer>();
-        //             }
+                    if (i != 0)
+                    {
+                        childCubeRock = new GameObject().AddComponent(typeof(CubeRock)) as CubeRock;
+                        childCubeRock.divider = cubeRock.divider / (i + 1);
+                        childCubeRock.width = cubeRock.width;
+                        childCubeRock.height = cubeRock.height;
+                        childCubeRock.depth = cubeRock.depth;
+                        childCubeRock.noise = cubeRock.noise;
+                        childCubeRock.smoothFlag = cubeRock.smoothFlag;
+                        childCubeRock = CubeRockMeshGenerator.Instance.CreateVertexPositions(childCubeRock);
+                        childCubeRock.mesh = CubeRockMeshGenerator.Instance.CreateRockMesh(childCubeRock);
+                        childCubeRock.name = cubeRock.name + "_LOD_0" + i;
+                        childCubeRock.transform.parent = cubeRock.transform;
+                        childCubeRock.transform.localPosition = Vector3.zero;
+                        childCubeRock.transform.localRotation = new Quaternion(0f, 0f, 0f, 0f);
+                        childCubeRock.GetComponent<MeshRenderer>().material = cubeRock.GetComponent<MeshRenderer>().sharedMaterial;
+                        renderers = new Renderer[1];
+                        renderers[0] = childCubeRock.GetComponent<Renderer>();
+                        childrens[i - 1] = childCubeRock.transform;
+                        childCubeRock.RemoveCubeRockClass();
+                    }
+                    else
+                    {
+                        renderers = new Renderer[1];
+                        renderers[0] = cubeRock.GetComponent<Renderer>();
+                    }
 
-        //             if (i != lodCounter - 1)
-        //             {
-        //                 lods[i] = new LOD((1f / lodCounter) * (lodCounter - i - 1) / 2, renderers);
-        //             }
-        //             else
-        //             {
-        //                 lods[i] = new LOD(0f, renderers);
-        //             }
+                    if (i != lodCounter - 1)
+                    {
+                        lods[i] = new LOD((1f / lodCounter) * (lodCounter - i - 1) / 2, renderers);
+                    }
+                    else
+                    {
+                        lods[i] = new LOD(0f, renderers);
+                    }
 
-        //         }
-        //         cubeRock.childrens = childrens;
-        //         group.SetLODs(lods);
-        //         group.RecalculateBounds();
-        //     }
-        // }
+                }
+                cubeRock.childrens = childrens;
+                group.SetLODs(lods);
+                group.RecalculateBounds();
+            }
+        }
     }
 }

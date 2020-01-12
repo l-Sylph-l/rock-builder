@@ -58,7 +58,7 @@ namespace RockBuilder
 
             sphereRock.mesh = SphereRockMeshGenerator.Instance.CreateRockMesh(sphereRock);
             sphereRock.GetComponent<MeshRenderer>().material = material;
-            //CreateLods(sphereRock);
+            CreateLods(sphereRock);
             CreateMeshCollider(sphereRock);
             return sphereRock;
         }
@@ -91,76 +91,87 @@ namespace RockBuilder
             if (sphereRock.colliderFlag)
             {
                 MeshCollider meshCollider = sphereRock.gameObject.AddComponent<MeshCollider>();
-                meshCollider.sharedMesh = sphereRock.mesh;
+                Mesh meshData = sphereRock.mesh;
+                List<List<Vector3>> vertexIterations = sphereRock.vertexPositions;
+                int edges = sphereRock.edges;
+                if (sphereRock.edges > 12)
+                {
+                    sphereRock.edges = 12;
+                    sphereRock.vertexPositions = SphereRockMeshGenerator.Instance.CreateVertexPositions(sphereRock);
+                    meshData = SphereRockMeshGenerator.Instance.CreateRockMesh(sphereRock);
+                }
+                sphereRock.edges = edges;
+                sphereRock.vertexPositions = vertexIterations;
+                meshCollider.sharedMesh = meshData;
                 meshCollider.convex = true;
             }
-        } 
+        }
 
-        // public void CreateLods(SphereRock sphereRock)
-        // {
-        //     if (sphereRock.childrens != null)
-        //     {
-        //         sphereRock.RemoveLOD();
-        //     }
+        public void CreateLods(SphereRock sphereRock)
+        {
+            if (sphereRock.childrens != null)
+            {
+                sphereRock.RemoveLOD();
+            }
 
-        //     int lodCounter = sphereRock.lodCount;
+            int lodCounter = sphereRock.lodCount;
 
-        //     if (lodCounter != 0 && 3 <= sphereRock.edges / sphereRock.lodCount)
-        //     {
-        //         // Programmatically create a LOD group and add LOD levels.
-        //         // Create a GUI that allows for forcing a specific LOD level.
-        //         lodCounter += 1;
-        //         LODGroup group = sphereRock.gameObject.AddComponent<LODGroup>();
-        //         Transform[] childrens = new Transform[lodCounter - 1];
+            if (lodCounter != 0 && 6 <= sphereRock.edges / sphereRock.lodCount)
+            {
+                // Programmatically create a LOD group and add LOD levels.
+                // Create a GUI that allows for forcing a specific LOD level.
+                lodCounter += 1;
+                LODGroup group = sphereRock.gameObject.AddComponent<LODGroup>();
+                Transform[] childrens = new Transform[lodCounter - 1];
 
-        //         // Add 4 LOD levels
-        //         LOD[] lods = new LOD[lodCounter];
-        //         for (int i = 0; i < lodCounter; i++)
-        //         {
+                // Add 4 LOD levels
+                LOD[] lods = new LOD[lodCounter];
+                for (int i = 0; i < lodCounter; i++)
+                {
 
-        //             Renderer[] renderers;
-        //             SphereRock childSphereRock;
+                    Renderer[] renderers;
+                    SphereRock childSphereRock;
 
-        //             if (i != 0)
-        //             {
-        //                 childSphereRock = new GameObject().AddComponent(typeof(SphereRock)) as SphereRock;
-        //                 childSphereRock.edges = sphereRock.edges / (i + 1);
-        //                 childSphereRock.radius = sphereRock.radius;
-        //                 childSphereRock.height = sphereRock.height;
-        //                 childSphereRock.heightPeak = sphereRock.heightPeak;
-        //                 childSphereRock.smoothFlag = sphereRock.smoothFlag;
-        //                 childSphereRock.vertexPositions = SphereRockMeshGenerator.Instance.CreateVertexPositions(childSphereRock);
-        //                 childSphereRock.mesh = SphereRockMeshGenerator.Instance.CreateMesh(childSphereRock);
-        //                 childSphereRock.name = sphereRock.name + "_LOD_0" + i;
-        //                 childSphereRock.transform.parent = sphereRock.transform;
-        //                 childSphereRock.transform.localPosition = Vector3.zero;
-        //                 childSphereRock.transform.localRotation = new Quaternion(0f, 0f, 0f, 0f);
-        //                 childSphereRock.GetComponent<MeshRenderer>().material = sphereRock.GetComponent<MeshRenderer>().sharedMaterial;
-        //                 renderers = new Renderer[1];
-        //                 renderers[0] = childSphereRock.GetComponent<Renderer>();
-        //                 childrens[i - 1] = childSphereRock.transform;
-        //                 childSphereRock.RemoveSphereRockClass();
-        //             }
-        //             else
-        //             {
-        //                 renderers = new Renderer[1];
-        //                 renderers[0] = sphereRock.GetComponent<Renderer>();
-        //             }
+                    if (i != 0)
+                    {
+                        childSphereRock = new GameObject().AddComponent(typeof(SphereRock)) as SphereRock;
+                        childSphereRock.edges = sphereRock.edges / (i + 1);
+                        childSphereRock.width = sphereRock.width;
+                        childSphereRock.height = sphereRock.height;
+                        childSphereRock.depth = sphereRock.depth;
+                        childSphereRock.smoothFlag = sphereRock.smoothFlag;
+                        childSphereRock.vertexPositions = SphereRockMeshGenerator.Instance.CreateVertexPositions(childSphereRock);
+                        childSphereRock.mesh = SphereRockMeshGenerator.Instance.CreateRockMesh(childSphereRock);
+                        childSphereRock.name = sphereRock.name + "_LOD_0" + i;
+                        childSphereRock.transform.parent = sphereRock.transform;
+                        childSphereRock.transform.localPosition = Vector3.zero;
+                        childSphereRock.transform.localRotation = new Quaternion(0f, 0f, 0f, 0f);
+                        childSphereRock.GetComponent<MeshRenderer>().material = sphereRock.GetComponent<MeshRenderer>().sharedMaterial;
+                        renderers = new Renderer[1];
+                        renderers[0] = childSphereRock.GetComponent<Renderer>();
+                        childrens[i - 1] = childSphereRock.transform;
+                        childSphereRock.RemoveSphereRockClass();
+                    }
+                    else
+                    {
+                        renderers = new Renderer[1];
+                        renderers[0] = sphereRock.GetComponent<Renderer>();
+                    }
 
-        //             if (i != lodCounter - 1)
-        //             {
-        //                 lods[i] = new LOD((1f / lodCounter) * (lodCounter - i - 1) / 2, renderers);
-        //             }
-        //             else
-        //             {
-        //                 lods[i] = new LOD(0f, renderers);
-        //             }
+                    if (i != lodCounter - 1)
+                    {
+                        lods[i] = new LOD((1f / lodCounter) * (lodCounter - i - 1) / 2, renderers);
+                    }
+                    else
+                    {
+                        lods[i] = new LOD(0f, renderers);
+                    }
 
-        //         }
-        //         sphereRock.childrens = childrens;
-        //         group.SetLODs(lods);
-        //         group.RecalculateBounds();
-        //     }
-        // }
+                }
+                sphereRock.childrens = childrens;
+                group.SetLODs(lods);
+                group.RecalculateBounds();
+            }
+        }
     }
 }
