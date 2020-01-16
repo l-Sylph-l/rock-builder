@@ -8,30 +8,49 @@ namespace Tests
 {
     public class SphereRockServiceTest
     {
-        // A Test behaves as an ordinary method
         [Test]
         public void CreateEmptySphereRock_Test()
         {
             //ARRANGE
+            TestUtilities util = TestUtilities.Instance;
             SphereRock sphereRock = SphereRockService.Instance.CreateEmptySphereRock();
 
             //ACT
-
+            // Do nothing in this test case
 
             //ASSERT
-            Assert.IsNotNull(sphereRock.gameObject.GetComponent<MeshFilter>());
-            Assert.IsNotNull(sphereRock.gameObject.GetComponent<MeshRenderer>());
+            Assert.IsNotNull(sphereRock.gameObject.GetComponent<MeshFilter>(),
+            util.PrintMessageOnMissingComponents("Sphere Rock", "MeshFilter"));
+            Assert.IsNotNull(sphereRock.gameObject.GetComponent<MeshRenderer>(),
+            util.PrintMessageOnMissingComponents("Sphere Rock", "MeshRenderer"));
 
+            Assert.IsTrue(sphereRock.colliderFlag, util.PrintMessageOnWrongDefaultValue("Sphere Rock", "ColliderFlag"));
+            Assert.IsFalse(sphereRock.smoothFlag, util.PrintMessageOnWrongDefaultValue("Sphere Rock", "SmoothFlag"));
+            Assert.AreEqual(sphereRock.lodCount, 0, util.PrintMessageOnWrongDefaultValue("Sphere Rock", "LodCount"));
+            Assert.AreEqual(sphereRock.name, "New Game Object", util.PrintMessageOnWrongDefaultValue("Sphere Rock", "Name"));
         }
 
-        // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-        // `yield return null;` to skip a frame.
-        [UnityTest]
-        public IEnumerator SphereRockMeshGeneratorWithEnumeratorPasses()
+        [Test]
+        public void CreateEmptySphereRockWithName_Test()
         {
-            // Use the Assert class to test conditions.
-            // Use yield to skip a frame.
-            yield return null;
+            //ARRANGE
+            TestUtilities util = TestUtilities.Instance;
+            string objectName = "new sphere rock";
+            SphereRock sphereRock = SphereRockService.Instance.CreateEmptySphereRock(objectName);
+
+            //ACT
+            // Do nothing in this test case
+
+            //ASSERT
+            Assert.IsNotNull(sphereRock.gameObject.GetComponent<MeshFilter>(),
+            util.PrintMessageOnMissingComponents("Sphere Rock", "MeshFilter"));
+            Assert.IsNotNull(sphereRock.gameObject.GetComponent<MeshRenderer>(),
+            util.PrintMessageOnMissingComponents("Sphere Rock", "MeshRenderer"));
+
+            Assert.IsTrue(sphereRock.colliderFlag, util.PrintMessageOnWrongDefaultValue("Sphere Rock", "ColliderFlag"));
+            Assert.IsFalse(sphereRock.smoothFlag, util.PrintMessageOnWrongDefaultValue("Sphere Rock", "SmoothFlag"));
+            Assert.AreEqual(sphereRock.lodCount, 0, util.PrintMessageOnWrongDefaultValue("Sphere Rock", "LodCount"));
+            Assert.AreEqual(sphereRock.name, objectName, util.PrintMessageOnWrongDefaultValue("Sphere Rock", "Name"));
         }
     }
 }

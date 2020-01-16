@@ -144,10 +144,10 @@ namespace RockBuilder
             int increaseValue = cubeRock.divider;
             vertexLoop = 0;
             triangleVerticesCount = 0;
-            int verticesCount = (12 * 4) + (6 * ((increaseValue*increaseValue) * 4) + (8*3));
+            int verticesCount = (12 * 4) + (6 * ((increaseValue * increaseValue) * 4) + (8 * 3));
             vertices = new Vector3[verticesCount];
             uv = new Vector2[verticesCount];
-            triangles = new int[(12 * 6) + (6 * ((increaseValue * increaseValue) * 6) + (8*3))];
+            triangles = new int[(12 * 6) + (6 * ((increaseValue * increaseValue) * 6) + (8 * 3))];
             noiseFactor = cubeRock.noise;
 
 
@@ -246,20 +246,20 @@ namespace RockBuilder
             FillPlane(upperPlane, cubeRock.depth, cubeRock.width, increaseValue);
             FillPlane(bottomPlane, cubeRock.depth, cubeRock.width, increaseValue);
 
-            FillPlane(frontBevelRight, cubeRock.bezelSize, cubeRock.height, increaseValue);
-            FillPlane(frontBevelLeft, cubeRock.bezelSize, cubeRock.height, increaseValue);
-            FillPlane(backBevelRight, cubeRock.bezelSize, cubeRock.height, increaseValue);
-            FillPlane(backBevelLeft, cubeRock.bezelSize, cubeRock.height, increaseValue);
+            FillPlane(frontBevelRight, cubeRock.bezelSize, cubeRock.height, 1);
+            FillPlane(frontBevelLeft, cubeRock.bezelSize, cubeRock.height, 1);
+            FillPlane(backBevelRight, cubeRock.bezelSize, cubeRock.height, 1);
+            FillPlane(backBevelLeft, cubeRock.bezelSize, cubeRock.height, 1);
 
-            FillPlane(upperBevelFront, cubeRock.width, cubeRock.bezelSize, increaseValue);
-            FillPlane(upperBevelLeft, cubeRock.depth, cubeRock.bezelSize, increaseValue);
-            FillPlane(upperBevelBack, cubeRock.width, cubeRock.bezelSize, increaseValue);
-            FillPlane(upperBevelRight, cubeRock.depth, cubeRock.bezelSize, increaseValue);
+            FillPlane(upperBevelFront, cubeRock.width, cubeRock.bezelSize, 1);
+            FillPlane(upperBevelLeft, cubeRock.depth, cubeRock.bezelSize, 1);
+            FillPlane(upperBevelBack, cubeRock.width, cubeRock.bezelSize, 1);
+            FillPlane(upperBevelRight, cubeRock.depth, cubeRock.bezelSize, 1);
 
-            FillPlane(bottomBevelFront, cubeRock.bezelSize, cubeRock.height, increaseValue);
-            FillPlane(bottomBevelLeft, cubeRock.bezelSize, cubeRock.depth, increaseValue);
-            FillPlane(bottomBevelBack, cubeRock.bezelSize, cubeRock.height, increaseValue);
-            FillPlane(bottomBevelRight, cubeRock.bezelSize, cubeRock.depth, increaseValue);
+            FillPlane(bottomBevelFront, cubeRock.height, cubeRock.bezelSize, 1);
+            FillPlane(bottomBevelLeft, cubeRock.depth, cubeRock.bezelSize, 1);
+            FillPlane(bottomBevelBack, cubeRock.height, cubeRock.bezelSize, 1);
+            FillPlane(bottomBevelRight, cubeRock.depth, cubeRock.bezelSize, 1);
 
             FillTriangle(upperRightBevelCrossFront);
             FillTriangle(upperLeftBevelCrossFront);
@@ -309,19 +309,7 @@ namespace RockBuilder
         {
             float loopCount = 0;
             float rowCount = 0;
-            float divider = (float) planeVertices.Count / increaseFactor;
-            float widthIteration = uvWidth / divider;
-            float heightIteration = uvHeight / divider;
-            float biggerIteration;
 
-            if (widthIteration >= heightIteration)
-            {
-                biggerIteration = widthIteration;
-            }
-            else
-            {
-                biggerIteration = heightIteration;
-            }
 
             foreach (List<Vector3> vertexList in planeVertices)
             {
@@ -338,33 +326,49 @@ namespace RockBuilder
                     rowCount++;
                 }
 
+                float divider = (float)planeVertices.Count / increaseFactor;
+                float widthIteration = uvWidth / increaseFactor;
+                float heightIteration = uvHeight / increaseFactor;
+                float biggerIteration;
+
+                if (widthIteration >= heightIteration)
+                {
+                    widthIteration = 1f / increaseFactor;
+                    heightIteration = (uvHeight / uvWidth) / increaseFactor;
+                }
+                else
+                {
+                    heightIteration = 1f / increaseFactor;
+                    widthIteration = (uvWidth / heightIteration) / increaseFactor;
+                }
+
                 float firstWidthUv = widthIteration * loopCount;
                 float secondWidthUv = widthIteration * (loopCount + 1);
                 float firstHeightUv = heightIteration * rowCount;
                 float secondHeightUv = heightIteration * (rowCount + 1);
 
-                if (loopCount == 0)
-                {
-                    firstWidthUv = 1;
+                // if (loopCount == 0)
+                // {
+                //     firstWidthUv = 1;
 
-                }
-                else
-                {
-                    firstWidthUv = 1 - (firstWidthUv / biggerIteration);
+                // }
+                // else
+                // {
+                //     firstWidthUv = 1 - (firstWidthUv / biggerIteration);
 
-                }
+                // }
 
-                if (rowCount == 0)
-                {
-                    firstHeightUv = 0;
-                }
-                else
-                {
-                    firstHeightUv = firstHeightUv / biggerIteration;
-                }
+                // if (rowCount == 0)
+                // {
+                //     firstHeightUv = 0;
+                // }
+                // else
+                // {
+                //     firstHeightUv = firstHeightUv / biggerIteration;
+                // }
 
-                secondWidthUv = 1 - (secondWidthUv / biggerIteration);
-                secondHeightUv = secondHeightUv / biggerIteration;
+                // secondWidthUv = 1 - (secondWidthUv / biggerIteration);
+                // secondHeightUv = secondHeightUv / biggerIteration;
 
                 uv[vertexLoop] = new Vector2(firstWidthUv, firstHeightUv);
                 uv[vertexLoop + 1] = new Vector2(secondWidthUv, firstHeightUv);

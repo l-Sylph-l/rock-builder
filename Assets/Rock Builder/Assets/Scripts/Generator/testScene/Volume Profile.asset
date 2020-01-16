@@ -89,22 +89,22 @@ MonoBehaviour:
     m_Value: 0
   top:
     m_OverrideState: 1
-    m_Value: {r: 0.7924528, g: 0.8230589, b: 1, a: 1}
+    m_Value: {r: 0.7264151, g: 0.7264151, b: 0.7264151, a: 1}
     hdr: 1
     showAlpha: 0
     showEyeDropper: 1
   middle:
     m_OverrideState: 1
-    m_Value: {r: 0.3, g: 0.7, b: 1, a: 1}
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
     hdr: 1
     showAlpha: 0
     showEyeDropper: 1
   bottom:
     m_OverrideState: 1
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
+    m_Value: {r: 0.067105725, g: 0.071908414, b: 0.122641504, a: 1}
     hdr: 1
     showAlpha: 0
     showEyeDropper: 1
   gradientDiffusion:
     m_OverrideState: 1
-    m_Value: 4.12
+    m_Value: 2.17
