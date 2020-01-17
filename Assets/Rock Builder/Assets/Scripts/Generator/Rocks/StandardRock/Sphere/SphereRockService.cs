@@ -92,7 +92,7 @@ namespace RockBuilder
             {
                 MeshCollider meshCollider = sphereRock.gameObject.AddComponent<MeshCollider>();
                 Mesh meshData = sphereRock.mesh;
-                List<List<Vector3>> vertexIterations = sphereRock.vertexPositions;
+                List<Vector3> vertexIterations = sphereRock.vertexPositions;
                 int edges = sphereRock.edges;
                 if (sphereRock.edges > 12)
                 {

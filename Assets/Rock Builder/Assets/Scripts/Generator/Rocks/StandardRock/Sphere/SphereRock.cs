@@ -26,7 +26,7 @@ namespace RockBuilder
         [HideInInspector]
         public bool colliderFlag;
         [HideInInspector]
-        public List<List<Vector3>> vertexPositions;
+        public List<Vector3> vertexPositions;
         [HideInInspector]
         public Transform[] childrens;
         public Mesh mesh
@@ -75,12 +75,29 @@ namespace RockBuilder
 
         private void OnDrawGizmosSelected()
         {
-            if (vertexPositions != null )
+            if (vertexPositions != null)
             {
                 // update vertex positions
                 vertexPositions = SphereRockMeshGenerator.Instance.CreateVertexPositions(this);
                 SphereRockPreview.Instance.DrawGizmo(this);
             }
+        }
+
+        public List<List<Vector3>> GetOrderedVertexList()
+        {
+            
+            List<List<Vector3>> orderedVertexList = new List<List<Vector3>>();
+            for (int rowCount = 0; rowCount < edges; rowCount++)
+            {
+                List<Vector3> iteration = new List<Vector3>();
+                for (int vertexCount = 0; vertexCount < edges; vertexCount++)
+                {
+                    int index = (edges * rowCount) + vertexCount;
+                    iteration.Add(vertexPositions[index]);
+                }
+                orderedVertexList.Add(iteration);
+            }
+            return orderedVertexList;
         }
 
         public void RemoveSphereRockClass()

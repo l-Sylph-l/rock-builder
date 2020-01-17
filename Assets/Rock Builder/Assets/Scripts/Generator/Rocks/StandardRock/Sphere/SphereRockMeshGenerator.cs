@@ -34,9 +34,10 @@ namespace RockBuilder
             }
         }
 
-        public List<List<Vector3>> CreateVertexPositions(SphereRock sphereRock)
+        public List<Vector3> CreateVertexPositions(SphereRock sphereRock)
         {
-            List<List<Vector3>> circularIerationList = new List<List<Vector3>>();
+            // List<List<Vector3>> circularIerationList = new List<List<Vector3>>();
+            List<Vector3> finalList = new List<Vector3> ();
 
             float startPositionY = -sphereRock.height / 2;
             int edges = sphereRock.edges;
@@ -58,7 +59,7 @@ namespace RockBuilder
 
             foreach (Vector3 vertex in circularIeration)
             {
-                List<Vector3> circularIerationY = new List<Vector3>();
+                // List<Vector3> circularIerationY = new List<Vector3>();
                 for (int loopCount = 0; edges > loopCount; loopCount++)
                 {
                     float multiplyFactor = vertex.x / radiusX;
@@ -66,12 +67,12 @@ namespace RockBuilder
                     float newRadiusZ = radiusZ * multiplyFactor;
                     float positionY = vertex.y;
                     Vector3 spawnPoint = DrawCircularVerticesXZ(sphereRock, newRadiusX, newRadiusZ, positionY, edges, loopCount);
-                    circularIerationY.Add(spawnPoint);
+                    finalList.Add(spawnPoint);
                 }
-                circularIerationList.Add(circularIerationY);
+                // circularIerationList.Add(circularIerationY);
             }
 
-            return circularIerationList;
+            return finalList;
         }
 
         private Vector3 DrawCircularVerticesXZ(SphereRock sphereRock, float radiusX, float radiusZ, float positionY, int edges, int loopCount)
@@ -102,20 +103,21 @@ namespace RockBuilder
 
         public Mesh CreateRockMesh(SphereRock sphereRock)
         {
-            if (sphereRock.smoothFlag)
-            {
-                return CreateSmoothMesh(sphereRock);
-            }
-            else
-            {
-                return CreateHardMesh(sphereRock);
-            }
+            return CreateSmoothMesh(sphereRock);
+            // if (sphereRock.smoothFlag)
+            // {
+            //     return CreateSmoothMesh(sphereRock);
+            // }
+            // else
+            // {
+            //     return CreateHardMesh(sphereRock);
+            // }
         }
 
 
         private Mesh CreateHardMesh(SphereRock sphereRock)
         {
-            List<List<Vector3>> circularIterations = sphereRock.vertexPositions;
+            List<List<Vector3>> circularIterations = sphereRock.GetOrderedVertexList();
             int verticesPerIteration = circularIterations.Count;
             vertexLoop = 0;
             triangleVerticesCount = 0;
@@ -233,7 +235,7 @@ namespace RockBuilder
 
         private Mesh CreateSmoothMesh(SphereRock sphereRock)
         {
-            List<List<Vector3>> circularIterations = sphereRock.vertexPositions;
+            List<List<Vector3>> circularIterations = sphereRock.GetOrderedVertexList();
             int verticesPerIteration = circularIterations.Count;
             vertexLoop = 0;
             triangleVerticesCount = 0;

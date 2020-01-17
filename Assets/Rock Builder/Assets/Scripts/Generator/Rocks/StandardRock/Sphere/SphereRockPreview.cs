@@ -34,47 +34,51 @@ namespace RockBuilder
 
             Vector3 vertexFrom = Vector3.zero;
 
-            foreach (List<Vector3> iteration in sphereRock.vertexPositions)
-            {
+            List<List<Vector3>> orderedList = sphereRock.GetOrderedVertexList();
 
+            foreach (List<Vector3> iteration in orderedList)
+            {
+                int vertexCount = 1;
                 bool skipFirstVertex = true;
+                Vector3 firstVertex = iteration[0];
                 foreach (Vector3 vertex in iteration)
                 {
                     if (!skipFirstVertex)
                     {
                         Gizmos.DrawLine(vertexFrom, vertex);
+                        if (vertexCount == iteration.Count)
+                        {
+                            Gizmos.DrawLine(vertex, firstVertex);
+                        }
                     }
 
                     vertexFrom = vertex;
                     skipFirstVertex = false;
-
-
-
+                    vertexCount++;
                 }
             }
 
-            for (int loopCount = 0; loopCount < sphereRock.vertexPositions.Count; loopCount++)
+            for (int loopCount = 0; loopCount < orderedList.Count; loopCount++)
             {
 
-                for (int innerLoopCount = 0; innerLoopCount < sphereRock.vertexPositions[loopCount].Count; innerLoopCount++)
+                for (int innerLoopCount = 0; innerLoopCount < orderedList[loopCount].Count; innerLoopCount++)
                 {
-                    Vector3 verticalVertexFrom = sphereRock.vertexPositions[innerLoopCount][loopCount];
+                    Vector3 verticalVertexFrom = orderedList[innerLoopCount][loopCount];
                     Vector3 verticalVertexTo;
 
-                    if (sphereRock.vertexPositions.Count - 1 != innerLoopCount)
+                    if (orderedList.Count - 1 != innerLoopCount)
                     {
-                        verticalVertexTo = sphereRock.vertexPositions[innerLoopCount + 1][loopCount];
+                        verticalVertexTo = orderedList[innerLoopCount + 1][loopCount];
                     }
                     else
                     {
-                        verticalVertexTo = sphereRock.vertexPositions[0][loopCount];
+                        verticalVertexTo = orderedList[0][loopCount];
                     }
 
                     Gizmos.DrawLine(verticalVertexFrom, verticalVertexTo);
 
                 }
             }
-
         }
 
         public void DrawGizmo(SphereRock sphereRock)
@@ -84,7 +88,7 @@ namespace RockBuilder
             DrawLines(sphereRock);
 
             // Draw black cubes on every vertex position of the gem
-            foreach (List<Vector3> iteration in sphereRock.vertexPositions)
+            foreach (List<Vector3> iteration in sphereRock.GetOrderedVertexList())
             {
                 foreach (Vector3 spawnPosition in iteration)
                 {
