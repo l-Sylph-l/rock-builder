@@ -32,7 +32,7 @@ namespace RockBuilder
         public SphereRock CreateEmptySphereRock()
         {
             SphereRock sphereRock = new GameObject().AddComponent(typeof(SphereRock)) as SphereRock;
-            sphereRock.smoothFlag = false;
+            sphereRock.smoothFlag = true;
             sphereRock.lodCount = 0;
             sphereRock.colliderFlag = true;
             //Undo.RegisterCreatedObjectUndo(diamondGenerator, "Created diamond");

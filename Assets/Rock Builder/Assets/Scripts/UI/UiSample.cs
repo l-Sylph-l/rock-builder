@@ -115,7 +115,7 @@ namespace RockBuilder
                 if (GUILayout.Button("   Custom   ", GUILayout.Height(32)))
                 {
                     secondParameterRocks = "Custom";
-                    customRock = CustomRockService.Instance.CreateEmptyCustomRock(firstParameterRocks);
+                    // customRock = CustomRockService.Instance.CreateEmptyCustomRock(firstParameterRocks);
                 }
                 GUILayout.EndHorizontal();
 
@@ -151,7 +151,7 @@ namespace RockBuilder
                     GUILayout.Space(15);
 
                     // Displays the other rocks parameter just, if rounded or edgy was selected
-                    if (eightParameterRocks != ""  && (cubeRock != null || sphereRock != null))
+                    if (eightParameterRocks != "" && (cubeRock != null || sphereRock != null))
                     {
                         // Edges just for the rounded stones
                         if (eightParameterRocks == "Rounded")
@@ -243,8 +243,9 @@ namespace RockBuilder
                 }
 
                 // This is the rock part, if the user wants to create his own shape
-                if (secondParameterRocks != "" && secondParameterRocks != "Standard" && customRock != null)
+                if (secondParameterRocks != "" && secondParameterRocks != "Standard")
                 {
+
                     EditorGUILayout.HelpBox("In the first release, the custom shape is not available yet. This feature will follow as soon as possible.", MessageType.Info);
 
                     // NOT in the first release!
