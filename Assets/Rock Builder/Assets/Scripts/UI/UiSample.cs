@@ -206,8 +206,8 @@ namespace RockBuilder
                         }
                         rockNoise = EditorGUILayout.FloatField("Noise", rockNoise);
 
-                        // Fifth rocks parameter => The checkbox to smooth an object        
-                        fifthParamaterRocks = EditorGUILayout.Toggle("Smooth", fifthParamaterRocks);
+                        //// Fifth rocks parameter => The checkbox to smooth an object        
+                        //fifthParamaterRocks = EditorGUILayout.Toggle("Smooth", fifthParamaterRocks);
 
                         // Sixth rocks parameter => The checkbox to give the object a collider        
                         sixthParamaterRocks = EditorGUILayout.Toggle("Collider", sixthParamaterRocks);
@@ -245,6 +245,11 @@ namespace RockBuilder
                 // This is the rock part, if the user wants to create his own shape
                 if (secondParameterRocks != "" && secondParameterRocks != "Standard" && customRock != null)
                 {
+                    EditorGUILayout.HelpBox("In the first release, the custom shape is not available yet. This feature will follow as soon as possible.", MessageType.Info);
+
+                    // NOT in the first release!
+                    /*
+
                     // Update UI depending on the selected custom rock
                     UpdateRocks();
 
@@ -288,6 +293,9 @@ namespace RockBuilder
                             customRock = CustomRockService.Instance.CreateCustomRock(customRock, rockMaterial);
                         }
                     }
+
+                    */
+
                 }
             }
 
