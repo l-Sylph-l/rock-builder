@@ -24,7 +24,7 @@ namespace RockBuilder
         bool fifthParamaterRocks = false; // Smooth
         bool sixthParamaterRocks = false; // Collider
         int seventhParamaterRocks = 0; // LODs
-        string eightParameterRocks = ""; // Rock rather round or edgy
+        string eightParameterRocks = ""; // Rock rather round or squared
         int ninthParamaterRocks = 6; // Edges 
         float rockHeight = 1.0f; // Height of the rock
         float rockWidth = 1.0f; // Width of the rock
@@ -126,7 +126,7 @@ namespace RockBuilder
                 {
                     UpdateRocks();
 
-                    // Selection of the stone shape (round or edgy)     
+                    // Selection of the stone shape (round or square)     
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.TextField(eightParameterRocks);
                     EditorGUI.EndDisabledGroup();
@@ -140,17 +140,17 @@ namespace RockBuilder
                         sphereRock = SphereRockService.Instance.CreateEmptySphereRock(firstParameterRocks);
                         eightParameterRocks = "Rounded";
                     }
-                    GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Edgy_icon.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
-                    if (GUILayout.Button("      Edgy      ", GUILayout.Height(32)))
+                    GUILayout.Box(LoadPNG("Assets/Rock Builder/Assets/Images/Squared_icon.png"), new GUILayoutOption[] { GUILayout.Width(30), GUILayout.Height(30) });
+                    if (GUILayout.Button("   Squared   ", GUILayout.Height(32)))
                     {
                         cubeRock = CubeRockService.Instance.CreateEmptyCubeRock(firstParameterRocks);
-                        eightParameterRocks = "Edgy";
+                        eightParameterRocks = "Squared";
                     }
                     GUILayout.EndHorizontal();
 
                     GUILayout.Space(15);
 
-                    // Displays the other rocks parameter just, if rounded or edgy was selected
+                    // Displays the other rocks parameter just, if rounded or squared was selected
                     if (eightParameterRocks != "" && (cubeRock != null || sphereRock != null))
                     {
                         // Edges just for the rounded stones
@@ -160,8 +160,8 @@ namespace RockBuilder
                             ninthParamaterRocks = EditorGUILayout.IntSlider("Edges", ninthParamaterRocks, 6, 100);
                         }
 
-                        // Divider just for the edgy stones
-                        if (eightParameterRocks == "Edgy")
+                        // Divider just for the squared stones
+                        if (eightParameterRocks == "Squared")
                         {
                             // Fourth rocks parameter => Slidebar for the divider between 1 and 50
                             fourthParamaterRocks = EditorGUILayout.IntSlider("Divider", fourthParamaterRocks, 1, 50);
@@ -188,8 +188,8 @@ namespace RockBuilder
                         }
                         rockDepth = EditorGUILayout.FloatField("Depth", rockDepth);
 
-                        // Bevel size just for the edgy stones
-                        if (eightParameterRocks == "Edgy")
+                        // Bevel size just for the squared stones
+                        if (eightParameterRocks == "Squared")
                         {
                             // Restricts the user inputs for the bevel size => 0.01 - 1000
                             if (rockBevelSize < 0 || rockBevelSize > 1000)
