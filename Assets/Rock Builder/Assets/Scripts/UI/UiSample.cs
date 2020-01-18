@@ -463,7 +463,7 @@ namespace RockBuilder
                 if (GUILayout.Button("Open User Manual", GUILayout.Height(25)))
                 {
                     // Opens the user manual PDF file
-                    Application.OpenURL(System.Environment.CurrentDirectory + "/Assets/Rock Builder/Assets/Resources/Dummy.pdf");
+                    Application.OpenURL(System.Environment.CurrentDirectory + "/Assets/Rock Builder/Assets/Resources/UserManual_RockBuilder.pdf");
                 }
 
                 GUILayout.Space(20);
