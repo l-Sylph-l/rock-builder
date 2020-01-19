@@ -456,7 +456,7 @@ namespace RockBuilder
 
                 GUILayout.Space(15);
 
-                EditorGUILayout.HelpBox("Rock Builder is a simple tool to create rocks and gemstones with different shaders. It's made by two students from the SAE Zurich as their bachelor thesis.", MessageType.Info);
+                EditorGUILayout.HelpBox("Rock Builder is a simple tool to create rocks and gemstones with different shaders. It's made by two students from SAE Zurich as their bachelor thesis.", MessageType.Info);
 
                 GUILayout.Space(15);
 
@@ -472,7 +472,7 @@ namespace RockBuilder
 
                 GUILayout.Space(15);
 
-                GUILayout.Label("Please send us an email if you have any questions or if you have problems with the tool. We do our best to answer the email as fast as possible. Thank you!", infoText);
+                GUILayout.Label("Please send us an email if you have any questions or if you have problems with the tool. We will do our best to answer the email as fast as possible. Thank you!", infoText);
 
                 GUILayout.Space(15);
 
