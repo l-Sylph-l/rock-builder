@@ -25,7 +25,7 @@ namespace Tests
             util.PrintMessageOnMissingComponents("Sphere Rock", "MeshRenderer"));
 
             Assert.IsTrue(sphereRock.colliderFlag, util.PrintMessageOnWrongDefaultValue("Sphere Rock", "ColliderFlag"));
-            Assert.IsFalse(sphereRock.smoothFlag, util.PrintMessageOnWrongDefaultValue("Sphere Rock", "SmoothFlag"));
+            Assert.IsTrue(sphereRock.smoothFlag, util.PrintMessageOnWrongDefaultValue("Sphere Rock", "SmoothFlag"));
             Assert.AreEqual(sphereRock.lodCount, 0, util.PrintMessageOnWrongDefaultValue("Sphere Rock", "LodCount"));
             Assert.AreEqual(sphereRock.name, "New Game Object", util.PrintMessageOnWrongDefaultValue("Sphere Rock", "Name"));
         }
@@ -48,7 +48,7 @@ namespace Tests
             util.PrintMessageOnMissingComponents("Sphere Rock", "MeshRenderer"));
 
             Assert.IsTrue(sphereRock.colliderFlag, util.PrintMessageOnWrongDefaultValue("Sphere Rock", "ColliderFlag"));
-            Assert.IsFalse(sphereRock.smoothFlag, util.PrintMessageOnWrongDefaultValue("Sphere Rock", "SmoothFlag"));
+            Assert.IsTrue(sphereRock.smoothFlag, util.PrintMessageOnWrongDefaultValue("Sphere Rock", "SmoothFlag"));
             Assert.AreEqual(sphereRock.lodCount, 0, util.PrintMessageOnWrongDefaultValue("Sphere Rock", "LodCount"));
             Assert.AreEqual(sphereRock.name, objectName, util.PrintMessageOnWrongDefaultValue("Sphere Rock", "Name"));
         }
