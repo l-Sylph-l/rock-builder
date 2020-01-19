@@ -329,7 +329,6 @@ namespace RockBuilder
                 float divider = (float)planeVertices.Count / increaseFactor;
                 float widthIteration = uvWidth / increaseFactor;
                 float heightIteration = uvHeight / increaseFactor;
-                float biggerIteration;
 
                 if (widthIteration >= heightIteration)
                 {
@@ -339,7 +338,7 @@ namespace RockBuilder
                 else
                 {
                     heightIteration = 1f / increaseFactor;
-                    widthIteration = (uvWidth / heightIteration) / increaseFactor;
+                    widthIteration = (uvWidth / uvHeight) / increaseFactor;
                 }
 
                 float firstWidthUv = widthIteration * loopCount;
