@@ -628,7 +628,7 @@ namespace RockBuilder
                     fourthParamaterRocks = cubeRock.divider;
                     seventhParamaterRocks = cubeRock.lodCount;
                     sixthParamaterRocks = cubeRock.colliderFlag;
-                    eightParameterRocks = "Edgy";
+                    eightParameterRocks = "Squared";
                     if (cubeRock.GetComponent<MeshRenderer>().sharedMaterial != null)
                     {
                         rockMaterial = cubeRock.GetComponent<MeshRenderer>().sharedMaterial;
