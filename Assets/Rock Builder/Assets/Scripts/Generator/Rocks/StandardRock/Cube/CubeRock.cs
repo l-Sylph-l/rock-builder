@@ -9,6 +9,8 @@ namespace RockBuilder
     [RequireComponent(typeof(MeshRenderer))]
     public class CubeRock : MonoBehaviour
     {
+                [HideInInspector]
+        public int divider;
         [HideInInspector]
         public float height;
         [HideInInspector]
@@ -18,9 +20,7 @@ namespace RockBuilder
          [HideInInspector]
         public float noise;
         [HideInInspector]
-        public float bezelSize;
-        [HideInInspector]
-        public int divider;
+        public float bevelSize;
         [HideInInspector]
         public int lodCount;
         [HideInInspector]

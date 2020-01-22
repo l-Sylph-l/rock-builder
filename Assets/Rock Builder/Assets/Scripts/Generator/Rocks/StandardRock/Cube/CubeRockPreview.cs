@@ -129,7 +129,7 @@ namespace RockBuilder
             }
 
 
-            if (cubeRock.bezelSize == 0f)
+            if (cubeRock.bevelSize == 0f)
             {
                 bottomLoopCount = 1;
                 linkLoopCount = 0;
@@ -225,7 +225,7 @@ namespace RockBuilder
                 VisualizeVertex(spawnPosition, cubeRock);
             }
 
-            if (cubeRock.bezelSize == 0f)
+            if (cubeRock.bevelSize == 0f)
             {
                 foreach (Vector3 spawnPosition in cubeRock.bottomBezelsVertices)
                 {

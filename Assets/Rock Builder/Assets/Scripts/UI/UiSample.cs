@@ -624,7 +624,7 @@ namespace RockBuilder
                     rockWidth = cubeRock.width;
                     rockDepth = cubeRock.depth;
                     rockNoise = cubeRock.noise;
-                    rockBevelSize = cubeRock.bezelSize;
+                    rockBevelSize = cubeRock.bevelSize;
                     fourthParamaterRocks = cubeRock.divider;
                     seventhParamaterRocks = cubeRock.lodCount;
                     sixthParamaterRocks = cubeRock.colliderFlag;
@@ -755,7 +755,7 @@ namespace RockBuilder
                 cubeRock.width = rockWidth;
                 cubeRock.depth = rockDepth;
                 cubeRock.noise = rockNoise;
-                cubeRock.bezelSize = rockBevelSize;
+                cubeRock.bevelSize = rockBevelSize;
                 cubeRock.divider = fourthParamaterRocks;
                 cubeRock.colliderFlag = sixthParamaterRocks;
             }

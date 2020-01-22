@@ -67,25 +67,25 @@ namespace RockBuilder
             Vector3 thirdUpperVertex = new Vector3(negativePositionX, positivePositionY, negativePositionZ);
             Vector3 fourthUpperVertex = new Vector3(negativePositionX, positivePositionY, positivePositionZ);
 
-            Vector3 firstBottomOffset = new Vector3(positivePositionX, negativePositionY, positivePositionZ - cubeRock.bezelSize / 2);
-            Vector3 secondBottomOffset = new Vector3(positivePositionX, negativePositionY, negativePositionZ + cubeRock.bezelSize / 2);
-            Vector3 thirdBottomOffset = new Vector3(positivePositionX - cubeRock.bezelSize / 2, negativePositionY, negativePositionZ);
-            Vector3 fourthBottomOffset = new Vector3(negativePositionX + cubeRock.bezelSize / 2, negativePositionY, negativePositionZ);
-            Vector3 fifthBottomOffset = new Vector3(negativePositionX, negativePositionY, negativePositionZ + cubeRock.bezelSize / 2);
-            Vector3 sixthBottomOffset = new Vector3(negativePositionX, negativePositionY, positivePositionZ - cubeRock.bezelSize / 2);
-            Vector3 seventhBottomOffset = new Vector3(negativePositionX + cubeRock.bezelSize / 2, negativePositionY, positivePositionZ);
-            Vector3 eighthBottomOffset = new Vector3(positivePositionX - cubeRock.bezelSize / 2, negativePositionY, positivePositionZ);
+            Vector3 firstBottomOffset = new Vector3(positivePositionX, negativePositionY, positivePositionZ - cubeRock.bevelSize / 2);
+            Vector3 secondBottomOffset = new Vector3(positivePositionX, negativePositionY, negativePositionZ + cubeRock.bevelSize / 2);
+            Vector3 thirdBottomOffset = new Vector3(positivePositionX - cubeRock.bevelSize / 2, negativePositionY, negativePositionZ);
+            Vector3 fourthBottomOffset = new Vector3(negativePositionX + cubeRock.bevelSize / 2, negativePositionY, negativePositionZ);
+            Vector3 fifthBottomOffset = new Vector3(negativePositionX, negativePositionY, negativePositionZ + cubeRock.bevelSize / 2);
+            Vector3 sixthBottomOffset = new Vector3(negativePositionX, negativePositionY, positivePositionZ - cubeRock.bevelSize / 2);
+            Vector3 seventhBottomOffset = new Vector3(negativePositionX + cubeRock.bevelSize / 2, negativePositionY, positivePositionZ);
+            Vector3 eighthBottomOffset = new Vector3(positivePositionX - cubeRock.bevelSize / 2, negativePositionY, positivePositionZ);
 
-            Vector3 firstUpperOffset = new Vector3(positivePositionX, positivePositionY, positivePositionZ - cubeRock.bezelSize / 2);
-            Vector3 secondUpperOffset = new Vector3(positivePositionX, positivePositionY, negativePositionZ + cubeRock.bezelSize / 2);
-            Vector3 thirdUpperOffset = new Vector3(positivePositionX - cubeRock.bezelSize / 2, positivePositionY, negativePositionZ);
-            Vector3 fourthUpperOffset = new Vector3(negativePositionX + cubeRock.bezelSize / 2, positivePositionY, negativePositionZ);
-            Vector3 fifthUpperOffset = new Vector3(negativePositionX, positivePositionY, negativePositionZ + cubeRock.bezelSize / 2);
-            Vector3 sixthUpperOffset = new Vector3(negativePositionX, positivePositionY, positivePositionZ - cubeRock.bezelSize / 2);
-            Vector3 seventhUpperOffset = new Vector3(negativePositionX + cubeRock.bezelSize / 2, positivePositionY, positivePositionZ);
-            Vector3 eighthUpperOffset = new Vector3(positivePositionX - cubeRock.bezelSize / 2, positivePositionY, positivePositionZ);
+            Vector3 firstUpperOffset = new Vector3(positivePositionX, positivePositionY, positivePositionZ - cubeRock.bevelSize / 2);
+            Vector3 secondUpperOffset = new Vector3(positivePositionX, positivePositionY, negativePositionZ + cubeRock.bevelSize / 2);
+            Vector3 thirdUpperOffset = new Vector3(positivePositionX - cubeRock.bevelSize / 2, positivePositionY, negativePositionZ);
+            Vector3 fourthUpperOffset = new Vector3(negativePositionX + cubeRock.bevelSize / 2, positivePositionY, negativePositionZ);
+            Vector3 fifthUpperOffset = new Vector3(negativePositionX, positivePositionY, negativePositionZ + cubeRock.bevelSize / 2);
+            Vector3 sixthUpperOffset = new Vector3(negativePositionX, positivePositionY, positivePositionZ - cubeRock.bevelSize / 2);
+            Vector3 seventhUpperOffset = new Vector3(negativePositionX + cubeRock.bevelSize / 2, positivePositionY, positivePositionZ);
+            Vector3 eighthUpperOffset = new Vector3(positivePositionX - cubeRock.bevelSize / 2, positivePositionY, positivePositionZ);
 
-            Vector3 bezelOffsetY = new Vector3(0, cubeRock.bezelSize / 2, 0);
+            Vector3 bezelOffsetY = new Vector3(0, cubeRock.bevelSize / 2, 0);
 
             cubeRock.bottomVerticalBezelsVertices.Add(firstBottomOffset + bezelOffsetY);
             cubeRock.bottomVerticalBezelsVertices.Add(secondBottomOffset + bezelOffsetY);
@@ -115,10 +115,10 @@ namespace RockBuilder
             cubeRock.upperBezelsVertices.Add(Vector3.Lerp(fourthUpperOffset - bezelOffsetY, fifthUpperOffset - bezelOffsetY, 0.5f));
             cubeRock.upperBezelsVertices.Add(Vector3.Lerp(sixthUpperOffset - bezelOffsetY, seventhUpperOffset - bezelOffsetY, 0.5f));
 
-            Vector3 firstBezelOffset = new Vector3(-cubeRock.bezelSize / 2, 0, -cubeRock.bezelSize / 2);
-            Vector3 secondBezelOffset = new Vector3(-cubeRock.bezelSize / 2, 0, cubeRock.bezelSize / 2);
-            Vector3 thirdBezelOffset = new Vector3(cubeRock.bezelSize / 2, 0, cubeRock.bezelSize / 2);
-            Vector3 fourthBezelOffset = new Vector3(cubeRock.bezelSize / 2, 0, -cubeRock.bezelSize / 2);
+            Vector3 firstBezelOffset = new Vector3(-cubeRock.bevelSize / 2, 0, -cubeRock.bevelSize / 2);
+            Vector3 secondBezelOffset = new Vector3(-cubeRock.bevelSize / 2, 0, cubeRock.bevelSize / 2);
+            Vector3 thirdBezelOffset = new Vector3(cubeRock.bevelSize / 2, 0, cubeRock.bevelSize / 2);
+            Vector3 fourthBezelOffset = new Vector3(cubeRock.bevelSize / 2, 0, -cubeRock.bevelSize / 2);
 
             cubeRock.bottomPlaneVertices.Add(firstBottomVertex + firstBezelOffset);
             cubeRock.bottomPlaneVertices.Add(secondBottomVertex + secondBezelOffset);
@@ -246,20 +246,20 @@ namespace RockBuilder
             FillPlane(upperPlane, cubeRock.depth, cubeRock.width, increaseValue);
             FillPlane(bottomPlane, cubeRock.depth, cubeRock.width, increaseValue);
 
-            FillPlane(frontBevelRight, cubeRock.bezelSize, cubeRock.height, 1);
-            FillPlane(frontBevelLeft, cubeRock.bezelSize, cubeRock.height, 1);
-            FillPlane(backBevelRight, cubeRock.bezelSize, cubeRock.height, 1);
-            FillPlane(backBevelLeft, cubeRock.bezelSize, cubeRock.height, 1);
+            FillPlane(frontBevelRight, cubeRock.bevelSize, cubeRock.height, 1);
+            FillPlane(frontBevelLeft, cubeRock.bevelSize, cubeRock.height, 1);
+            FillPlane(backBevelRight, cubeRock.bevelSize, cubeRock.height, 1);
+            FillPlane(backBevelLeft, cubeRock.bevelSize, cubeRock.height, 1);
 
-            FillPlane(upperBevelFront, cubeRock.width, cubeRock.bezelSize, 1);
-            FillPlane(upperBevelLeft, cubeRock.depth, cubeRock.bezelSize, 1);
-            FillPlane(upperBevelBack, cubeRock.width, cubeRock.bezelSize, 1);
-            FillPlane(upperBevelRight, cubeRock.depth, cubeRock.bezelSize, 1);
+            FillPlane(upperBevelFront, cubeRock.width, cubeRock.bevelSize, 1);
+            FillPlane(upperBevelLeft, cubeRock.depth, cubeRock.bevelSize, 1);
+            FillPlane(upperBevelBack, cubeRock.width, cubeRock.bevelSize, 1);
+            FillPlane(upperBevelRight, cubeRock.depth, cubeRock.bevelSize, 1);
 
-            FillPlane(bottomBevelFront, cubeRock.height, cubeRock.bezelSize, 1);
-            FillPlane(bottomBevelLeft, cubeRock.depth, cubeRock.bezelSize, 1);
-            FillPlane(bottomBevelBack, cubeRock.height, cubeRock.bezelSize, 1);
-            FillPlane(bottomBevelRight, cubeRock.depth, cubeRock.bezelSize, 1);
+            FillPlane(bottomBevelFront, cubeRock.height, cubeRock.bevelSize, 1);
+            FillPlane(bottomBevelLeft, cubeRock.depth, cubeRock.bevelSize, 1);
+            FillPlane(bottomBevelBack, cubeRock.height, cubeRock.bevelSize, 1);
+            FillPlane(bottomBevelRight, cubeRock.depth, cubeRock.bevelSize, 1);
 
             FillTriangle(upperRightBevelCrossFront);
             FillTriangle(upperLeftBevelCrossFront);
