@@ -4,7 +4,7 @@ using UnityEngine.TestTools;
 using RockBuilder;
 using UnityEngine;
 
-namespace Tests
+namespace RockBuilder.Tests
 {
     public class SphereRockServiceTest
     {

@@ -3,28 +3,83 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
-using Rockbuilder;
+using RockBuilder;
 
-namespace Rockbuilder.Tests
+namespace RockBuilder.Tests
 {
     public class SphereRockMeshGeneratorTest
     {
-        // A Test behaves as an ordinary method
         [Test]
-        public void SphereRockMeshGeneratorSimplePasses()
+        public void CreateVertexPositions_Test()
         {
-            
-            // Use the Assert class to test conditions
+            //ARRANGE
+            TestUtilities util = TestUtilities.Instance;
+            SphereRock sphereRock = SphereRockService.Instance.CreateEmptySphereRock();
+            sphereRock.edges = 6;
+
+            //ACT
+            List<Vector3> vertexPositions = SphereRockMeshGenerator.Instance.CreateVertexPositions(sphereRock);
+
+            //ASSERT
+            Assert.IsNotNull(sphereRock.gameObject.GetComponent<MeshRenderer>(),
+            util.PrintMessageObjectIsNull("Vertex list"));
+
+            int expectedCount = 36;
+            Assert.AreEqual(expectedCount, vertexPositions.Count, util.PrintMessageDoesNotHaveCount("Vertex list", expectedCount));
         }
 
-        // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-        // `yield return null;` to skip a frame.
-        [UnityTest]
-        public IEnumerator SphereRockMeshGeneratorWithEnumeratorPasses()
+        [Test]
+        public void CreateSmoothMesh_Test()
         {
-            // Use the Assert class to test conditions.
-            // Use yield to skip a frame.
-            yield return null;
+            //ARRANGE
+            TestUtilities util = TestUtilities.Instance;
+            SphereRock sphereRock = SphereRockService.Instance.CreateEmptySphereRock();
+            sphereRock.edges = 6;
+            sphereRock.width = 1f;
+            sphereRock.height = 1f;
+            sphereRock.depth = 1f;
+            sphereRock.vertexPositions = SphereRockMeshGenerator.Instance.CreateVertexPositions(sphereRock);
+
+            //ACT
+            Mesh mesh = SphereRockMeshGenerator.Instance.CreateRockMesh(sphereRock);
+
+            //ASSERT
+            Assert.IsNotNull(mesh,
+            util.PrintMessageObjectIsNull("Sphere Rock Mesh"));
+
+            int expectedVerticesCount = 30;
+            int expectedUvCount = 30;
+            int expectedTrianglesCount = 222;
+            Assert.AreEqual(expectedVerticesCount, mesh.vertices.Length, util.PrintMessageDoesNotHaveCount("Vertex list", expectedVerticesCount));
+            Assert.AreEqual(expectedUvCount, mesh.uv.Length, util.PrintMessageDoesNotHaveCount("UV list", expectedUvCount));
+            Assert.AreEqual(expectedTrianglesCount, mesh.triangles.Length, util.PrintMessageDoesNotHaveCount("Triangle list", expectedTrianglesCount));
+        }
+
+        [Test]
+        public void CreateHardMesh_Test()
+        {
+            //ARRANGE
+            TestUtilities util = TestUtilities.Instance;
+            SphereRock sphereRock = SphereRockService.Instance.CreateEmptySphereRock();
+            sphereRock.edges = 6;
+            sphereRock.width = 1f;
+            sphereRock.height = 1f;
+            sphereRock.depth = 1f;
+            sphereRock.vertexPositions = SphereRockMeshGenerator.Instance.CreateVertexPositions(sphereRock);
+
+            //ACT
+            Mesh mesh = SphereRockMeshGenerator.Instance.CreateRockMesh(sphereRock);
+
+            //ASSERT
+            Assert.IsNotNull(mesh,
+            util.PrintMessageObjectIsNull("Sphere Rock Mesh"));
+
+            int expectedVerticesCount = 30;
+            int expectedUvCount = 30;
+            int expectedTrianglesCount = 222;
+            Assert.AreEqual(expectedVerticesCount, mesh.vertices.Length, util.PrintMessageDoesNotHaveCount("Vertex list", expectedVerticesCount));
+            Assert.AreEqual(expectedUvCount, mesh.uv.Length, util.PrintMessageDoesNotHaveCount("UV list", expectedUvCount));
+            Assert.AreEqual(expectedTrianglesCount, mesh.triangles.Length, util.PrintMessageDoesNotHaveCount("Triangle list", expectedTrianglesCount));
         }
     }
 }

@@ -4,7 +4,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Rockbuilder.Tests
+namespace RockBuilder.Tests
 {
     public class SphereRockPreviewTest
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Tests
+namespace RockBuilder.Tests
 {
     public class TestUtilities
     {
@@ -36,6 +36,16 @@ namespace Tests
         public string PrintMessageOnMissingComponents(string testObject, string component)
         {
             return component + " Component is not to the " + testObject + " Gameobject attached.";
+        }
+
+        public string PrintMessageDoesNotHaveCount(string testObject, int expectedCount)
+        {
+            return testObject + " does not have a count of " + expectedCount;
+        }
+
+        public string PrintMessageObjectIsNull(string testObject)
+        {
+            return testObject + " was null.";
         }
     }
 }
