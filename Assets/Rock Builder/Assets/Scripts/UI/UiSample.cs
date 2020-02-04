@@ -206,8 +206,8 @@ namespace RockBuilder
                         }
                         rockNoise = EditorGUILayout.FloatField("Noise", rockNoise);
 
-                        //// Fifth rocks parameter => The checkbox to smooth an object        
-                        //fifthParamaterRocks = EditorGUILayout.Toggle("Smooth", fifthParamaterRocks);
+                        // Fifth rocks parameter => The checkbox to smooth an object        
+                        fifthParamaterRocks = EditorGUILayout.Toggle("Smooth", fifthParamaterRocks);
 
                         // Sixth rocks parameter => The checkbox to give the object a collider        
                         sixthParamaterRocks = EditorGUILayout.Toggle("Collider", sixthParamaterRocks);

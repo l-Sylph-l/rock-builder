@@ -37,7 +37,7 @@ namespace RockBuilder
         public List<Vector3> CreateVertexPositions(SphereRock sphereRock)
         {
             // List<List<Vector3>> circularIerationList = new List<List<Vector3>>();
-            List<Vector3> finalList = new List<Vector3> ();
+            List<Vector3> finalList = new List<Vector3>();
 
             float startPositionY = -sphereRock.height / 2;
             int edges = sphereRock.edges;
@@ -103,15 +103,15 @@ namespace RockBuilder
 
         public Mesh CreateRockMesh(SphereRock sphereRock)
         {
-            return CreateSmoothMesh(sphereRock);
-            // if (sphereRock.smoothFlag)
-            // {
-            //     return CreateSmoothMesh(sphereRock);
-            // }
-            // else
-            // {
-            //     return CreateHardMesh(sphereRock);
-            // }
+            // return CreateSmoothMesh(sphereRock);
+            if (sphereRock.smoothFlag)
+            {
+                return CreateSmoothMesh(sphereRock);
+            }
+            else
+            {
+                return CreateHardMesh(sphereRock);
+            }
         }
 
 
@@ -121,21 +121,23 @@ namespace RockBuilder
             int verticesPerIteration = circularIterations.Count;
             vertexLoop = 0;
             triangleVerticesCount = 0;
-            int verticesCount = (verticesPerIteration * verticesPerIteration) * 100;
-            Vector3[] noiseVertices = new Vector3[verticesCount];
+            int baseVerticesCount = (verticesPerIteration * verticesPerIteration);
+            int verticesCount = baseVerticesCount * 4;
+            Vector3[] noiseVertices = new Vector3[baseVerticesCount];
             Vector2[] noiseUv = new Vector2[verticesCount];
             vertices = new Vector3[verticesCount];
             uv = new Vector2[verticesCount];
-            triangles = new int[verticesCount * 21];
+            triangles = new int[verticesCount * 12];
             noiseFactor = sphereRock.noise;
 
             int iterationCount = 0;
+            int vertexCount = 1;
 
             foreach (List<Vector3> iteration in circularIterations)
             {
                 iterationCount++;
                 float uvHeightIteration = (1f / circularIterations.Count) * iterationCount;
-                int vertexCount = 1;
+                vertexCount = 1;
 
                 foreach (Vector3 vertex in iteration)
                 {
@@ -148,77 +150,141 @@ namespace RockBuilder
                 }
             }
 
+            int closingVerticesCount = verticesPerIteration * 2;
+            int bodyVerticesCount = baseVerticesCount - (closingVerticesCount);
+
+            int lowerClosingStartIndex = 0;
+            int upperClosingStartIndex = baseVerticesCount - closingVerticesCount;
+            int bodyStartIndex = verticesPerIteration;
+
+
+            List<Vector3> noiseVerticesList = noiseVertices.ToList();
+            List<Vector3> lowerClosingVertices = noiseVerticesList.GetRange(lowerClosingStartIndex, closingVerticesCount);
+            List<Vector3> bodyVertices = noiseVerticesList.GetRange(bodyStartIndex, bodyVerticesCount);
+            List<Vector3> upperClosingVertices = noiseVerticesList.GetRange(upperClosingStartIndex, closingVerticesCount);
+
             vertexLoop = 0;
-            int heightCount = 0;
-            int noiseVertexLoop = 0;
 
-
-            foreach (Vector3 vertex in noiseVertices)
+            int uvIterationCount = verticesPerIteration - 1;
+            for (int loopCount = 0; loopCount < verticesPerIteration; loopCount++)
             {
-                int vertexCount = 1;
-                float firstUvWidthIteration = (1f / circularIterations.Count) * vertexCount;
-                float secondUvWidthIteration = (1f / circularIterations.Count) * (vertexCount + 1);
-                float firstUvHeightIteration = (1f / circularIterations.Count) * heightCount;
-                float secondUvHeightIteration = (1f / circularIterations.Count) * (heightCount + 1);
+                float firstUvWidthIteration = (1f / uvIterationCount) * loopCount;
+                float secondUvWidthIteration = (1f / uvIterationCount) * (loopCount + 1);
+                float firstUvHeightIteration = (1f / uvIterationCount) * 0;
+                float secondUvHeightIteration = (1f / uvIterationCount) * 1;
 
-                int firstLowerIndex = vertexLoop;
-                int secondLowerIndex = vertexLoop + 1;
-                int firstUpperIndex = vertexLoop + verticesPerIteration;
-                int secondUpperIndex = vertexLoop + verticesPerIteration + 1;
+                int lowerMiddlePointIndex = loopCount;
+                int firstIndex = loopCount + verticesPerIteration;
+                int secondIndex = loopCount + verticesPerIteration + 1;
 
-                int firstLowerNoiseIndex = noiseVertexLoop;
-                int secondLowerNoiseIndex = noiseVertexLoop + 1;
-                int firstUpperNoiseIndex = noiseVertexLoop + verticesPerIteration;
-                int secondUpperNoiseIndex = noiseVertexLoop + verticesPerIteration + 1;
-
-                if (vertexCount == verticesPerIteration)
+                if (loopCount == verticesPerIteration - 1)
                 {
-                    // secondLowerIndex = vertexLoop + 1 - verticesPerIteration;
-                    // secondUpperIndex = vertexLoop + 1;
-
-                    secondLowerNoiseIndex = noiseVertexLoop + 1 - verticesPerIteration;
-                    secondUpperNoiseIndex = noiseVertexLoop + 1;
+                    secondIndex = iterationCount;
                 }
 
-                vertices[vertexLoop] = noiseVertices[firstLowerNoiseIndex];
-                vertices[vertexLoop + 1] = noiseVertices[secondLowerNoiseIndex];
-                vertices[vertexLoop + 2] = noiseVertices[firstUpperNoiseIndex];
-                vertices[vertexLoop + 3] = noiseVertices[secondUpperNoiseIndex];
+                vertices[vertexLoop] = lowerClosingVertices[lowerMiddlePointIndex];
+                vertices[vertexLoop + 1] = lowerClosingVertices[firstIndex];
+                vertices[vertexLoop + 2] = lowerClosingVertices[secondIndex];
 
-                uv[vertexLoop] = new Vector2(firstUvWidthIteration, firstUvHeightIteration);
-                uv[vertexLoop + 1] = new Vector2(secondUvWidthIteration, firstUvHeightIteration);
-                uv[vertexLoop + 2] = new Vector2(firstUvWidthIteration, secondUvHeightIteration);
-                uv[vertexLoop + 3] = new Vector2(secondUvWidthIteration, secondUvHeightIteration);
+                Vector2 firstUvVertex = new Vector2(secondUvWidthIteration, secondUvHeightIteration);
+                Vector2 secondUvVertex = new Vector2(firstUvWidthIteration, secondUvHeightIteration);
+                float middlePointUvWidth = Mathf.Lerp(firstUvWidthIteration, secondUvWidthIteration, 0.5f);
+                Vector2 middlePointVertex = new Vector2(middlePointUvWidth, firstUvHeightIteration);
 
-                if (iterationCount != circularIterations.Count)
+                uv[vertexLoop] = middlePointVertex;
+                uv[vertexLoop + 1] = firstUvVertex;
+                uv[vertexLoop + 2] = secondUvVertex;
+
+                triangles[triangleVerticesCount] = vertexLoop;
+                triangles[triangleVerticesCount + 1] = vertexLoop + 1;
+                triangles[triangleVerticesCount + 2] = vertexLoop + 2;
+
+                triangleVerticesCount += 3;
+                vertexLoop += 3;
+            }
+
+            int IterationCompensation = 3;
+
+            for (int outerLoopCount = 0; outerLoopCount < verticesPerIteration - IterationCompensation; outerLoopCount++)
+            {
+                int rowCount = outerLoopCount + 1;
+                for (int loopCount = 0; loopCount < verticesPerIteration; loopCount++)
                 {
-                    triangles[triangleVerticesCount] = vertexLoop;
-                    triangles[triangleVerticesCount + 1] = secondLowerIndex;
-                    triangles[triangleVerticesCount + 2] = firstUpperIndex;
-                    triangles[triangleVerticesCount + 3] = secondLowerIndex;
-                    triangles[triangleVerticesCount + 4] = secondUpperIndex;
-                    triangles[triangleVerticesCount + 5] = firstUpperIndex;
+                    float firstUvWidthIteration = (1f / uvIterationCount) * loopCount;
+                    float secondUvWidthIteration = (1f / uvIterationCount) * (loopCount + 1);
+                    float firstUvHeightIteration = (1f / uvIterationCount) * rowCount;
+                    float secondUvHeightIteration = (1f / uvIterationCount) * (rowCount + 1);
 
-                    // if (vertexCount == verticesPerIteration)
-                    // {
-                    //     triangles[triangleVerticesCount + 1] = vertexLoop + 1 - verticesPerIteration;
-                    //     triangles[triangleVerticesCount + 3] = vertexLoop + 1 - verticesPerIteration;
-                    //     triangles[triangleVerticesCount + 4] = vertexLoop + 1;
-                    // }
+                    int bodyVertexCount = (verticesPerIteration * outerLoopCount) + loopCount;
+
+                    int firstLowerIndex = bodyVertexCount;
+                    int secondLowerIndex = bodyVertexCount + 1;
+                    int firstUpperIndex = bodyVertexCount + verticesPerIteration;
+                    int secondUpperIndex = bodyVertexCount + verticesPerIteration + 1;
+
+                    if (loopCount == verticesPerIteration - 1)
+                    {
+                        secondLowerIndex = secondLowerIndex - verticesPerIteration;
+                        secondUpperIndex = secondUpperIndex - verticesPerIteration;
+                    }
+
+                    vertices[vertexLoop] = bodyVertices[firstLowerIndex];
+                    vertices[vertexLoop + 1] = bodyVertices[secondLowerIndex];
+                    vertices[vertexLoop + 2] = bodyVertices[firstUpperIndex];
+                    vertices[vertexLoop + 3] = bodyVertices[secondUpperIndex];
+
+                    uv[vertexLoop] = new Vector2(firstUvWidthIteration, firstUvHeightIteration);
+                    uv[vertexLoop + 1] = new Vector2(secondUvWidthIteration, firstUvHeightIteration);
+                    uv[vertexLoop + 2] = new Vector2(firstUvWidthIteration, secondUvHeightIteration);
+                    uv[vertexLoop + 3] = new Vector2(secondUvWidthIteration, secondUvHeightIteration);
+
+                    triangles[triangleVerticesCount] = vertexLoop;
+                    triangles[triangleVerticesCount + 1] = vertexLoop + 2;
+                    triangles[triangleVerticesCount + 2] = vertexLoop + 1;
+                    triangles[triangleVerticesCount + 3] = vertexLoop + 3;
+                    triangles[triangleVerticesCount + 4] = vertexLoop + 1;
+                    triangles[triangleVerticesCount + 5] = vertexLoop + 2;
 
                     triangleVerticesCount += 6;
-
+                    vertexLoop += 4;
                 }
+            }
 
-                vertexLoop += 4;
-                noiseVertexLoop++;
-                vertexCount++;
+            for (int loopCount = 0; loopCount < iterationCount; loopCount++)
+            {
+                int upperMiddlePointIndex = loopCount + iterationCount;
+                int firstIndex = loopCount;
+                int secondIndex = loopCount + 1;
 
-                if (vertexCount == verticesPerIteration)
+                float firstUvWidthIteration = (1f / uvIterationCount) * loopCount;
+                float secondUvWidthIteration = (1f / uvIterationCount) * (loopCount + 1);
+                float firstUvHeightIteration = (1f / uvIterationCount) * (uvIterationCount - 1);
+                float secondUvHeightIteration = (1f / uvIterationCount) * uvIterationCount;
+
+                if (loopCount == iterationCount - 1)
                 {
-                    vertexCount = 1;
-                    heightCount++;
+                    secondIndex = 0;
                 }
+
+                vertices[vertexLoop] = upperClosingVertices[upperMiddlePointIndex];
+                vertices[vertexLoop + 1] = upperClosingVertices[firstIndex];
+                vertices[vertexLoop + 2] = upperClosingVertices[secondIndex];
+
+                Vector2 firstUvVertex = new Vector2(secondUvWidthIteration, firstUvHeightIteration);
+                Vector2 secondUvVertex = new Vector2(firstUvWidthIteration, firstUvHeightIteration);
+                float middlePointUvWidth = Mathf.Lerp(firstUvWidthIteration, secondUvWidthIteration, 0.5f);
+                Vector2 middlePointVertex = new Vector2(middlePointUvWidth, secondUvHeightIteration);
+
+                uv[vertexLoop] = middlePointVertex;
+                uv[vertexLoop + 1] = firstUvVertex;
+                uv[vertexLoop + 2] = secondUvVertex;
+
+                triangles[triangleVerticesCount] = vertexLoop;
+                triangles[triangleVerticesCount + 1] = vertexLoop + 2;
+                triangles[triangleVerticesCount + 2] = vertexLoop + 1;
+
+                triangleVerticesCount += 3;
+                vertexLoop += 3;
             }
 
             Mesh mesh = new Mesh();
@@ -340,7 +406,7 @@ namespace RockBuilder
             #region Recalculate some normals manually for smoother shading. 
             Vector3[] normals = mesh.normals;
 
-            for (int loopCount = 0; loopCount < sphereRock.edges-1; loopCount++)
+            for (int loopCount = 0; loopCount < sphereRock.edges - 1; loopCount++)
             {
                 int firstIndex = loopCount * (sphereRock.edges + 1) + 1;
                 int secondIndex = firstIndex + sphereRock.edges;
