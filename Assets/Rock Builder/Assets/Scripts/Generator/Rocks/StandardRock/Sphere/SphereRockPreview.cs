@@ -4,6 +4,14 @@ using UnityEngine;
 
 namespace RockBuilder
 {
+    ///-----------------------------------------------------------------
+    ///   Namespace:      RockBuilder
+    ///   Class:          SphereRockPreview
+    ///   Description:    Draws the preview for the sphere rock.
+    ///   Author:         Stefano Canonico                    
+    ///   Date:           04.01.2020
+    ///   Version:        1.0
+    ///-----------------------------------------------------------------
     public class SphereRockPreview
     {
         private static SphereRockPreview instance = null;

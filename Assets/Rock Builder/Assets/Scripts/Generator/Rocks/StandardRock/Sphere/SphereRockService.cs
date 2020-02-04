@@ -5,6 +5,14 @@ using UnityEngine;
 
 namespace RockBuilder
 {
+    ///-----------------------------------------------------------------
+    ///   Namespace:      RockBuilder
+    ///   Class:          CubeRockService
+    ///   Description:    This Class handles the initialisation of new sphere rocks.
+    ///   Author:         Stefano Canonico                    
+    ///   Date:           04.01.2020
+    ///   Version:        1.0
+    ///-----------------------------------------------------------------
     public class SphereRockService
     {
         private static SphereRockService instance = null;

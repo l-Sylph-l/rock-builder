@@ -5,6 +5,14 @@ using System.Linq;
 
 namespace RockBuilder
 {
+    ///-----------------------------------------------------------------
+    ///   Namespace:      RockBuilder
+    ///   Class:          CubeRockMeshGenerator
+    ///   Description:    The mesh Generator for the custom rock.
+    ///   Author:         Stefano Canonico                    
+    ///   Date:           04.01.2020
+    ///   Version:        1.0
+    ///-----------------------------------------------------------------
     enum IterationType
     {
         firstQuarter,
@@ -216,7 +224,7 @@ namespace RockBuilder
 
             foreach (CustomRockListIteration iteration in sortedVertexPositions)
             {
-                
+
                 iteration.EqualizeVertexCountOnFirstQuarter(highestCount);
                 iteration.EqualizeVertexCountOnSecondQuarter(highestCount);
                 iteration.EqualizeVertexCountOnThirdQuarter(highestCount);
@@ -228,8 +236,9 @@ namespace RockBuilder
             return sortedVertexPositions;
         }
 
-        private List<CustomRockListIteration> EqualizeToNewVertexCount(List<CustomRockListIteration> sortedList, int newCount){
-             foreach (CustomRockListIteration iteration in sortedList)
+        private List<CustomRockListIteration> EqualizeToNewVertexCount(List<CustomRockListIteration> sortedList, int newCount)
+        {
+            foreach (CustomRockListIteration iteration in sortedList)
             {
                 iteration.EqualizeVertexCountOnFirstQuarter(newCount);
                 iteration.EqualizeVertexCountOnSecondQuarter(newCount);
@@ -452,14 +461,14 @@ namespace RockBuilder
             Vector2[] uv = new Vector2[vrticesCount];
             int vertexLoop = 0;
             int vertexCountPerIteration = rockBuildData.sortedVertices[0].GetVertexCount();
-            int uvIterationY = 0;      
+            int uvIterationY = 0;
             foreach (CustomRockListIteration iterationList in rockBuildData.sortedVertices)
             {
-                
+
                 float uvHeightIteration = 1f / rockBuildData.sortedVertices.Count;
                 float uvWidthIteration = 1f / vertexCountPerIteration;
                 float uvPositionY = uvIterationY * uvHeightIteration;
-                int uvIterationX = 0; 
+                int uvIterationX = 0;
                 foreach (Vector3 vertex in iterationList.GetSortedVertexList())
                 {
                     float uvPositionX = uvIterationX * uvWidthIteration;

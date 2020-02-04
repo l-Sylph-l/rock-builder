@@ -5,6 +5,14 @@ using UnityEngine;
 namespace RockBuilder
 {
 
+    ///-----------------------------------------------------------------
+    ///   Namespace:      RockBuilder
+    ///   Class:          CubeRock
+    ///   Description:    Model for the custom rock.
+    ///   Author:         Stefano Canonico                    
+    ///   Date:           04.01.2020
+    ///   Version:        1.0
+    ///-----------------------------------------------------------------
     [RequireComponent(typeof(MeshFilter))]
     [RequireComponent(typeof(MeshRenderer))]
     public class CustomRock : MonoBehaviour

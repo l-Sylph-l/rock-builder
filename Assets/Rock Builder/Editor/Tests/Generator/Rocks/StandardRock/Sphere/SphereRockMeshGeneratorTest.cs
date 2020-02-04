@@ -65,6 +65,7 @@ namespace RockBuilder.Tests
             sphereRock.width = 1f;
             sphereRock.height = 1f;
             sphereRock.depth = 1f;
+            sphereRock.smoothFlag = false;
             sphereRock.vertexPositions = SphereRockMeshGenerator.Instance.CreateVertexPositions(sphereRock);
 
             //ACT
@@ -74,9 +75,9 @@ namespace RockBuilder.Tests
             Assert.IsNotNull(mesh,
             util.PrintMessageObjectIsNull("Sphere Rock Mesh"));
 
-            int expectedVerticesCount = 30;
-            int expectedUvCount = 30;
-            int expectedTrianglesCount = 222;
+            int expectedVerticesCount = 108;
+            int expectedUvCount = 108;
+            int expectedTrianglesCount = 144;
             Assert.AreEqual(expectedVerticesCount, mesh.vertices.Length, util.PrintMessageDoesNotHaveCount("Vertex list", expectedVerticesCount));
             Assert.AreEqual(expectedUvCount, mesh.uv.Length, util.PrintMessageDoesNotHaveCount("UV list", expectedUvCount));
             Assert.AreEqual(expectedTrianglesCount, mesh.triangles.Length, util.PrintMessageDoesNotHaveCount("Triangle list", expectedTrianglesCount));

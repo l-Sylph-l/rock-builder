@@ -5,6 +5,14 @@ using System.Linq;
 
 namespace RockBuilder
 {
+    ///-----------------------------------------------------------------
+    ///   Namespace:      RockBuilder
+    ///   Class:          CubeRockMeshGenerator
+    ///   Description:    The mesh Generator for the cube rock.
+    ///   Author:         Stefano Canonico                    
+    ///   Date:           04.01.2020
+    ///   Version:        1.0
+    ///-----------------------------------------------------------------
     public class CubeRockMeshGenerator
     {
         private static CubeRockMeshGenerator instance = null;

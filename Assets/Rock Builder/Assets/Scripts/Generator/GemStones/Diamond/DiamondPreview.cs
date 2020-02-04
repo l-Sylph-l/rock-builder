@@ -4,6 +4,14 @@ using UnityEngine;
 
 namespace RockBuilder
 {
+    ///-----------------------------------------------------------------
+    ///   Namespace:      RockBuilder
+    ///   Class:          CubeRockPreview
+    ///   Description:    Draws the preview for the diamond.
+    ///   Author:         Stefano Canonico                    
+    ///   Date:           04.01.2020
+    ///   Version:        1.0
+    ///-----------------------------------------------------------------
     public class DiamondPreview
     {
         private static DiamondPreview instance = null;
@@ -44,7 +52,7 @@ namespace RockBuilder
                 if (loopCount == edges - 1)
                 {
                     //Draw line from the bottom peak to the upper pavillon vertices 
-                    if(loopCount % 2 == 0)
+                    if (loopCount % 2 == 0)
                     {
                         Gizmos.DrawLine(spawnPoints[0], spawnPoints[1 + loopCount + edges / 2]);
                     }
@@ -103,11 +111,11 @@ namespace RockBuilder
                         // Draw from the lower crown vertices to the upper crown vertices
                         // Always connect one lower crown vertex to two upper crown vertices
                         Gizmos.DrawLine(spawnPoints[index], spawnPoints[(edges / 2) + index]);
-                        Gizmos.DrawLine(spawnPoints[index], spawnPoints[(edges / 2) + index - 1 ]);
+                        Gizmos.DrawLine(spawnPoints[index], spawnPoints[(edges / 2) + index - 1]);
 
                         index = edges * 2 + loopCount;
                         // Draw the top plane of the diamond
-                        Gizmos.DrawLine(spawnPoints[index], spawnPoints[index+1]);
+                        Gizmos.DrawLine(spawnPoints[index], spawnPoints[index + 1]);
                     }
                 }
             }

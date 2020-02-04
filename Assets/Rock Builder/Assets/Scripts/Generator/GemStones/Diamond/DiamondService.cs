@@ -5,6 +5,14 @@ using UnityEditor;
 
 namespace RockBuilder
 {
+    ///-----------------------------------------------------------------
+    ///   Namespace:      RockBuilder
+    ///   Class:          CubeRockService
+    ///   Description:    This Class handles the initialisation of new diamonds.
+    ///   Author:         Stefano Canonico                    
+    ///   Date:           04.01.2020
+    ///   Version:        1.0
+    ///-----------------------------------------------------------------
     public class DiamondService
     {
         private static DiamondService instance = null;
@@ -31,7 +39,7 @@ namespace RockBuilder
 
         public Diamond CreateEmptyDiamond()
         {
-            Diamond diamond = new GameObject().AddComponent(typeof(Diamond)) as Diamond;            
+            Diamond diamond = new GameObject().AddComponent(typeof(Diamond)) as Diamond;
             diamond.radius = 1f;
             diamond.pavillonHeight = 1f;
             diamond.crownHeight = 0.33f;

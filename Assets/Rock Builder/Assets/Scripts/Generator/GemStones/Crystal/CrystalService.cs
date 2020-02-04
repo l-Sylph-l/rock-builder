@@ -5,6 +5,14 @@ using UnityEngine;
 
 namespace RockBuilder
 {
+    ///-----------------------------------------------------------------
+    ///   Namespace:      RockBuilder
+    ///   Class:          CubeRockService
+    ///   Description:    This Class handles the initialisation of new crystals.
+    ///   Author:         Stefano Canonico                    
+    ///   Date:           04.01.2020
+    ///   Version:        1.0
+    ///-----------------------------------------------------------------
     public class CrystalService
     {
         private static CrystalService instance = null;
@@ -98,7 +106,7 @@ namespace RockBuilder
                 meshCollider.sharedMesh = crystal.mesh;
                 meshCollider.convex = true;
             }
-        } 
+        }
 
         public void CreateLods(Crystal crystal)
         {

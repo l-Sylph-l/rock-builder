@@ -5,6 +5,14 @@ using System.Linq;
 
 namespace RockBuilder
 {
+    ///-----------------------------------------------------------------
+    ///   Namespace:      RockBuilder
+    ///   Class:          CubeRockService
+    ///   Description:    Model to which contains data of an custom rock iteration.
+    ///   Author:         Stefano Canonico                    
+    ///   Date:           04.01.2020
+    ///   Version:        1.0
+    ///-----------------------------------------------------------------
     public class CustomRockListIteration
     {
         public List<Vector3> unsortedVertexList;
@@ -144,7 +152,7 @@ namespace RockBuilder
             }
             else
             {
-                float newValue = (float) interpolationCount / 2 + 0.5f;
+                float newValue = (float)interpolationCount / 2 + 0.5f;
                 interpolationCountBefore = (int)newValue;
                 interpolationCountAfter = interpolationCountBefore - 1;
                 interpolationFactorBefore = 1f / (interpolationCountBefore + 1);

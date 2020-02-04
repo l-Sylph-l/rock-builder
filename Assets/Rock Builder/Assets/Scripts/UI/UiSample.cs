@@ -8,6 +8,14 @@ using RockBuilder;
 
 namespace RockBuilder
 {
+    ///-----------------------------------------------------------------
+    ///   Namespace:      RockBuilder
+    ///   Class:          RockBuilderWindow
+    ///   Description:    The UI of the RockBuilder tool.
+    ///   Author:         Kim Hunkeler                   
+    ///   Date:           04.01.2020
+    ///   Version:        1.0
+    ///-----------------------------------------------------------------
     public class RockBuilderWindow : EditorWindow
     {
         private GUIStyle guiStyle = new GUIStyle();

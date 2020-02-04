@@ -4,7 +4,14 @@ using UnityEngine;
 
 namespace RockBuilder
 {
-
+    ///-----------------------------------------------------------------
+    ///   Namespace:      RockBuilder
+    ///   Class:          SphereRock
+    ///   Description:    Model for the sphere rock.
+    ///   Author:         Stefano Canonico                    
+    ///   Date:           04.01.2020
+    ///   Version:        1.0
+    ///-----------------------------------------------------------------
     [RequireComponent(typeof(MeshFilter))]
     [RequireComponent(typeof(MeshRenderer))]
     public class SphereRock : MonoBehaviour
@@ -85,7 +92,7 @@ namespace RockBuilder
 
         public List<List<Vector3>> GetOrderedVertexList()
         {
-            
+
             List<List<Vector3>> orderedVertexList = new List<List<Vector3>>();
             for (int rowCount = 0; rowCount < edges; rowCount++)
             {

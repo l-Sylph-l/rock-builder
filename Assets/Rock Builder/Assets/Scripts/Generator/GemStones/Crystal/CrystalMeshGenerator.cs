@@ -4,6 +4,14 @@ using System.Collections.Generic;
 
 namespace RockBuilder
 {
+    ///-----------------------------------------------------------------
+    ///   Namespace:      RockBuilder
+    ///   Class:          CubeRockMeshGenerator
+    ///   Description:    The mesh Generator for the rystal.
+    ///   Author:         Stefano Canonico                    
+    ///   Date:           04.01.2020
+    ///   Version:        1.0
+    ///-----------------------------------------------------------------
     public class CrystalMeshGenerator
     {
         private static CrystalMeshGenerator instance = null;

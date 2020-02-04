@@ -5,6 +5,14 @@ using System.Linq;
 
 namespace RockBuilder
 {
+    ///-----------------------------------------------------------------
+    ///   Namespace:      RockBuilder
+    ///   Class:          SphereRockMeshGenerator
+    ///   Description:    The mesh generator for the sphere rock.
+    ///   Author:         Stefano Canonico                    
+    ///   Date:           04.01.2020
+    ///   Version:        1.0
+    ///-----------------------------------------------------------------
     public class SphereRockMeshGenerator
     {
         private static SphereRockMeshGenerator instance = null;
@@ -122,12 +130,13 @@ namespace RockBuilder
             vertexLoop = 0;
             triangleVerticesCount = 0;
             int baseVerticesCount = (verticesPerIteration * verticesPerIteration);
-            int verticesCount = baseVerticesCount * 4;
+            int closingVerticesSize = (verticesPerIteration * 2) * 3;
+            int bodyVerticesSize = (verticesPerIteration * 4) * (verticesPerIteration - 3);
+            int verticesCount = closingVerticesSize + bodyVerticesSize;
             Vector3[] noiseVertices = new Vector3[baseVerticesCount];
-            Vector2[] noiseUv = new Vector2[verticesCount];
             vertices = new Vector3[verticesCount];
             uv = new Vector2[verticesCount];
-            triangles = new int[verticesCount * 12];
+            triangles = new int[(verticesPerIteration * (verticesPerIteration - 2)) * 6];
             noiseFactor = sphereRock.noise;
 
             int iterationCount = 0;
@@ -143,7 +152,6 @@ namespace RockBuilder
                 {
                     float uvWidthIteration = (1f / circularIterations.Count) * vertexCount / 1;
                     noiseVertices[vertexLoop] = vertex;
-                    noiseUv[vertexLoop] = new Vector2(uvWidthIteration, uvHeightIteration);
 
                     vertexLoop++;
                     vertexCount++;

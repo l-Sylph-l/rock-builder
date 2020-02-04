@@ -4,6 +4,14 @@ using UnityEngine;
 
 namespace RockBuilder
 {
+    ///-----------------------------------------------------------------
+    ///   Namespace:      RockBuilder
+    ///   Class:          CubeRock
+    ///   Description:    Model for the crystal.
+    ///   Author:         Stefano Canonico                    
+    ///   Date:           04.01.2020
+    ///   Version:        1.0
+    ///-----------------------------------------------------------------
     [RequireComponent(typeof(MeshFilter))]
     [RequireComponent(typeof(MeshRenderer))]
     public class Crystal : MonoBehaviour
@@ -73,7 +81,7 @@ namespace RockBuilder
 
         private void OnDrawGizmosSelected()
         {
-            if(vertexPositions != null)
+            if (vertexPositions != null)
             {
                 // update vertex positions
                 vertexPositions = CrystalMeshGenerator.Instance.CreateVertexPositions(this);

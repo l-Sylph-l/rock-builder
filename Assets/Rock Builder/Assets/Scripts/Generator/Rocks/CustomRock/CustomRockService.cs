@@ -5,6 +5,14 @@ using UnityEngine;
 
 namespace RockBuilder
 {
+    ///-----------------------------------------------------------------
+    ///   Namespace:      RockBuilder
+    ///   Class:          CubeRockService
+    ///   Description:    This Class handles the initialisation of new custom rocks.
+    ///   Author:         Stefano Canonico                    
+    ///   Date:           04.01.2020
+    ///   Version:        1.0
+    ///-----------------------------------------------------------------
     public class CustomRockService
     {
         private static CustomRockService instance = null;
@@ -93,7 +101,7 @@ namespace RockBuilder
                 meshCollider.sharedMesh = customRock.mesh;
                 meshCollider.convex = true;
             }
-        } 
+        }
 
         // public void CreateLods(CustomRock customRock)
         // {
