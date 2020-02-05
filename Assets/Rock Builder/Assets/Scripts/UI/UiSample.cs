@@ -123,7 +123,7 @@ namespace RockBuilder
                 if (GUILayout.Button("   Custom   ", GUILayout.Height(32)))
                 {
                     secondParameterRocks = "Custom";
-                    // customRock = CustomRockService.Instance.CreateEmptyCustomRock(firstParameterRocks);
+                    customRock = CustomRockService.Instance.CreateEmptyCustomRock(firstParameterRocks);
                 }
                 GUILayout.EndHorizontal();
 
@@ -254,10 +254,10 @@ namespace RockBuilder
                 if (secondParameterRocks != "" && secondParameterRocks != "Standard")
                 {
 
-                    EditorGUILayout.HelpBox("In the first release, the custom shape is not available yet. This feature will follow as soon as possible.", MessageType.Info);
+                    // EditorGUILayout.HelpBox("In the first release, the custom shape is not available yet. This feature will follow as soon as possible.", MessageType.Info);
 
                     // NOT in the first release!
-                    /*
+                    
 
                     // Update UI depending on the selected custom rock
                     UpdateRocks();
@@ -303,7 +303,7 @@ namespace RockBuilder
                         }
                     }
 
-                    */
+                
 
                 }
             }
