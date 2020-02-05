@@ -142,6 +142,9 @@ namespace RockBuilder
             int iterationCount = 0;
             int vertexCount = 1;
 
+            Vector3 bottomClosingVertex = AddNoise(circularIterations.First()[0]);
+            Vector3 upperClosingVertex = AddNoise(circularIterations.Last()[0]);
+
             foreach (List<Vector3> iteration in circularIterations)
             {
                 iterationCount++;
@@ -150,8 +153,19 @@ namespace RockBuilder
 
                 foreach (Vector3 vertex in iteration)
                 {
+
                     float uvWidthIteration = (1f / circularIterations.Count) * vertexCount / 1;
-                    noiseVertices[vertexLoop] = vertex;
+                    noiseVertices[vertexLoop] = AddNoise(vertex);
+
+                    if (iterationCount == 1)
+                    {
+                        noiseVertices[vertexLoop] = bottomClosingVertex;
+                    }
+
+                    if (iterationCount == verticesPerIteration-1)
+                    {
+                        noiseVertices[vertexLoop] = upperClosingVertex;
+                    }
 
                     vertexLoop++;
                     vertexCount++;
@@ -164,7 +178,6 @@ namespace RockBuilder
             int lowerClosingStartIndex = 0;
             int upperClosingStartIndex = baseVerticesCount - closingVerticesCount;
             int bodyStartIndex = verticesPerIteration;
-
 
             List<Vector3> noiseVerticesList = noiseVertices.ToList();
             List<Vector3> lowerClosingVertices = noiseVerticesList.GetRange(lowerClosingStartIndex, closingVerticesCount);

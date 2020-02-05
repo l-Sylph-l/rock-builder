@@ -158,7 +158,6 @@ namespace RockBuilder
             triangles = new int[(12 * 6) + (6 * ((increaseValue * increaseValue) * 6) + (8 * 3))];
             noiseFactor = cubeRock.noise;
 
-
             List<Vector3> bottomPlaneVertices = cubeRock.bottomPlaneVertices;
             List<Vector3> upperPlaneVertices = cubeRock.upperPlaneVertices;
             List<Vector3> bottomBezelsVertices = cubeRock.bottomVerticalBezelsVertices;
@@ -240,44 +239,88 @@ namespace RockBuilder
             List<Vector3> bottomLeftBevelCrossBack = new List<Vector3>() { bottomPlaneList[0], backPlaneList[0], leftPlaneList[1] };
             List<Vector3> bottomRightBevelCrossBack = new List<Vector3>() { bottomPlaneList[2], rightPlaneList[0], backPlaneList[1] };
 
-            frontPlane = increasePolyCount(frontPlane, increaseValue);
-            leftPlane = increasePolyCount(leftPlane, increaseValue);
-            backPlane = increasePolyCount(backPlane, increaseValue);
-            rightPlane = increasePolyCount(rightPlane, increaseValue);
-            upperPlane = increasePolyCount(upperPlane, increaseValue);
-            bottomPlane = increasePolyCount(bottomPlane, increaseValue);
+            if (cubeRock.smoothFlag)
+            {
+                List<Vector3> frontPlaneSmooth = increaseSmoothPolyCount(frontPlane, increaseValue);
+                List<Vector3> leftPlaneSmooth = increaseSmoothPolyCount(leftPlane, increaseValue);
+                List<Vector3> backPlaneSmooth = increaseSmoothPolyCount(backPlane, increaseValue);
+                List<Vector3> rightPlaneSmooth = increaseSmoothPolyCount(rightPlane, increaseValue);
+                List<Vector3> upperPlaneSmooth = increaseSmoothPolyCount(upperPlane, increaseValue);
+                List<Vector3> bottomPlaneSmooth = increaseSmoothPolyCount(bottomPlane, increaseValue);
 
-            FillPlane(frontPlane, cubeRock.width, cubeRock.height, increaseValue);
-            FillPlane(leftPlane, cubeRock.width, cubeRock.height, increaseValue);
-            FillPlane(backPlane, cubeRock.depth, cubeRock.height, increaseValue);
-            FillPlane(rightPlane, cubeRock.width, cubeRock.height, increaseValue);
-            FillPlane(upperPlane, cubeRock.depth, cubeRock.width, increaseValue);
-            FillPlane(bottomPlane, cubeRock.depth, cubeRock.width, increaseValue);
+                FillSmoothPlane(frontPlaneSmooth, cubeRock.depth, cubeRock.height, increaseValue);
+                FillSmoothPlane(leftPlaneSmooth, cubeRock.width, cubeRock.height, increaseValue);
+                FillSmoothPlane(backPlaneSmooth, cubeRock.depth, cubeRock.height, increaseValue);
+                FillSmoothPlane(rightPlaneSmooth, cubeRock.width, cubeRock.height, increaseValue);
+                FillSmoothPlane(upperPlaneSmooth, cubeRock.depth, cubeRock.width, increaseValue);
+                FillSmoothPlane(bottomPlaneSmooth, cubeRock.width, cubeRock.depth, increaseValue);
 
-            FillPlane(frontBevelRight, cubeRock.bevelSize, cubeRock.height, 1);
-            FillPlane(frontBevelLeft, cubeRock.bevelSize, cubeRock.height, 1);
-            FillPlane(backBevelRight, cubeRock.bevelSize, cubeRock.height, 1);
-            FillPlane(backBevelLeft, cubeRock.bevelSize, cubeRock.height, 1);
+                FillPlane(frontBevelRight, cubeRock.bevelSize, cubeRock.height, 1);
+                FillPlane(frontBevelLeft, cubeRock.bevelSize, cubeRock.height, 1);
+                FillPlane(backBevelRight, cubeRock.bevelSize, cubeRock.height, 1);
+                FillPlane(backBevelLeft, cubeRock.bevelSize, cubeRock.height, 1);
 
-            FillPlane(upperBevelFront, cubeRock.width, cubeRock.bevelSize, 1);
-            FillPlane(upperBevelLeft, cubeRock.depth, cubeRock.bevelSize, 1);
-            FillPlane(upperBevelBack, cubeRock.width, cubeRock.bevelSize, 1);
-            FillPlane(upperBevelRight, cubeRock.depth, cubeRock.bevelSize, 1);
+                FillPlane(upperBevelFront, cubeRock.width, cubeRock.bevelSize, 1);
+                FillPlane(upperBevelLeft, cubeRock.depth, cubeRock.bevelSize, 1);
+                FillPlane(upperBevelBack, cubeRock.width, cubeRock.bevelSize, 1);
+                FillPlane(upperBevelRight, cubeRock.depth, cubeRock.bevelSize, 1);
 
-            FillPlane(bottomBevelFront, cubeRock.height, cubeRock.bevelSize, 1);
-            FillPlane(bottomBevelLeft, cubeRock.depth, cubeRock.bevelSize, 1);
-            FillPlane(bottomBevelBack, cubeRock.height, cubeRock.bevelSize, 1);
-            FillPlane(bottomBevelRight, cubeRock.depth, cubeRock.bevelSize, 1);
+                FillPlane(bottomBevelFront, cubeRock.height, cubeRock.bevelSize, 1);
+                FillPlane(bottomBevelLeft, cubeRock.depth, cubeRock.bevelSize, 1);
+                FillPlane(bottomBevelBack, cubeRock.height, cubeRock.bevelSize, 1);
+                FillPlane(bottomBevelRight, cubeRock.depth, cubeRock.bevelSize, 1);
 
-            FillTriangle(upperRightBevelCrossFront);
-            FillTriangle(upperLeftBevelCrossFront);
-            FillTriangle(upperRightBevelCrossBack);
-            FillTriangle(upperLeftBevelCrossBack);
+                FillSmoothTriangle(upperRightBevelCrossFront);
+                FillSmoothTriangle(upperLeftBevelCrossFront);
+                FillSmoothTriangle(upperRightBevelCrossBack);
+                FillSmoothTriangle(upperLeftBevelCrossBack);
 
-            FillTriangle(bottomRightBevelCrossFront);
-            FillTriangle(bottomLeftBevelCrossFront);
-            FillTriangle(bottomLeftBevelCrossBack);
-            FillTriangle(bottomRightBevelCrossBack);
+                FillSmoothTriangle(bottomRightBevelCrossFront);
+                FillSmoothTriangle(bottomLeftBevelCrossFront);
+                FillSmoothTriangle(bottomLeftBevelCrossBack);
+                FillSmoothTriangle(bottomRightBevelCrossBack);
+            }
+            else
+            {
+                frontPlane = increasePolyCount(frontPlane, increaseValue);
+                leftPlane = increasePolyCount(leftPlane, increaseValue);
+                backPlane = increasePolyCount(backPlane, increaseValue);
+                rightPlane = increasePolyCount(rightPlane, increaseValue);
+                upperPlane = increasePolyCount(upperPlane, increaseValue);
+                bottomPlane = increasePolyCount(bottomPlane, increaseValue);
+
+                FillPlane(frontPlane, cubeRock.depth, cubeRock.height, increaseValue);
+                FillPlane(leftPlane, cubeRock.width, cubeRock.height, increaseValue);
+                FillPlane(backPlane, cubeRock.depth, cubeRock.height, increaseValue);
+                FillPlane(rightPlane, cubeRock.width, cubeRock.height, increaseValue);
+                FillPlane(upperPlane, cubeRock.depth, cubeRock.width, increaseValue);
+                FillPlane(bottomPlane, cubeRock.width, cubeRock.depth, increaseValue);
+
+                FillPlane(frontBevelRight, cubeRock.bevelSize, cubeRock.height, 1);
+                FillPlane(frontBevelLeft, cubeRock.bevelSize, cubeRock.height, 1);
+                FillPlane(backBevelRight, cubeRock.bevelSize, cubeRock.height, 1);
+                FillPlane(backBevelLeft, cubeRock.bevelSize, cubeRock.height, 1);
+
+                FillPlane(upperBevelFront, cubeRock.width, cubeRock.bevelSize, 1);
+                FillPlane(upperBevelLeft, cubeRock.depth, cubeRock.bevelSize, 1);
+                FillPlane(upperBevelBack, cubeRock.width, cubeRock.bevelSize, 1);
+                FillPlane(upperBevelRight, cubeRock.depth, cubeRock.bevelSize, 1);
+
+                FillPlane(bottomBevelFront, cubeRock.height, cubeRock.bevelSize, 1);
+                FillPlane(bottomBevelLeft, cubeRock.depth, cubeRock.bevelSize, 1);
+                FillPlane(bottomBevelBack, cubeRock.height, cubeRock.bevelSize, 1);
+                FillPlane(bottomBevelRight, cubeRock.depth, cubeRock.bevelSize, 1);
+
+                FillTriangle(upperRightBevelCrossFront);
+                FillTriangle(upperLeftBevelCrossFront);
+                FillTriangle(upperRightBevelCrossBack);
+                FillTriangle(upperLeftBevelCrossBack);
+
+                FillTriangle(bottomRightBevelCrossFront);
+                FillTriangle(bottomLeftBevelCrossFront);
+                FillTriangle(bottomLeftBevelCrossBack);
+                FillTriangle(bottomRightBevelCrossBack);
+            }
 
             Mesh mesh = new Mesh();
             mesh.Clear();
@@ -287,28 +330,6 @@ namespace RockBuilder
             mesh.name = "generated cube rock mesh";
             mesh.RecalculateNormals();
 
-
-            //#region Recalculate some normals manually for smoother shading. 
-            //Vector3[] normals = mesh.normals;
-
-            //Vector3 averageNormal1 = (normals[0] + normals[(crystal.edges * 2)]) / 2;
-            //normals[0] = averageNormal1;
-            //normals[(crystal.edges * 2)] = averageNormal1;
-
-            //Vector3 averageNormal2 = (normals[1] + normals[(crystal.edges * 2) + 1]) / 2;
-            //normals[1] = averageNormal2;
-            //normals[(crystal.edges * 2) + 1] = averageNormal2;
-
-            //for (int i = 1; i < crystal.edges + 1; i++)
-            //{
-            //    normals[normals.Length - i] = new Vector3(0f, 1f, 0f);
-            //    normals[normals.Length - i - crystal.edges] = new Vector3(0f, -1f, 0f);
-            //}
-
-            //mesh.normals = normals;
-            //#endregion
-
-
             mesh.Optimize();
             return mesh;
         }
@@ -317,7 +338,6 @@ namespace RockBuilder
         {
             float loopCount = 0;
             float rowCount = 0;
-
 
             foreach (List<Vector3> vertexList in planeVertices)
             {
@@ -354,29 +374,6 @@ namespace RockBuilder
                 float firstHeightUv = heightIteration * rowCount;
                 float secondHeightUv = heightIteration * (rowCount + 1);
 
-                // if (loopCount == 0)
-                // {
-                //     firstWidthUv = 1;
-
-                // }
-                // else
-                // {
-                //     firstWidthUv = 1 - (firstWidthUv / biggerIteration);
-
-                // }
-
-                // if (rowCount == 0)
-                // {
-                //     firstHeightUv = 0;
-                // }
-                // else
-                // {
-                //     firstHeightUv = firstHeightUv / biggerIteration;
-                // }
-
-                // secondWidthUv = 1 - (secondWidthUv / biggerIteration);
-                // secondHeightUv = secondHeightUv / biggerIteration;
-
                 uv[vertexLoop] = new Vector2(firstWidthUv, firstHeightUv);
                 uv[vertexLoop + 1] = new Vector2(secondWidthUv, firstHeightUv);
                 uv[vertexLoop + 2] = new Vector2(firstWidthUv, secondHeightUv);
@@ -411,7 +408,6 @@ namespace RockBuilder
                 vertices[vertexLoop] = vertex;
                 vertexLoop++;
             }
-
         }
 
         private List<List<Vector3>> increasePolyCount(List<List<Vector3>> planeVertices, int increaseFactor)
@@ -483,43 +479,137 @@ namespace RockBuilder
                             newVertexBottomLeft = squareBefore[3];
                         }
 
-                        // Smooth algorythm
-                        //    if(noiseFactor != 0 &&){
-                        //         newVertexBottomRight = AddNoise(newVertexBottomRight);
-                        //         newVertexBottomLeft = AddNoise(newVertexBottomLeft);
-                        //         newVertexUpperRight = AddNoise(newVertexUpperRight);
-                        //         newVertexUpperLeft = AddNoise(newVertexUpperLeft);
-                        //     }
-
                         List<Vector3> newSquare = new List<Vector3> { newVertexBottomRight, newVertexBottomLeft, newVertexUpperRight, newVertexUpperLeft };
-
                         increasedPolyCountPlanes.Add(newSquare);
                     }
                 }
             }
 
-            // for (int rowCount = 0; rowCount < increaseFactor; rowCount++)
-            // {
-
-            //     List<List<Vector3>> row = new List<List<Vector3>>();
-
-
-            //     for (int loopCount = 0; loopCount < increaseFactor; loopCount++)
-            //     {
-            //         row.Add(increasedPolyCountPlanes[loopCount]);
-            //     }
-
-
-            //     for (int loopCount = 0; loopCount < increaseFactor; loopCount++)
-            //     {
-            //         Vector3 vertex1 = row[loopCount][0];
-            //         Vector3 vertex2 = row[loopCount][1];
-            //     }
-            // }
-
             planeVertices = increasedPolyCountPlanes;
 
             return planeVertices;
+        }
+
+        private List<Vector3> increaseSmoothPolyCount(List<List<Vector3>> planeVertices, int increaseFactor)
+        {
+            List<Vector3> increasedPolyCountPlanes = new List<Vector3>();
+
+            foreach (List<Vector3> vertexList in planeVertices)
+            {
+
+                int bottomRightIndex = 0;
+                int bottomLeftIndex = 1;
+                int upperRightIndex = 2;
+                int upperLeftIndex = 3;
+
+                for (int rowCount = 0; rowCount < increaseFactor + 1; rowCount++)
+                {
+                    float rowLerpFactor = (1f / increaseFactor) * rowCount;
+                    float nextRowLerpFactor = (1f / increaseFactor) * (rowCount + 1);
+
+                    Vector3 lerpVertexBottomRight = Vector3.Lerp(vertexList[bottomRightIndex], vertexList[upperRightIndex], rowLerpFactor);
+                    Vector3 lerpVertexBottomLeft = Vector3.Lerp(vertexList[bottomLeftIndex], vertexList[upperLeftIndex], rowLerpFactor);
+                    Vector3 lerpVertexUpperRight = Vector3.Lerp(vertexList[bottomRightIndex], vertexList[upperRightIndex], nextRowLerpFactor);
+                    Vector3 lerpVertexUpperLeft = Vector3.Lerp(vertexList[bottomLeftIndex], vertexList[upperLeftIndex], nextRowLerpFactor);
+
+                    for (int loopCount = 0; loopCount < increaseFactor + 1; loopCount++)
+                    {
+                        float lerpFactor = (1f / increaseFactor) * loopCount;
+                        float nextLerpFactor = (1f / increaseFactor) * (loopCount + 1);
+
+                        Vector3 newVertexToAdd = Vector3.Lerp(lerpVertexBottomRight, lerpVertexBottomLeft, lerpFactor);
+
+                        if (loopCount != 0 && rowCount != 0 && loopCount != increaseFactor && rowCount != increaseFactor)
+                        {
+                            newVertexToAdd = AddNoise(newVertexToAdd);
+                        }
+
+                        increasedPolyCountPlanes.Add(newVertexToAdd);
+                    }
+                }
+            }
+
+            return increasedPolyCountPlanes;
+        }
+
+        private void FillSmoothPlane(List<Vector3> planeVertices, float uvWidth, float uvHeight, int increaseFactor)
+        {
+            float loopCount = 0;
+            float rowCount = 0;
+            int triangleVertexLoop = vertexLoop;
+
+            foreach (Vector3 vertex in planeVertices)
+            {
+                if (loopCount == increaseFactor + 1)
+                {
+                    loopCount = 0;
+                    rowCount++;
+                }
+
+                float divider = (float)planeVertices.Count / increaseFactor;
+                float widthIteration = uvWidth / increaseFactor;
+                float heightIteration = uvHeight / increaseFactor;
+
+                if (widthIteration >= heightIteration)
+                {
+                    widthIteration = 1f / increaseFactor;
+                    heightIteration = (uvHeight / uvWidth) / increaseFactor;
+                }
+                else
+                {
+                    heightIteration = 1f / increaseFactor;
+                    widthIteration = (uvWidth / uvHeight) / increaseFactor;
+                }
+
+                float firstWidthUv = widthIteration * loopCount;
+                float firstHeightUv = heightIteration * rowCount;
+
+                uv[vertexLoop] = new Vector2(firstWidthUv, firstHeightUv);
+
+                vertices[vertexLoop] = vertex;
+                vertexLoop++;
+
+                loopCount++;
+            }
+
+            int triangleIterations = increaseFactor * increaseFactor;
+            int upperVerticesIndex = increaseFactor + 1;
+
+            for (int vertexRowCount = 0; vertexRowCount < increaseFactor; vertexRowCount++)
+            {
+                for (int vertexLoopCount = 0; vertexLoopCount < increaseFactor; vertexLoopCount++)
+                {
+                    triangles[triangleVerticesCount] = triangleVertexLoop;
+                    triangles[triangleVerticesCount + 1] = triangleVertexLoop + 1;
+                    triangles[triangleVerticesCount + 2] = triangleVertexLoop + upperVerticesIndex;
+                    triangles[triangleVerticesCount + 3] = triangleVertexLoop + upperVerticesIndex + 1;
+                    triangles[triangleVerticesCount + 4] = triangleVertexLoop + upperVerticesIndex;
+                    triangles[triangleVerticesCount + 5] = triangleVertexLoop + 1;
+
+                    triangleVertexLoop += 1;
+                    triangleVerticesCount += 6;
+                }
+                triangleVertexLoop += 1;
+            }
+        }
+
+        private void FillSmoothTriangle(List<Vector3> triangleVertices)
+        {
+            triangles[triangleVerticesCount] = vertexLoop;
+            triangles[triangleVerticesCount + 1] = vertexLoop + 1;
+            triangles[triangleVerticesCount + 2] = vertexLoop + 2;
+
+            uv[vertexLoop] = new Vector2(0, 1);
+            uv[vertexLoop + 1] = new Vector2(0, 0);
+            uv[vertexLoop + 2] = new Vector2(1, 1);
+
+            triangleVerticesCount += 3;
+
+            foreach (Vector3 vertex in triangleVertices)
+            {
+                vertices[vertexLoop] = vertex;
+                vertexLoop++;
+            }
         }
 
         private Vector3 AddNoise(Vector3 vertex)

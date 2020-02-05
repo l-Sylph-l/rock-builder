@@ -44,6 +44,7 @@ namespace RockBuilder.Tests
             cubeRock.width = 1f;
             cubeRock.height = 1f;
             cubeRock.depth = 1f;
+            cubeRock.smoothFlag = true;
             cubeRock = CubeRockMeshGenerator.Instance.CreateVertexPositions(cubeRock);
 
             //ACT
@@ -53,8 +54,8 @@ namespace RockBuilder.Tests
             Assert.IsNotNull(mesh,
             util.PrintMessageObjectIsNull("Cube Rock Mesh"));
 
-            int expectedVerticesCount = 288;
-            int expectedUvCount = 288;
+            int expectedVerticesCount = 168;
+            int expectedUvCount = 168;
             int expectedTrianglesCount = 420;
             Assert.AreEqual(expectedVerticesCount, mesh.vertices.Length, util.PrintMessageDoesNotHaveCount("Vertex list", expectedVerticesCount));
             Assert.AreEqual(expectedUvCount, mesh.uv.Length, util.PrintMessageDoesNotHaveCount("UV list", expectedUvCount));
