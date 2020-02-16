@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEditor;
 
 namespace RockBuilder
 {
@@ -316,7 +317,7 @@ namespace RockBuilder
             mesh.name = "generated sphere mesh";
             mesh.RecalculateNormals();
 
-            mesh.Optimize();
+            MeshUtility.Optimize(mesh);
             return mesh;
         }
 
@@ -441,7 +442,7 @@ namespace RockBuilder
             mesh.normals = normals;
             #endregion
 
-            mesh.Optimize();
+            MeshUtility.Optimize(mesh);
             return mesh;
         }
 

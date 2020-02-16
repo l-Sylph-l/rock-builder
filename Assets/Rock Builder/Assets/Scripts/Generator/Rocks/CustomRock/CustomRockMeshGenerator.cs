@@ -593,7 +593,7 @@ namespace RockBuilder
             //#endregion
 
 
-            //mesh.Optimize();
+            //MeshUtility.Optimize(mesh);
             return mesh;
         }
     }

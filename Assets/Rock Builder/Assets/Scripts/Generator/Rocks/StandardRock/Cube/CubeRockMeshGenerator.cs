@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEditor;
 
 namespace RockBuilder
 {
@@ -330,7 +331,7 @@ namespace RockBuilder
             mesh.name = "generated cube rock mesh";
             mesh.RecalculateNormals();
 
-            mesh.Optimize();
+            MeshUtility.Optimize(mesh);
             return mesh;
         }
 

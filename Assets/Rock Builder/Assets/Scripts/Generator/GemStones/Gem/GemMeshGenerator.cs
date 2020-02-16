@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 namespace RockBuilder
 {
@@ -363,7 +364,7 @@ namespace RockBuilder
             mesh.triangles = triangles;
             mesh.uv = uv;
             mesh.name = "generated gem mesh";
-            mesh.Optimize();
+            MeshUtility.Optimize(mesh);
             mesh.RecalculateNormals();
             return mesh;
         }
@@ -581,7 +582,7 @@ namespace RockBuilder
             mesh.normals = normals;
             #endregion
 
-            mesh.Optimize();
+            MeshUtility.Optimize(mesh);
             return mesh;
         }
 
