@@ -163,7 +163,7 @@ namespace RockBuilder
                         noiseVertices[vertexLoop] = bottomClosingVertex;
                     }
 
-                    if (iterationCount == verticesPerIteration-1)
+                    if (iterationCount == verticesPerIteration)
                     {
                         noiseVertices[vertexLoop] = upperClosingVertex;
                     }
